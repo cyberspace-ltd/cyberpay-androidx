@@ -1,10 +1,14 @@
 package com.cyberspace.cyberpayapp
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.cyberspace.cyberpaysdk.CyberpaySdk
+import com.cyberspace.cyberpaysdk.TransactionCallback
+import com.cyberspace.cyberpaysdk.data.model.Transaction
 
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -14,6 +18,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        CyberpaySdk.chargeCard(this, Transaction(), object : TransactionCallback(){
+            override fun onSuccess(transaction: Transaction) {
+
+            }
+
+            override fun onError(transaction: Transaction, throwable: Throwable) {
+
+            }
+
+            override fun onValidate(transaction: Transaction) {
+
+            }
+        })
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
