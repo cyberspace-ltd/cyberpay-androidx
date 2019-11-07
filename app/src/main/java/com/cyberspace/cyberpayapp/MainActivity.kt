@@ -8,9 +8,12 @@ import android.view.Menu
 import android.view.MenuItem
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.TransactionCallback
+import com.cyberspace.cyberpaysdk.data.model.Card
 import com.cyberspace.cyberpaysdk.data.model.Transaction
 
 import kotlinx.android.synthetic.main.activity_main.*
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +21,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+
+      //  Log.e("CARD TYPE", card.cardType?.name + " " + card.cardType?.issuerName)
+
 
         CyberpaySdk.chargeCard(this, Transaction(), object : TransactionCallback(){
             override fun onSuccess(transaction: Transaction) {
