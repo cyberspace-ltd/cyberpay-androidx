@@ -8,7 +8,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -19,8 +19,21 @@ allprojects {
     repositories {
         google()
         jcenter()
-
     }
+}
+
+ext {
+    // App dependencies
+    retrofitVersion = '2.6.0'
+    rxJavaVersion = '2.2.9'
+    rxAndroidVersion = '2.1.1'
+    roomRxJavaVersion = '1.1.1'
+    gsonVersion = '2.8.5'
+    loggingInterceptorVersion = '3.14.2'
+
+    daggerVersion = '2.1.0'
+    glideVersion = '4.9.0'
+    dexterVersion ='5.0.0'
 }
 
 task clean(type: Delete) {
