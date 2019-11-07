@@ -19,6 +19,7 @@ public class CyberpaySdk private constructor(){
             this.key = integrationKey
             this.envMode = mode
         }
+
     }
 
 
