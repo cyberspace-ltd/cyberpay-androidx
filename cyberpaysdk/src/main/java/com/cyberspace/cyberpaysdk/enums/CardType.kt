@@ -20,7 +20,7 @@ enum class CardType  constructor(private val regex: String, val issuerName: Stri
          * @param card
          * @return
          */
-        fun getCardByName(card: String): CardType? {
+        fun getCardByName (card: String): CardType? {
             for (cc in values()) {
                 if (cc.matches(card)) {
                     return cc
