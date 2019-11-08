@@ -31,7 +31,7 @@ object CardValidator {
      * @param cardNumber Credit Card Number.
      * @return Whether the card number passes the luhnCheck.
      */
-    internal fun luhnCheck(cardNumber: String): Boolean {
+    private fun luhnCheck(cardNumber: String): Boolean {
         // number must be validated as 0..9 numeric first!!
         val digits = cardNumber.length
         val oddOrEven = digits and 1

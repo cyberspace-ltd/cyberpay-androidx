@@ -41,8 +41,6 @@ class Card {
 
     var cardType : CardType? = null
 
-    private fun validateCard() : Boolean {
-        return true
-    }
+    internal var pin : String? = null
 
 }

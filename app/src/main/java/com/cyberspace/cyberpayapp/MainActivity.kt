@@ -21,9 +21,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-      //  Log.e("CARD TYPE", card.cardType?.name + " " + card.cardType?.issuerName)
-       // var card = Card()
-
         CyberpaySdk.chargeCard(this, Transaction(), object : TransactionCallback(){
             override fun onSuccess(transaction: Transaction) {
 

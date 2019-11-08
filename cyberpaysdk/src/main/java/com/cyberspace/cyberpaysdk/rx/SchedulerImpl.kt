@@ -10,7 +10,6 @@ import javax.inject.Inject
 class SchedulerImpl @Inject constructor(): com.cyberspace.cyberpaysdk.rx.Scheduler {
 
     override fun ui(): Scheduler {
-
         return AndroidSchedulers.mainThread()
     }
 
