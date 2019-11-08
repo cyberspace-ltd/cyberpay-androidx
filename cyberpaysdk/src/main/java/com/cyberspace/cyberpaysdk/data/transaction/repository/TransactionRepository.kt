@@ -12,6 +12,10 @@ interface TransactionRepository {
     fun beginTransaction(transaction : Transaction) : Observable<JsonObject>
     fun chargeCard (transaction: Transaction) :  Observable<JsonObject>
     fun verifyTransaction(reference: String)
+    fun verifyMerchantTransaction(merchantReference: String) : Observable<JsonObject>
+    fun verifyOtp (transaction: Transaction) : Observable<JsonObject>
+    fun verifyBankOtp (transaction: Transaction) : Observable<JsonObject>
+
 
 
 }
