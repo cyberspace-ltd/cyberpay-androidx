@@ -2,7 +2,7 @@ package com.cyberspace.cyberpaysdk.utils.validator
 
 import com.cyberspace.cyberpaysdk.enums.CardType
 
-object CardValidator {
+internal object CardValidator {
 
     /**
      * Checks if the field is a valid credit card number.

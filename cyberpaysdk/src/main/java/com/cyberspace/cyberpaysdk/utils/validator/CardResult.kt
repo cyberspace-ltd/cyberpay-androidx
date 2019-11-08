@@ -2,7 +2,7 @@ package com.cyberspace.cyberpaysdk.utils.validator
 
 import com.cyberspace.cyberpaysdk.enums.CardType
 
-class CardResult {
+internal class CardResult {
 
     var isValid = false
     var cardType: CardType? = null

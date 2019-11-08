@@ -1,7 +1,5 @@
 package com.cyberspace.cyberpaysdk.rx
 
-import com.cyberspace.cyberpaysdk.data.model.Card
-import com.cyberspace.cyberpaysdk.data.model.Transaction
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

@@ -1,4 +1,4 @@
-package com.cyberspace.cyberpaysdk.data.remote.base
+package com.cyberspace.cyberpaysdk.data.base.remote
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class BaseService  @Inject constructor() : Service {
+internal class BaseService  @Inject constructor() : Service {
 
     private var retrofit: Retrofit? = null
     private val baseUrl = "http://api.acme.international/"

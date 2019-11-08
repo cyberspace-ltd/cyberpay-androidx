@@ -1,6 +1,6 @@
 package com.cyberspace.cyberpaysdk.utils
 
-object Luhn {
+internal object Luhn {
 
     fun isValid(input: String): Boolean {
 

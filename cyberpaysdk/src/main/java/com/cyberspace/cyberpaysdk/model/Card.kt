@@ -1,4 +1,4 @@
-package com.cyberspace.cyberpaysdk.data.model
+package com.cyberspace.cyberpaysdk.model
 
 import com.cyberspace.cyberpaysdk.enums.CardType
 import com.cyberspace.cyberpaysdk.utils.validator.CardValidator

@@ -1,8 +1,7 @@
 package com.cyberspace.cyberpaysdk
 
 import android.content.Context
-import android.util.Log
-import com.cyberspace.cyberpaysdk.data.model.Transaction
+import com.cyberspace.cyberpaysdk.data.transaction.Transaction
 import com.cyberspace.cyberpaysdk.enums.Mode
 
 public object CyberpaySdk {
@@ -19,7 +18,12 @@ public object CyberpaySdk {
             this.envMode = mode
         }
 
-        fun chargeCard(context: Context, transaction : Transaction , transactionCallback: TransactionCallback){
+        fun chargeCard(context: Context, transaction : Transaction, transactionCallback: TransactionCallback){
+
+        }
+
+        @Deprecated("This is method is deprecated")
+        fun setTransaction(){
 
         }
 
