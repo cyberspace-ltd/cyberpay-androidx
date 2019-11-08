@@ -9,6 +9,6 @@ class Transaction {
     var channel = "None"
     var description = ""
     var amount = 0.0
-    private var otp = ""
+    internal var otp = ""
 
 }
