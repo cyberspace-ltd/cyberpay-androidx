@@ -20,8 +20,8 @@ enum class CardType  constructor(private val regex: String, val issuerName: Stri
          * @param card
          * @return
          */
-        fun gleanCompany(card: String): CardType? {
-            for (cc in CardType.values()) {
+        fun getCardByName(card: String): CardType? {
+            for (cc in values()) {
                 if (cc.matches(card)) {
                     return cc
                 }
@@ -34,8 +34,8 @@ enum class CardType  constructor(private val regex: String, val issuerName: Stri
          * @param issuerName
          * @return
          */
-        fun gleanCompanyByIssuerName(issuerName: String): CardType? {
-            for (cc in CardType.values()) {
+        fun getCardByIssuerName(issuerName: String): CardType? {
+            for (cc in values()) {
                 if (cc.issuerName == issuerName) {
                     return cc
                 }

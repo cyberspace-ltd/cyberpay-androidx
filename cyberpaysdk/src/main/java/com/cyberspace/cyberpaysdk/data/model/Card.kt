@@ -1,7 +1,6 @@
 package com.cyberspace.cyberpaysdk.data.model
 
 import com.cyberspace.cyberpaysdk.enums.CardType
-import com.cyberspace.cyberpaysdk.utils.validator.CardResult
 import com.cyberspace.cyberpaysdk.utils.validator.CardValidator
 import java.security.InvalidParameterException
 
@@ -17,9 +16,16 @@ class Card {
         field  = value
     }
 
-    var cardName : String? = null
-    var cardCvv : String? = null
-    var cardEmail : String? = null
+    var cardName = ""
+    var cardEmail = ""
+
+    var cvv : String? = null
+    set(value) {
+        if(value != null) if(value.length > 3 || value.length <3) throw InvalidParameterException("Invalid Card Cvv Found")
+        else throw InvalidParameterException("Invalid Card Cvv Found")
+
+        field = value
+    }
 
     var expiryMonth : Int = 0
     set(value) {
@@ -38,7 +44,5 @@ class Card {
     private fun validateCard() : Boolean {
         return true
     }
-
-
 
 }

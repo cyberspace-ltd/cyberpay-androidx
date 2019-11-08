@@ -21,7 +21,7 @@ object CardValidator {
         }
 
         val cc =
-            CardType.gleanCompany(card) ?:  return CardResult (card, false)
+            CardType.getCardByName(card) ?:  return CardResult (card, false)
 
         return CardResult (card, cc)
     }
