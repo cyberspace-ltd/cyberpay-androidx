@@ -1,15 +1,15 @@
-package com.cyberspace.cyberpaysdk.data.transaction.service
+package com.cyberspace.cyberpaysdk.data.transaction.remote
 
+import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
 import com.google.gson.JsonObject
 import io.reactivex.Observable
-import okhttp3.RequestBody
-import org.json.JSONObject
 import retrofit2.http.*
 
-interface TransactionService {
+internal interface TransactionService {
 
     @POST("payments")
-    fun beginTransaction(@Body transactionService : Map<String, String>) : Observable<JsonObject>
+    fun beginTransaction(@Body transactionService : MutableMap<String, Any?>) : Observable<ApiResponse<SetTransaction>>
 
     @POST("payments/card")
     fun chargeCard(@Body transactionService: Map<String, String>) : Observable<JsonObject>
@@ -33,28 +33,6 @@ interface TransactionService {
     fun enrolOtp(@Body transactionService: Map<String, String>) : Observable<JsonObject>
 
     @GET("banks")
-    fun getBank() : Observable<JsonObject>
-
-    /*
-
-
-    @POST("payments/otp")
-    Call<ApiResponse<OtpResponse>> verifyOtp(@Body RequestBody params);
-
-    @POST("payments/bank/otp/{value}")
-    Call<ApiResponse<OtpResponse>> verifyBankOtp(@Body RequestBody params, @Path("value") String value);
-
-    @POST("payments/bank")
-    Call<ApiResponse<ChargeBankResponse>> chargeBank(@Body RequestBody params);
-
-   @POST("payments/bank/enrol/otp")
-    Call<ApiResponse<ChargeBankResponse>> enrolOtp(@Body RequestBody params);
-
-    @GET("banks")
-    Call<ApiResponse<List<BankResponse>>> getBank();
-
-*/
-
-
+    fun getBanks() : Observable<JsonObject>
 
 }

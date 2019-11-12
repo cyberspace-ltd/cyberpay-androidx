@@ -10,7 +10,7 @@ import javax.inject.Inject
 internal class BaseService  @Inject constructor() : Service {
 
     private var retrofit: Retrofit? = null
-    private val baseUrl = "http://api.acme.international/"
+    private val baseUrl = "https://payment-api.staging.cyberpay.ng/api/v1/"
 
     private fun getRetrofitInstance(): Retrofit? {
         if (retrofit == null) {

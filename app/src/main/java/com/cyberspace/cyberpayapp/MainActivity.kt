@@ -7,11 +7,11 @@ import android.view.Menu
 import android.view.MenuItem
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.TransactionCallback
-import com.cyberspace.cyberpaysdk.model.Card
 import com.cyberspace.cyberpaysdk.data.transaction.Transaction
+import com.cyberspace.cyberpaysdk.model.Card
+
 
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,11 +23,15 @@ class MainActivity : AppCompatActivity() {
 
         var card = Card()
         card.cardNumber = "5399830000000008"
+        card.expiryMonth = 12
+        card.expiryYear = 22
 
-       // Log.e("VALID CARD", String.format("NAME: %s, ISSUER: %s",card.cardType?.name, card.cardType?.issuerName))
+        val transaction = Transaction()
+        transaction.amount = 100000.0
+        transaction.card = card
 
-        CyberpaySdk.chargeCard(this,
-            Transaction(), object : TransactionCallback(){
+
+        CyberpaySdk.chargeCard(this, transaction, object : TransactionCallback() {
             override fun onSuccess(transaction: Transaction) {
 
             }

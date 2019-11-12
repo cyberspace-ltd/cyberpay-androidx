@@ -1,8 +1,8 @@
 package com.cyberspace.cyberpaysdk.data.base.remote
 
-class ApiResponse<T> {
+internal class ApiResponse<T> {
 
-    private var message : String? = null
-    private var succeeded  = false
-    private var data : T? = null
+    var message : String? = null
+    var succeeded  = false
+    var data : T? = null
 }
