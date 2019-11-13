@@ -34,6 +34,13 @@ public object CyberpaySdk {
             this.envMode = mode
         }
 
+        private fun chargeCardWithoutPin(context: Context, transaction: Transaction, transactionCallback: TransactionCallback){
+
+        }
+
+        private fun chargeCardWithPin(context: Context, transaction: Transaction, transactionCallback: TransactionCallback){
+
+        }
 
 
         @SuppressLint("CheckResult")
@@ -41,7 +48,7 @@ public object CyberpaySdk {
             transaction.type = TransactionType.Card
             transaction.key = key
 
-
+            // set transaction
             if(transaction.merchantReference.isEmpty())
                 transaction.merchantReference = SequenceGenerator.hash()
 
@@ -49,24 +56,29 @@ public object CyberpaySdk {
             repository.beginTransaction(transaction)
                 ?.subscribeOn(scheduler.background())
                 ?.observeOn(scheduler.ui())
-                ?.subscribe(object : Observer<ApiResponse<SetTransaction>?> {
-                    override fun onNext(t: ApiResponse<SetTransaction>) {
-                        transaction.transactionReference = t.data?.transactionReference
-                        transaction.charge = t.data?.charge
-                    }
+                ?.subscribe({
+                    t ->
+                    transaction.transactionReference = t.data?.transactionReference
+                    transaction.charge = t.data?.charge
+                    // charge card without pin
+                    chargeCardWithoutPin(context, transaction, object : TransactionCallback() {
+                        override fun onSuccess(transaction: Transaction) {
 
-                    override fun onError(e: Throwable) {
-                        Log.e("ERROR: RESPONSE",e.toString())
-                    }
+                        }
 
-                    override fun onComplete() {
+                        override fun onError(transaction: Transaction, throwable: Throwable) {
 
-                    }
+                        }
 
-                    override fun onSubscribe(d: Disposable) {
+                        override fun onValidate(transaction: Transaction) {
 
-                    }
-                })
+                        }
+                    })
+
+                    },
+                    { e ->
+
+                    })
 
         }
 

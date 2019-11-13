@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        var card = Card()
+        val card = Card()
         card.cardNumber = "5399830000000008"
         card.expiryMonth = 12
         card.expiryYear = 22
@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         val transaction = Transaction()
         transaction.amount = 100000.0
         transaction.card = card
-
 
         CyberpaySdk.chargeCard(this, transaction, object : TransactionCallback() {
             override fun onSuccess(transaction: Transaction) {

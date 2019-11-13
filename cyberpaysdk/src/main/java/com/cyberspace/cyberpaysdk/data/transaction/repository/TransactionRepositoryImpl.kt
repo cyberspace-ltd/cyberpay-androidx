@@ -7,6 +7,7 @@ import com.cyberspace.cyberpaysdk.data.base.remote.Service
 import com.cyberspace.cyberpaysdk.data.transaction.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.TransactionService
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
 import com.google.gson.JsonObject
 import io.reactivex.Observable
 
@@ -27,8 +28,18 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         return service.create(TransactionService::class.java)?.beginTransaction(param)
     }
 
-    override fun chargeCard(transaction: Transaction): Observable<JsonObject> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun chargeCard(transaction: Transaction): Observable<ApiResponse<CardTransaction>>? {
+
+        val param = mutableMapOf<String, Any?>()
+        param["Name"] = ""
+        param["ExpiryMonth"] = transaction.card?.expiryMonth
+        param["ExpiryYear"] = transaction.card?.expiryYear
+        param["CardNumber"] = transaction.card?.cardNumber
+        param["CVV"] = transaction.card?.cvv
+        param["Reference"] = transaction.transactionReference
+        param["cardPin"] = transaction.card?.pin
+
+        return service.create(TransactionService::class.java)?.chargeCard(param)
     }
 
     override fun verifyTransaction(reference: String) {

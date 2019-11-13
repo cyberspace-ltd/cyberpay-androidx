@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="@dimen/horizontal_margin"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:focusable="false"
+        android:hint="@string/bank_hint"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        style="@style/input"/>
+
+    <EditText
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:hint="@string/account_hint"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        style="@style/input"/>
+
+</LinearLayout>

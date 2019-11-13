@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">CyberpaySdk</string>
+    <string name="test_message">This is a test page to see how payment works. Do not use for production</string>
+    <string name="logo_content_desc">logo</string>
+    <string name="pay_options">Payment Options</string>
+    <string name="bank">Bank</string>
+    <string name="card">Card</string>
+    <string name="card_hint">Card Number</string>
+    <string name="cvv_hint">CVV</string>
+    <string name="expiry_hint">MM/YY</string>
+    <string name="bank_hint">Select Bank</string>
+    <string name="account_hint">Account Number</string>
+    <string name="pay">Pay</string>
+    <string name="secure">Secured by</string>
 </resources>

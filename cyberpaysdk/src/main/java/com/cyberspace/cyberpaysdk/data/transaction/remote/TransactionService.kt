@@ -1,6 +1,7 @@
 package com.cyberspace.cyberpaysdk.data.transaction.remote
 
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
 import com.google.gson.JsonObject
 import io.reactivex.Observable
@@ -12,7 +13,7 @@ internal interface TransactionService {
     fun beginTransaction(@Body transactionService : MutableMap<String, Any?>) : Observable<ApiResponse<SetTransaction>>
 
     @POST("payments/card")
-    fun chargeCard(@Body transactionService: Map<String, String>) : Observable<JsonObject>
+    fun chargeCard(@Body transactionService: MutableMap<String, Any?>) : Observable<ApiResponse<CardTransaction>>
 
     @GET("payments/{transactionReference}")
     fun verifyTransaction(@Path("transactionReference") transactionReference : String) : Observable<JsonObject>
