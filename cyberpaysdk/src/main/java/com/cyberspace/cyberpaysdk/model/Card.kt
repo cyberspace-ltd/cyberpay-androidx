@@ -1,5 +1,6 @@
 package com.cyberspace.cyberpaysdk.model
 
+import android.util.Log
 import com.cyberspace.cyberpaysdk.enums.CardType
 import com.cyberspace.cyberpaysdk.utils.validator.CardValidator
 import java.security.InvalidParameterException
@@ -21,7 +22,10 @@ class Card {
 
     var cvv : String? = null
     set(value) {
-        if(value != null) if(value.length > 3 || value.length <3) throw InvalidParameterException("Invalid Card Cvv Found")
+        Log.e("CVV", value?.length.toString())
+        if(value != null) {
+            if(value.length > 3 || value.length <3) throw InvalidParameterException("Invalid Card Cvv Found")
+        }
         else throw InvalidParameterException("Invalid Card Cvv Found")
 
         field = value

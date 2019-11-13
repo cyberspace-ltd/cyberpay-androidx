@@ -16,7 +16,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 
-public object CyberpaySdk {
+ object CyberpaySdk {
 
         private var key = ""
         private var envMode : Mode = Mode.Debug
@@ -34,8 +34,42 @@ public object CyberpaySdk {
             this.envMode = mode
         }
 
+        @SuppressLint("CheckResult")
         private fun chargeCardWithoutPin(context: Context, transaction: Transaction, transactionCallback: TransactionCallback){
+            repository.chargeCard(transaction)
+                ?.subscribeOn(scheduler.background())
+                ?.observeOn(scheduler.ui())
+                ?.subscribe (
+                    {t ->
 
+                        when(t.data?.status){
+
+                            "Success", "Successful" -> {
+                                transactionCallback.onSuccess(transaction)
+                            }
+
+                            "Otp" -> {
+
+                            }
+                            "ProvidePin" -> {
+
+                            }
+                            "EnrollOtp" -> {
+
+                            }
+                            "Secure3D" -> {
+
+                            }
+                            "Secure3DMpgs" -> {
+
+                            }
+
+                        }
+                    },
+                    {e ->
+                        Log.e("RESPONSE", e.toString())
+                    }
+                )
         }
 
         private fun chargeCardWithPin(context: Context, transaction: Transaction, transactionCallback: TransactionCallback){
@@ -60,10 +94,10 @@ public object CyberpaySdk {
                     t ->
                     transaction.transactionReference = t.data?.transactionReference
                     transaction.charge = t.data?.charge
-                    // charge card without pin
+                    // charge card without pinpad
                     chargeCardWithoutPin(context, transaction, object : TransactionCallback() {
                         override fun onSuccess(transaction: Transaction) {
-
+                            transactionCallback.onSuccess(transaction)
                         }
 
                         override fun onError(transaction: Transaction, throwable: Throwable) {

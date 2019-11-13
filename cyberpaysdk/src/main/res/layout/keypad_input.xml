@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/one"
+                style="@style/key"
+                android:text="@string/one"
+                />
+
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/two"
+                style="@style/key"
+                android:text="@string/two"
+             />
+
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/three"
+                style="@style/key"
+                android:text="@string/three"
+               />
+
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_spacing"/>
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/four"
+                style="@style/key"
+                android:text="@string/four"
+               />
+
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/five"
+                style="@style/key"
+                android:text="@string/five"
+
+               />
+
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/six"
+                style="@style/key"
+                android:text="@string/six"
+            />
+
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_spacing"/>
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/seven"
+                style="@style/key"
+                android:text="@string/seven"
+               />
+
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/eight"
+                style="@style/key"
+                android:text="@string/eight"
+              />
+
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/nine"
+                style="@style/key"
+                android:text="@string/nine"
+              />
+
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_spacing"/>
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                style="@style/key"/>
+
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                android:id="@+id/zero"
+                style="@style/key"
+                android:text="@string/zero"
+               />
+
+
+            <ImageView
+                android:layout_weight="1"
+                android:id="@+id/delete"
+                android:scaleType="fitCenter"
+                android:src="@drawable/back_space"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"/>
+
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_spacing"/>
+
+
+        <LinearLayout
+            android:id="@+id/bt_continue"
+            android:layout_marginBottom="@dimen/horizontal_margin"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/input_height">
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Light
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:textSize="@dimen/medium_font"
+                android:textColor="@android:color/white"
+                android:text="@string/continue_text"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:layout_marginRight="@dimen/horizontal_margin"
+                android:layout_marginEnd="@dimen/horizontal_margin"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_button_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>

@@ -39,6 +39,8 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["Reference"] = transaction.transactionReference
         param["cardPin"] = transaction.card?.pin
 
+        Log.e("REQ", param.toString())
+
         return service.create(TransactionService::class.java)?.chargeCard(param)
     }
 

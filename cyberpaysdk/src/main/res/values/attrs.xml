@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PinPad">
+        <attr name="randomiseKeys" format="boolean"/>
+        <attr name="title" format="string"/>
+        <attr name="desc" format="string"/>
+        <attr name="pinLength" format="integer"/>
+    </declare-styleable>
+    
+</resources>

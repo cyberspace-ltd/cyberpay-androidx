@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,10 +26,12 @@ class MainActivity : AppCompatActivity() {
         card.cardNumber = "5399830000000008"
         card.expiryMonth = 12
         card.expiryYear = 22
+        card.cvv = "000"
 
         val transaction = Transaction()
         transaction.amount = 100000.0
         transaction.card = card
+
 
         CyberpaySdk.chargeCard(this, transaction, object : TransactionCallback() {
             override fun onSuccess(transaction: Transaction) {
@@ -44,10 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -12,4 +12,21 @@
     <string name="account_hint">Account Number</string>
     <string name="pay">Pay</string>
     <string name="secure">Secured by</string>
+    <string name="otp_text">Enter OTP Sent</string>
+    <string name="default_otp_message">A one time password has been sent to +23480******4. Enter Code below to complete your transaction</string>
+    <string name="otp">123456</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="zero">0</string>
+    <string name="continue_text">Continue</string>
+    <string name="pin_text">Enter Card Pin</string>
+    <string name="default_pin_message">To ensure you own this card, kindly enter your pin to continue</string>
+
 </resources>
