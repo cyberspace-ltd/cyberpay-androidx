@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
 
         val card = Card()
         card.cardNumber = "5399830000000008"
-        card.expiryMonth = 12
-        card.expiryYear = 22
+        card.expiryMonth = 5
+        card.expiryYear = 30
         card.cvv = "000"
 
         val transaction = Transaction()

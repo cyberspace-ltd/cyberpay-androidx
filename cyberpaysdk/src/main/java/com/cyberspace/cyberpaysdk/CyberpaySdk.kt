@@ -49,25 +49,25 @@ import io.reactivex.disposables.Disposable
                             }
 
                             "Otp" -> {
-
+                            // inflate opt ui
                             }
                             "ProvidePin" -> {
-
+                                // inflate pin ui
                             }
                             "EnrollOtp" -> {
-
+                                // inflate phone number ui
                             }
                             "Secure3D" -> {
-
+                                // to be decided
                             }
                             "Secure3DMpgs" -> {
-
+                                // to be decided
                             }
 
                         }
                     },
                     {e ->
-                        Log.e("RESPONSE", e.toString())
+                       //  Log.e("RESPONSE", e.toString())
                     }
                 )
         }
@@ -94,6 +94,7 @@ import io.reactivex.disposables.Disposable
                     t ->
                     transaction.transactionReference = t.data?.transactionReference
                     transaction.charge = t.data?.charge
+                    
                     // charge card without pinpad
                     chargeCardWithoutPin(context, transaction, object : TransactionCallback() {
                         override fun onSuccess(transaction: Transaction) {
