@@ -6,19 +6,74 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <EditText
-        android:focusable="false"
-        android:hint="@string/bank_hint"
+
+
+    <RelativeLayout
+        android:layout_marginBottom="@dimen/horizontal_margin"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/input_height"
-        style="@style/input"/>
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/bank_name"
+            android:hint="@string/bank_hint"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/input_height"
+            android:paddingStart="@dimen/vertical_margin"
+            android:paddingLeft="@dimen/vertical_margin"
+            style="@style/input"
+            android:focusable="false"
+            android:layout_marginBottom="0dp"/>
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arrow_down_sm"
+            android:layout_width="14dp"
+            android:layout_marginRight="@dimen/horizontal_margin"
+            android:layout_marginEnd="@dimen/horizontal_margin"
+            android:layout_height="14dp"/>
+
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_bank"
+            android:layout_width="16dp"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_height="16dp"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <EditText
+        android:id="@+id/account_number"
         android:inputType="number"
         android:imeOptions="actionDone"
         android:hint="@string/account_hint"
         android:layout_width="match_parent"
         android:layout_height="@dimen/input_height"
-        style="@style/input"/>
+        android:paddingStart="@dimen/vertical_margin"
+        android:paddingLeft="@dimen/vertical_margin"
+        style="@style/input"
+        android:layout_marginBottom="0dp"/>
+
+
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_account_number"
+            android:layout_width="16dp"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_height="16dp"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

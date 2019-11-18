@@ -5,7 +5,9 @@ internal class Bank {
     var bankCode = ""
     var bankName = ""
     var isActive : Boolean? = false
-    var providerCode : Int? = 0
-    var processType : MutableList<Any>? = mutableListOf()
+    var providerCode : Int?  = 0
+    var bankProviders : MutableList<Any>? = mutableListOf()
+    var processingType : String? = ""
+    var externalRedirectUrl : String? = ""
 
 }

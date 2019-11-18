@@ -7,7 +7,7 @@ import com.cyberspace.cyberpaysdk.model.Split
 class Transaction {
 
     var card : Card? = null
-    var transactionReference : String? = null
+    var reference : String? = null
     internal set
 
     var merchantReference = ""

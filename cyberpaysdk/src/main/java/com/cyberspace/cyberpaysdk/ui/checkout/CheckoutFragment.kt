@@ -1,0 +1,256 @@
+package com.cyberspace.cyberpaysdk.ui.checkout
+
+import android.app.Dialog
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+
+import com.cyberspace.cyberpaysdk.CyberpaySdk
+import com.cyberspace.cyberpaysdk.R
+import com.cyberspace.cyberpaysdk.data.bank.Bank
+import com.cyberspace.cyberpaysdk.data.transaction.Transaction
+import com.cyberspace.cyberpaysdk.enums.Mode
+import com.cyberspace.cyberpaysdk.model.Card
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import java.security.InvalidParameterException
+
+internal class CheckoutFragment constructor(var transaction: Transaction,var listener: OnCardSubmitted) : BottomSheetDialogFragment(), CheckoutContract.View{
+
+    lateinit var cardNumber : EditText
+    lateinit var expiry : EditText
+    lateinit var cvv : EditText
+
+    lateinit var bankName : EditText
+    lateinit var accountNumber : EditText
+    lateinit var cardType : ImageView
+
+    lateinit var close : View
+    lateinit var testView : View
+    lateinit var amount: TextView
+
+    var isCardNumberError : Boolean = true
+    var isCardCvvError : Boolean = true
+    var isCardExpiryError : Boolean = true
+
+    private lateinit var cardPay: LinearLayout
+    private lateinit var bankPay: LinearLayout
+    private lateinit var bankLayout: LinearLayout
+    private lateinit var cardLayout: LinearLayout
+
+    private lateinit var bankList: MutableList<Bank>
+
+    //indicators
+    private lateinit var cardIndicator: View
+    private lateinit var bankIndicator: View
+
+    private lateinit var pay : TextView
+
+    private lateinit var viewPresenter: CheckoutContract.Presenter
+
+    private val card = Card()
+
+    override fun setupDialog(dialog: Dialog, style: Int) {
+        super.setupDialog(dialog, style)
+
+        //Set the custom view
+        val view = LayoutInflater.from(context).inflate(R.layout.checkout, null)
+        dialog.setContentView(view)
+
+        dialog.setOnShowListener {
+            // For AndroidX use: com.google.android.material.R.id.design_bottom_sheet
+            val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as? FrameLayout
+            val behavior = BottomSheetBehavior.from(bottomSheet)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+
+        cardPay = view.findViewById(R.id.card_pay)
+        bankPay = view.findViewById(R.id.bank_pay)
+
+        bankLayout = view.findViewById(R.id.bank_layout)
+        cardLayout = view.findViewById(R.id.card_layout)
+
+        cardIndicator = view.findViewById(R.id.card_indicator)
+        bankIndicator = view.findViewById(R.id.bank_indicator)
+
+        cardNumber = view.findViewById(R.id.card_number)
+        expiry = view.findViewById(R.id.expiry)
+        cvv = view.findViewById(R.id.cvv)
+        cardType = view.findViewById(R.id.card_type)
+
+        pay = view.findViewById(R.id.pay)
+        amount = view.findViewById(R.id.amount)
+
+        pay.text = String.format("%s%s",pay.text, (transaction.amount/100).toString())
+
+        testView = view.findViewById(R.id.text_banner)
+
+        if(CyberpaySdk.envMode == Mode.Debug) testView.visibility = View.VISIBLE
+        else testView.visibility = View.GONE
+
+        bankName = view.findViewById(R.id.bank_name)
+        accountNumber = view.findViewById(R.id.account_number)
+
+        close = view.findViewById(R.id.close)
+
+        bankName.setOnClickListener {
+            // inflate banks list
+            for(str in bankList) Log.e("BANK\n", str.bankName)
+        }
+
+        close.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        bankPay.setOnClickListener {
+            viewPresenter.bankPay()
+        }
+
+        cardPay.setOnClickListener {
+            viewPresenter.cardPay()
+        }
+
+        this.isCancelable = false
+        viewPresenter = CheckoutPresenter()
+        attachPresenter(viewPresenter)
+
+        cardNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                try{
+                    card.cardNumber = s.toString()
+                    when(card.cardType?.issuerName){
+                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
+                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
+                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
+                    }
+
+                    isCardNumberError = false
+
+                }catch (e : Exception){
+                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
+                    cardType.setImageResource(0)
+                    isCardNumberError = true
+                }
+            }
+        })
+
+        cvv.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                try {
+                    card.cvv = s.toString()
+                    isCardCvvError = false
+                }catch (error : java.lang.Exception){
+                    cvv.error = "Invalid Card CVV"
+                    isCardCvvError = true
+                }
+
+            }
+        })
+
+        expiry.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    try{
+                        isCardExpiryError = false
+                        val exp = s.toString().split("/")
+                        card.expiryMonth = exp[0].toInt()
+                        card.expiryYear = exp[1].toInt()
+                    }
+                    catch (ex : InvalidParameterException){
+                        expiry.error = ex.message
+                        isCardExpiryError = true
+                    }
+                    catch (ex: java.lang.Exception) {
+                        isCardExpiryError = true
+                    }
+            }
+        })
+
+        pay.setOnClickListener {
+            if(!isCardCvvError && !isCardExpiryError && !isCardNumberError){
+                listener.onSubmit(this.dialog,card)
+            }
+
+            else {
+                if(isCardNumberError) cardNumber.error = "This is required"
+                if(isCardExpiryError) expiry.error = "This is required"
+                if(isCardCvvError) cvv.error = "This is required"
+            }
+        }
+    }
+
+    override fun onError(message: String) {
+
+    }
+
+    override fun onBankPay() {
+        cardIndicator.setBackgroundResource(R.color.white)
+        bankIndicator.setBackgroundResource(R.color.primaryColorDark)
+        bankLayout.visibility = View.VISIBLE
+        cardLayout.visibility = View.GONE
+        viewPresenter.loadBanks()
+    }
+
+    override fun onCardPay() {
+        bankIndicator.setBackgroundResource(R.color.white)
+        cardIndicator.setBackgroundResource(R.color.primaryColorDark)
+        bankLayout.visibility = View.GONE
+        cardLayout.visibility = View.VISIBLE
+    }
+
+    override fun attachPresenter(presenter: Any) {
+        viewPresenter  = presenter as CheckoutContract.Presenter
+    }
+
+    override fun close() {
+
+    }
+
+    override fun onLoad() {
+
+    }
+
+    override fun onLoadComplete(banks: MutableList<Bank>) {
+      bankList = banks
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+        viewPresenter.detachView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewPresenter.attachView(this)
+    }
+
+
+}

@@ -1,6 +1,7 @@
 package com.cyberspace.cyberpayapp
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
@@ -9,6 +10,7 @@ import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.TransactionCallback
 import com.cyberspace.cyberpaysdk.data.transaction.Transaction
 import com.cyberspace.cyberpaysdk.model.Card
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,30 +24,41 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val card = Card()
-        card.cardNumber = "5399830000000008"
-        card.expiryMonth = 5
-        card.expiryYear = 30
+        val fab : FloatingActionButton = findViewById(R.id.fab)
+
+        val card = Card()//5061030000000000928
+        //5061 0300 0000 0000 928
+        /*card.cardNumber = "5061 0300 0000 0000 928"//"4399830000000008"
+        card.expiryMonth = 6
+        card.expiryYear = 50
         card.cvv = "000"
 
+         */
+
         val transaction = Transaction()
-        transaction.amount = 100000.0
-        transaction.card = card
+        //
+        transaction.amount = 10000000.0
+        transaction.returnUrl = "https://googl"
+        //transaction.card = card
+
+        fab.setOnClickListener {
+            CyberpaySdk.checkoutTransaction(this, transaction, object : TransactionCallback() {
+                override fun onSuccess(transaction: Transaction) {
+                    Log.e("RESPONSE", "SUCCESSFUL")
+                }
+
+                override fun onError(transaction: Transaction, throwable: Throwable) {
+                    Log.e("ERROR", throwable.message)
+                }
+
+                override fun onValidate(transaction: Transaction) {
+
+                }
+            })
+        }
 
 
-        CyberpaySdk.chargeCard(this, transaction, object : TransactionCallback() {
-            override fun onSuccess(transaction: Transaction) {
 
-            }
-
-            override fun onError(transaction: Transaction, throwable: Throwable) {
-
-            }
-
-            override fun onValidate(transaction: Transaction) {
-
-            }
-        })
 
 
     }

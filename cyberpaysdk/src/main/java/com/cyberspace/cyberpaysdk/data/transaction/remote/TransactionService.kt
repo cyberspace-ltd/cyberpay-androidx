@@ -1,8 +1,11 @@
 package com.cyberspace.cyberpaysdk.data.transaction.remote
 
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.*
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.OtpResponse
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.VerifyMerchantTransaction
 import com.google.gson.JsonObject
 import io.reactivex.Observable
 import retrofit2.http.*
@@ -16,16 +19,16 @@ internal interface TransactionService {
     fun chargeCard(@Body transactionService: MutableMap<String, Any?>) : Observable<ApiResponse<CardTransaction>>
 
     @GET("payments/{transactionReference}")
-    fun verifyTransaction(@Path("transactionReference") transactionReference : String) : Observable<JsonObject>
+    fun verifyTransactionByReference(@Path("transactionReference") transactionReference : String) : Observable<ApiResponse<VerifyTransaction>>
 
     @GET("transactions/transactionsBymerchantRef")
-    fun verifyMerchantTransaction(@Query("merchantRef") merchantRef : String) : Observable<JsonObject>
+    fun verifyTransactionByMerchantReference(@Query("merchantRef") merchantRef : String) : Observable<ApiResponse<VerifyMerchantTransaction>>
 
     @POST("payments/otp")
-    fun verifyOtp(@Body transactionService : Map<String , String>) : Observable<JsonObject>
+    fun verifyCardOtp(@Body transactionService : MutableMap<String, Any?>) : Observable<ApiResponse<OtpResponse>>
 
     @POST("payments/bank/otp/{value}")
-    fun verifyBankOtp(@Body transactionService: Map<String, String>, @Path("value") value : String) : Observable<JsonObject>
+    fun verifyBankOtp(@Body transactionService: MutableMap<String, Any?>, @Path("value") value : String) : Observable<JsonObject>
 
     @POST("payments/bank")
     fun chargeBank(@Body transactionService: Map<String, String>) : Observable<JsonObject>

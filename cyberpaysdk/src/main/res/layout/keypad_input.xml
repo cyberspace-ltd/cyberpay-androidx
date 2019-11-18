@@ -129,7 +129,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/back_space"
                 android:layout_width="match_parent"
-                android:layout_height="28dp"/>
+                android:layout_height="24dp"/>
 
 
         </LinearLayout>
@@ -143,7 +143,7 @@
             android:id="@+id/bt_continue"
             android:layout_marginBottom="@dimen/horizontal_margin"
             android:orientation="horizontal"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/primary_button_background"
             android:layout_width="match_parent"
             android:layout_height="@dimen/input_height">
 

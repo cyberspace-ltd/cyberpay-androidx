@@ -5,11 +5,18 @@ import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
 import com.cyberspace.cyberpaysdk.data.base.remote.BaseService
 import com.cyberspace.cyberpaysdk.data.base.remote.Service
 import com.cyberspace.cyberpaysdk.data.transaction.Transaction
-import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.TransactionService
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.*
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.OtpResponse
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.VerifyMerchantTransaction
 import com.google.gson.JsonObject
 import io.reactivex.Observable
+import org.json.JSONObject
+import okhttp3.RequestBody
+
+
 
 internal class TransactionRepositoryImpl : TransactionRepository{
 
@@ -36,24 +43,28 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["ExpiryYear"] = transaction.card?.expiryYear
         param["CardNumber"] = transaction.card?.cardNumber
         param["CVV"] = transaction.card?.cvv
-        param["Reference"] = transaction.transactionReference
-        param["cardPin"] = transaction.card?.pin
-
-        Log.e("REQ", param.toString())
+        param["Reference"] = transaction.reference
+        param["CardPin"] = transaction.card?.pin
 
         return service.create(TransactionService::class.java)?.chargeCard(param)
     }
 
-    override fun verifyTransaction(reference: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun verifyTransactionByReference(reference: String): Observable<ApiResponse<VerifyTransaction>>? {
+      return service.create(TransactionService::class.java)?.verifyTransactionByReference(reference)
     }
 
-    override fun verifyMerchantTransaction(merchantReference: String): Observable<JsonObject> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun verifyTransactionByMerchantReference(merchantReference: String): Observable<ApiResponse<VerifyMerchantTransaction>>? {
+        return service.create(TransactionService::class.java)?.verifyTransactionByMerchantReference(merchantReference)
     }
 
-    override fun verifyOtp(transaction: Transaction): Observable<JsonObject> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun verifyCardOtp(transaction: Transaction): Observable<ApiResponse<OtpResponse>>? {
+
+        val param = mutableMapOf<String, Any?>()
+        param["otp"] = transaction.otp
+        param["reference"] = transaction.reference
+        param["card"] = transaction.card?.toJson()
+
+        return service.create(TransactionService::class.java)?.verifyCardOtp(param)
     }
 
     override fun verifyBankOtp(transaction: Transaction): Observable<JsonObject> {

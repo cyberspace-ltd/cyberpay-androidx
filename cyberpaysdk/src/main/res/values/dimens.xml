@@ -4,13 +4,18 @@
     <dimen name="vertical_margin">64dp</dimen>
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="line_spacing">32dp</dimen>
+    <dimen name="search_padding">48dp</dimen>
     <dimen name="view_spacing">24dp</dimen>
     <dimen name="small_font">12sp</dimen>
     <dimen name="medium_font">18sp</dimen>
     <dimen name="semi_medium_font">14sp</dimen>
-    <dimen name="large_font">28sp</dimen>
+    <dimen name="large_font">26sp</dimen>
+    <dimen name="semi_large_font">22sp</dimen>
     <dimen name="space_small">10dp</dimen>
     <dimen name="input_height">45dp</dimen>
     <dimen name="xlarge_font">48sp</dimen>
+    <dimen name="item_space">5dp</dimen>
+    <dimen name="text_line_spacing">5dp</dimen>
+    <dimen name="search_input">32dp</dimen>
 
 </resources>

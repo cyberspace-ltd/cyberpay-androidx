@@ -2,6 +2,7 @@ package com.cyberspace.cyberpaysdk.ui.widget
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.text.InputFilter
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -20,7 +21,7 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
      */
     var randomKeys : Boolean? = false
     var title : String? = null
-    var desc : String ? = null
+    var desc : String? = null
     var pinLength : Int? = 0
 
     /*
@@ -116,48 +117,61 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
         set click listeners
          */
         one.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[0].toString())
            if(onItemSelected != null) onItemSelected?.onClick(one.text.toString().toInt())
         }
 
         two.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[1].toString())
             if(onItemSelected != null) onItemSelected?.onClick(two.text.toString().toInt())
         }
 
         three.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[2].toString())
             if(onItemSelected != null) onItemSelected?.onClick(three.text.toString().toInt())
         }
 
         four.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[3].toString())
             if(onItemSelected != null) onItemSelected?.onClick(four.text.toString().toInt())
         }
 
         five.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[4].toString())
             if(onItemSelected != null) onItemSelected?.onClick(five.text.toString().toInt())
         }
 
 
         six.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[5].toString())
             if(onItemSelected != null) onItemSelected?.onClick(six.text.toString().toInt())
         }
 
         seven.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[6].toString())
             if(onItemSelected != null) onItemSelected?.onClick(seven.text.toString().toInt())
         }
 
         eight.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[7].toString())
             if(onItemSelected != null) onItemSelected?.onClick(eight.text.toString().toInt())
         }
 
         nine.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[8].toString())
             if(onItemSelected != null) onItemSelected?.onClick(nine.text.toString().toInt())
         }
 
         zero.setOnClickListener {
+            pin.text = String.format("%s%s",pin.text.toString(), keyArray[9].toString())
             if(onItemSelected != null) onItemSelected?.onClick(zero.text.toString().toInt())
         }
 
-
-
+        delete.setOnClickListener {
+            if(pin.text.isNotEmpty()){
+                pin.text = pin.text.toString().substring(0, pin.text.length-1)
+            }
+        }
 
         try {
             title = attributes?.getString(R.styleable.PinPad_title)
@@ -173,13 +187,7 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
 
         try {
             pinLength = attributes?.getInteger(R.styleable.PinPad_pinLength, 0)
-            /*
-
-            val filterArray = arrayOfNulls<InputFilter>(1)
-            filterArray [0] = InputFilter.LengthFilter(4)
-            pin?.filters = filterArray
-
-             */
+            pin.filters = arrayOf(InputFilter.LengthFilter(pinLength!!))
 
         }catch (error : Exception){}
 
@@ -189,7 +197,6 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
             if(randomKeys == true){
 
                 generateKeys()
-
                 one.text = keyArray[0].toString()
                 two.text = keyArray[1].toString()
                 three.text = keyArray[2].toString()
@@ -202,6 +209,7 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
                 zero.text = keyArray[9].toString()
 
             }
+            else keyArray = mutableListOf(1,2,3,4,5,6,7,8,9,0)
 
             //
         }catch (error : Exception){

@@ -3,6 +3,7 @@ package com.cyberspace.cyberpaysdk.model
 import android.util.Log
 import com.cyberspace.cyberpaysdk.enums.CardType
 import com.cyberspace.cyberpaysdk.utils.validator.CardValidator
+import org.json.JSONObject
 import java.security.InvalidParameterException
 
 class Card {
@@ -14,15 +15,16 @@ class Card {
         if(!result.isValid) throw InvalidParameterException("Invalid Card Number Found")
 
         this.cardType = result.cardType
-        field  = value
+        field  = result.cardNo
     }
 
     var cardName = ""
     var cardEmail = ""
+    var address = ""
+    var last4Digits = ""
 
     var cvv : String? = null
     set(value) {
-        Log.e("CVV", value?.length.toString())
         if(value != null) {
             if(value.length > 3 || value.length <3) throw InvalidParameterException("Invalid Card Cvv Found")
         }
@@ -33,18 +35,31 @@ class Card {
 
     var expiryMonth : Int = 0
     set(value) {
-        if(value > 12 || value<1) throw InvalidParameterException("Invalid Card Expiry Month Found")
+        if(value > 12 || value<1) throw InvalidParameterException("Invalid Card Expiry Month")
         field = value
     }
 
     var expiryYear : Int = 0
         set(value) {
-            if(value > 99 || value<1 ) throw InvalidParameterException("Invalid Card Expiry Year Found")
+            if(value > 99 || value<19 ) throw InvalidParameterException("Invalid Card Expiry Year")
             field = value
         }
 
     var cardType : CardType? = null
 
     internal var pin : String? = null
+
+    fun toJson () : JSONObject {
+        //val param = mutableMapOf<String, Any?>()
+        val param= HashMap<String, Any?>()
+        param["Name"] = ""
+        param["ExpiryMonth"] = expiryMonth
+        param["ExpiryYear"] = expiryYear
+        param["CardNumber"] = cardNumber
+        param["CVV"] = cvv
+        param["CardPin"] = pin
+
+        return JSONObject(param)
+    }
 
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+
+       <WebView
+           android:id="@+id/webView"
+           android:layout_centerInParent="true"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"/>
+
+
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:background="@android:color/white"
+        android:id="@+id/error_page"
+        android:padding="@dimen/horizontal_margin"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/large_font"
+            android:textColor="@android:color/black"
+            android:text="@string/error_title"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_marginBottom="@dimen/line_spacing"
+            android:src="@drawable/ic_load_error"
+            android:layout_width="96dp"
+            android:layout_height="96dp"/>
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Regular
+            android:layout_marginTop="@dimen/horizontal_margin"
+            android:text="@string/page_error"
+            android:textSize="@dimen/medium_font"
+            android:lineSpacingExtra="@dimen/text_line_spacing"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+            android:id="@+id/retry"
+            android:layout_marginTop="@dimen/line_spacing"
+            android:layout_marginBottom="@dimen/space_small"
+            android:text="@string/error_retry"
+            style="@style/button"
+            />
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

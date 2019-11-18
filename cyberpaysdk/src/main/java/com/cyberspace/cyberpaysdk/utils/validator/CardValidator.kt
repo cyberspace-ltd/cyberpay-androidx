@@ -12,7 +12,7 @@ internal object CardValidator {
 
     fun isValid(cardIn: String): CardResult {
         val card = cardIn.replace("[^0-9]+".toRegex(), "") // remove all non-numerics
-        if (card == null || card.length < 13 || card.length > 19) {
+        if (card.length < 13 || card.length > 19) {
             return CardResult (card, false)
         }
 

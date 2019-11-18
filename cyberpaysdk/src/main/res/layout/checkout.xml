@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:fillViewport="true"
-    android:background="@android:color/white"
+    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/text_banner"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:padding="@dimen/horizontal_margin"
-            android:background="@color/colorAccent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/close"
+            android:layout_gravity="end"
+            android:layout_width="24dp"
+            android:layout_margin="@dimen/space_small"
+            android:src="@drawable/ic_close_black_24dp"
+            android:layout_height="24dp"/>
 
-            <com.cyberspace.cyberpaysdk.utils.fonts.Bold
-                android:layout_width="wrap_content"
-                android:text="@string/test_message"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:textSize="@dimen/medium_font"
-                android:textColor="@android:color/white"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
 
         <LinearLayout
             android:gravity="center"
@@ -38,15 +29,44 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_marginTop="@dimen/space_small"
                 android:layout_width="180dp"
                 android:src="@drawable/ic_cyberpay_logo"
                 android:contentDescription="@string/logo_content_desc"
                 android:layout_height="32dp"/>
 
 
-            <com.cyberspace.cyberpaysdk.utils.fonts.Medium
-                android:layout_marginTop="@dimen/vertical_margin"
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/horizontal_margin"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                    android:layout_width="wrap_content"
+                    android:textSize="@dimen/semi_large_font"
+                    android:text="@string/naira"
+                    android:layout_height="wrap_content"/>
+
+                <Space
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"/>
+
+                <com.cyberspace.cyberpaysdk.utils.fonts.ExtraBold
+
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/large_font"
+                    android:text="200,000"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Regular
+                android:layout_marginTop="@dimen/horizontal_margin"
                 android:layout_marginBottom="@dimen/horizontal_margin"
                 android:layout_width="wrap_content"
                 android:text="@string/pay_options"
@@ -65,7 +85,6 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
 
                 <LinearLayout
                     android:baselineAligned="false"
@@ -89,12 +108,11 @@
                             android:layout_marginBottom="@dimen/space_small"
                             />
 
-
                         <View
-                            android:background="@color/colorPrimaryDark"
+                            android:id="@+id/card_indicator"
+                            android:background="@color/primaryColorDark"
                             android:layout_width="match_parent"
                             android:layout_height="5dp"/>
-
 
                     </LinearLayout>
 
@@ -116,16 +134,12 @@
 
 
                         <View
+                            android:id="@+id/bank_indicator"
                             android:background="@android:color/white"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"/>
-
-
+                            android:layout_height="5dp"/>
 
                     </LinearLayout>
-
-
-
 
                 </LinearLayout>
 
@@ -154,7 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <include layout="@layout/card_layout"/>
+                    <include layout="@layout/bank_layout"/>
 
                 </LinearLayout>
 
@@ -163,45 +177,43 @@
                     android:layout_height="@dimen/horizontal_margin"/>
 
 
-
             <com.cyberspace.cyberpaysdk.utils.fonts.Bold
-                android:layout_marginTop="@dimen/line_spacing"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:textStyle="bold"
-                android:textSize="@dimen/medium_font"
+                android:id="@+id/pay"
+                android:layout_marginTop="@dimen/horizontal_margin"
+                android:layout_marginBottom="@dimen/space_small"
                 android:text="@string/pay"
-                android:paddingTop="@dimen/space_small"
-                android:paddingBottom="@dimen/space_small"
-                android:paddingLeft="@dimen/vertical_margin"
-                android:paddingRight="@dimen/vertical_margin"
-                android:textColor="@android:color/white"
-                android:background="@drawable/primary_button_background"
-                android:layout_height="wrap_content"/>
+                android:layout_gravity="center"
+                style="@style/button"
+                />
 
                 <LinearLayout
+                    android:layout_marginEnd="@dimen/horizontal_margin"
+                    android:layout_marginRight="@dimen/horizontal_margin"
                     android:gravity="center"
-                    android:layout_marginTop="@dimen/line_spacing"
+                    android:layout_marginBottom="@dimen/space_small"
+                    android:layout_marginTop="@dimen/horizontal_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:layout_marginRight="-20dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/visa_card"
                         android:layout_width="wrap_content"
-                        android:layout_height="24dp"/>
+                        android:layout_height="18dp"/>
 
                     <ImageView
+                        android:layout_marginRight="-20dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/master_card"
                         android:layout_width="wrap_content"
-                        android:layout_height="24dp"/>
+                        android:layout_height="18dp"/>
 
                     <ImageView
                         android:scaleType="centerInside"
                         android:src="@drawable/verve_card"
                         android:layout_width="wrap_content"
-                        android:layout_height="19dp"/>
+                        android:layout_height="16dp"/>
 
 
                 </LinearLayout>
@@ -212,7 +224,7 @@
 
                 <LinearLayout
                     android:gravity="center"
-                    android:layout_marginTop="@dimen/line_spacing"
+                    android:layout_marginTop="@dimen/space_small"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -220,31 +232,47 @@
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_cyberpay_secure"
                         android:layout_width="wrap_content"
-                        android:layout_height="24dp"/>
+                        android:layout_height="18dp"/>
 
-                    <View
-                        android:layout_width="@dimen/space_small"
-                        android:layout_height="1dp"/>
 
                     <com.cyberspace.cyberpaysdk.utils.fonts.Light
                         android:layout_width="wrap_content"
                         android:text="@string/secure"
+                        android:textSize="@dimen/semi_medium_font"
                         android:layout_height="wrap_content"/>
 
-                    <View
-                        android:layout_width="@dimen/space_small"
-                        android:layout_height="1dp"/>
 
                     <ImageView
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_cyberpay_logo"
                         android:layout_width="wrap_content"
-                        android:layout_height="24dp"/>
+                        android:layout_height="18dp"/>
 
 
 
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/text_banner"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:padding="@dimen/space_small"
+                android:background="@color/colorRed"
+                android:layout_height="wrap_content">
+
+                <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                    android:id="@+id/test_indicator"
+                    android:layout_width="wrap_content"
+                    android:text="@string/test_message"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textSize="@dimen/small_font"
+                    android:textColor="@android:color/white"
+                    android:layout_height="wrap_content"/>
 
             </LinearLayout>
 
