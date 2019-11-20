@@ -16,6 +16,8 @@
     <dimen name="xlarge_font">48sp</dimen>
     <dimen name="item_space">5dp</dimen>
     <dimen name="text_line_spacing">5dp</dimen>
-    <dimen name="search_input">32dp</dimen>
+    <dimen name="search_input">35dp</dimen>
+    <dimen name="image_size_medium">72dp</dimen>
+    <dimen name="image_size_large">96dp</dimen>
 
 </resources>

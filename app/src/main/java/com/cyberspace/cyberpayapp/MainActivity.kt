@@ -2,13 +2,12 @@ package com.cyberspace.cyberpayapp
 
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.TransactionCallback
-import com.cyberspace.cyberpaysdk.data.transaction.Transaction
+import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.model.Card
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -32,16 +31,19 @@ class MainActivity : AppCompatActivity() {
         card.expiryMonth = 6
         card.expiryYear = 50
         card.cvv = "000"
-
          */
 
         val transaction = Transaction()
         //
         transaction.amount = 10000000.0
-        transaction.returnUrl = "https://googl"
+        transaction.customerEmail = "test@test"
+        transaction.description = "description"
+        transaction.dateOfBirth = "120988"
+        transaction.bvn = "12345678909"
         //transaction.card = card
 
         fab.setOnClickListener {
+
             CyberpaySdk.checkoutTransaction(this, transaction, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
                     Log.e("RESPONSE", "SUCCESSFUL")
@@ -56,10 +58,6 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
-
-
-
-
 
     }
 

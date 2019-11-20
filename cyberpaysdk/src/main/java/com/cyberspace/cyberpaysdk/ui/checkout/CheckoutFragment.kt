@@ -11,15 +11,24 @@ import androidx.appcompat.app.AppCompatActivity
 
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.R
-import com.cyberspace.cyberpaysdk.data.bank.Bank
-import com.cyberspace.cyberpaysdk.data.transaction.Transaction
+import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
+import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.enums.Mode
+import com.cyberspace.cyberpaysdk.enums.PaymentOption
 import com.cyberspace.cyberpaysdk.model.Card
+import com.cyberspace.cyberpaysdk.ui.bank.BankFragment
+import com.cyberspace.cyberpaysdk.ui.bank.OnSelected
+import com.cyberspace.cyberpaysdk.ui.confirm_redirect.ConfirmRedirect
+import com.cyberspace.cyberpaysdk.ui.confirm_redirect.OnConfirmed
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.security.InvalidParameterException
+import java.text.DecimalFormat
 
-internal class CheckoutFragment constructor(var transaction: Transaction,var listener: OnCardSubmitted) : BottomSheetDialogFragment(), CheckoutContract.View{
+
+internal class CheckoutFragment constructor(var context: AppCompatActivity,
+                                            var transaction: Transaction,
+                                            var listener: OnCheckoutSubmitted) : BottomSheetDialogFragment(), CheckoutContract.View{
 
     lateinit var cardNumber : EditText
     lateinit var expiry : EditText
@@ -41,8 +50,12 @@ internal class CheckoutFragment constructor(var transaction: Transaction,var lis
     private lateinit var bankPay: LinearLayout
     private lateinit var bankLayout: LinearLayout
     private lateinit var cardLayout: LinearLayout
+    private lateinit var account_loading : View
+    private lateinit var bank_loading : View
 
-    private lateinit var bankList: MutableList<Bank>
+    private lateinit var bankList: MutableList<BankResponse>
+
+    private var mBank: BankResponse? =  null
 
     //indicators
     private lateinit var cardIndicator: View
@@ -68,6 +81,9 @@ internal class CheckoutFragment constructor(var transaction: Transaction,var lis
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
+        account_loading = view.findViewById(R.id.account_loading)
+        bank_loading = view.findViewById(R.id.bank_loading)
+
         cardPay = view.findViewById(R.id.card_pay)
         bankPay = view.findViewById(R.id.bank_pay)
 
@@ -85,7 +101,8 @@ internal class CheckoutFragment constructor(var transaction: Transaction,var lis
         pay = view.findViewById(R.id.pay)
         amount = view.findViewById(R.id.amount)
 
-        pay.text = String.format("%s%s",pay.text, (transaction.amount/100).toString())
+        val df = DecimalFormat("###,###.##")
+        pay.text = String.format("%s%s",pay.text, df.format((transaction.amount/100)).toString())
 
         testView = view.findViewById(R.id.text_banner)
 
@@ -94,12 +111,23 @@ internal class CheckoutFragment constructor(var transaction: Transaction,var lis
 
         bankName = view.findViewById(R.id.bank_name)
         accountNumber = view.findViewById(R.id.account_number)
-
         close = view.findViewById(R.id.close)
 
         bankName.setOnClickListener {
             // inflate banks list
-            for(str in bankList) Log.e("BANK\n", str.bankName)
+           try {
+               val bankFragment = BankFragment(context , bankList, object : OnSelected {
+                   override fun onSelect(bank: BankResponse) {
+                       mBank = bank
+                       bankName.setText(bank.bankName)
+                       when (bank.processingType){
+                           "External" -> confirmRedirect(bank)
+                       }
+                   }
+               })
+
+               bankFragment.show(context.supportFragmentManager, bankFragment.tag)
+           } catch (error : java.lang.Exception){}
         }
 
         close.setOnClickListener {
@@ -195,16 +223,54 @@ internal class CheckoutFragment constructor(var transaction: Transaction,var lis
         })
 
         pay.setOnClickListener {
-            if(!isCardCvvError && !isCardExpiryError && !isCardNumberError){
-                listener.onSubmit(this.dialog,card)
+            //check for card option
+           if((viewPresenter as CheckoutPresenter).paymentOption == PaymentOption.Card){
+               if(!isCardCvvError && !isCardExpiryError && !isCardNumberError){
+                   listener.onCardSubmit(this.dialog,card)
+               }
+
+               else {
+                   if(isCardNumberError) cardNumber.error = "This is required"
+                   if(isCardExpiryError) expiry.error = "This is required"
+                   if(isCardCvvError) cvv.error = "This is required"
+               }
+           }
+            else {
+               var err = false
+               if(bankName.text.toString().isEmpty()) {
+                   bankName.error = "This is required"
+                   err = true
+               }
+
+               if(accountNumber.text.toString().isEmpty() && mBank?.processingType.equals("Internal")) {
+                   accountNumber.error = "This is required"
+                   err = true
+               }
+
+              if(err)  return@setOnClickListener
+
+               when(mBank?.processingType){
+                   "External" -> confirmRedirect(mBank!!)
+                   "Internal" -> listener.onBankSubmit(dialog, mBank!!)
+               }
+
+           }
+        }
+    }
+
+    fun confirmRedirect(bank: BankResponse){
+        val confirmFragment = ConfirmRedirect(getString(R.string.redirect_bank), object : OnConfirmed {
+            override fun onConfirm() {
+                bankName.setText("")
+                listener.onRedirect(dialog, bank)
             }
 
-            else {
-                if(isCardNumberError) cardNumber.error = "This is required"
-                if(isCardExpiryError) expiry.error = "This is required"
-                if(isCardCvvError) cvv.error = "This is required"
+            override fun onCancel() {
+                bankName.setText("")
             }
-        }
+        })
+
+        confirmFragment.show(context.supportFragmentManager, confirmFragment.tag)
     }
 
     override fun onError(message: String) {
@@ -235,11 +301,14 @@ internal class CheckoutFragment constructor(var transaction: Transaction,var lis
     }
 
     override fun onLoad() {
-
+        bankName.hint = "Loading..."
+        bank_loading.visibility = View.VISIBLE
     }
 
-    override fun onLoadComplete(banks: MutableList<Bank>) {
+    override fun onLoadComplete(banks: MutableList<BankResponse>) {
       bankList = banks
+        bankName.hint = "Select Bank"
+        bank_loading.visibility = View.GONE
     }
 
     override fun dismiss() {

@@ -7,7 +7,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @Component
-class SchedulerImpl @Inject constructor(): com.cyberspace.cyberpaysdk.rx.Scheduler {
+class SchedulerImpl : com.cyberspace.cyberpaysdk.rx.Scheduler {
 
     override fun ui(): Scheduler {
         return AndroidSchedulers.mainThread()

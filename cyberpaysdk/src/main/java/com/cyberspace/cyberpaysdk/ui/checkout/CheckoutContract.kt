@@ -1,6 +1,6 @@
 package com.cyberspace.cyberpaysdk.ui.checkout
 
-import com.cyberspace.cyberpaysdk.data.bank.Bank
+import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
 import com.example.kotlin.ui.base.BasePresenter
 import com.example.kotlin.ui.base.BaseView
 
@@ -17,7 +17,7 @@ internal interface CheckoutContract {
         fun onBankPay()
         fun onCardPay()
         fun onLoad()
-        fun onLoadComplete(banks: MutableList<Bank>)
+        fun onLoadComplete(banks: MutableList<BankResponse>)
     }
 
 }

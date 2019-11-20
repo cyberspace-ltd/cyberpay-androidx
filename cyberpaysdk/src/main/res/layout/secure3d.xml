@@ -57,6 +57,16 @@
             style="@style/button"
             />
 
+        <com.cyberspace.cyberpaysdk.utils.fonts.Medium
+            android:id="@+id/close"
+            android:text="@string/cancel"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/medium_font"
+            android:layout_marginTop="@dimen/horizontal_margin"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 

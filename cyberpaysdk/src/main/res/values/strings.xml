@@ -3,8 +3,8 @@
     <string name="test_message">This is a test page to see how payment works. Do not use for production</string>
     <string name="logo_content_desc">logo</string>
     <string name="pay_options">Payment Options</string>
-    <string name="bank">Bank</string>
-    <string name="card">Card</string>
+    <string name="bank">Pay with bank</string>
+    <string name="card">Pay with card</string>
     <string name="card_hint">Card Number</string>
     <string name="cvv_hint">CVV</string>
     <string name="expiry_hint">MM/YY</string>
@@ -36,5 +36,8 @@
     <string name="error_retry">Retry</string>
     <string name="select_bank">Select Bank</string>
     <string name="search_hint">Search</string>
+    <string name="redirect_auth">You will be redirected to your internet banking for authorization</string>
+    <string name="redirect_bank">You will be redirected to your bank to complete the transaction</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

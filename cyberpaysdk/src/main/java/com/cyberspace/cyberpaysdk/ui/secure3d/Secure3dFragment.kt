@@ -3,19 +3,16 @@ package com.cyberspace.cyberpaysdk.ui.secure3d
 import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.View
-import android.webkit.WebView
 import android.widget.FrameLayout
 import com.cyberspace.cyberpaysdk.R
-import com.cyberspace.cyberpaysdk.data.transaction.Transaction
+import com.cyberspace.cyberpaysdk.model.Transaction
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
 import android.graphics.Bitmap
-import android.webkit.WebViewClient
-import android.webkit.WebSettings
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.util.Log
+import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import com.cyberspace.cyberpaysdk.ui.widget.ProgressDialog
 
@@ -25,6 +22,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
     private lateinit var progressDialog: ProgressDialog
     private lateinit var error_page : View
     private lateinit var retry : View
+    private lateinit var close : View
 
     private var isError = false
 
@@ -47,6 +45,9 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
         webView = view.findViewById(R.id.webView)
         error_page = view.findViewById(R.id.error_page)
         retry = view.findViewById(R.id.retry)
+        close = view.findViewById(R.id.close)
+
+        close.setOnClickListener { dismiss() }
 
         retry.setOnClickListener {
             setupWebView(transaction.returnUrl)
@@ -58,6 +59,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView(data: String) {
+        Log.e("URL", data)
         webView.scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
         webView.keepScreenOn = true
         webView.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
@@ -79,10 +81,23 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                 progressDialog.show("Please Wait...")
             }
 
+            override fun onLoadResource(view: WebView?, url: String?) {
+                super.onLoadResource(view, url)
+                progressDialog.show("Please Wait...")
+            }
+
+            override fun onReceivedHttpError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                errorResponse: WebResourceResponse?
+            ) {
+                super.onReceivedHttpError(view, request, errorResponse)
+                progressDialog.dismiss()
+            }
+
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
                 progressDialog.dismiss()
-             //   Log.e("URL", url)
 
                if(!isError){
                    webView.visibility = View.VISIBLE
@@ -113,6 +128,22 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                 }
             }
 
+            @SuppressWarnings("deprecation")
+            override fun onReceivedError(
+                view: WebView?,
+                errorCode: Int,
+                description: String?,
+                failingUrl: String?
+            ) {
+                super.onReceivedError(view, errorCode, description, failingUrl)
+                Log.e("ERROR", description.toString())
+                isError = true
+                progressDialog.dismiss()
+                webView.visibility = View.GONE
+                error_page.visibility = View.VISIBLE
+            }
+
+            @TargetApi(android.os.Build.VERSION_CODES.M)
             override fun onReceivedError(
                 view: WebView,
                 request: WebResourceRequest,
@@ -120,9 +151,8 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
             ) {
                 super.onReceivedError(view, request, error)
                 //swipeRefreshLayout.setRefreshing(false)
-                isError = true
-                webView.visibility = View.GONE
-                error_page.visibility = View.VISIBLE
+
+                onReceivedError(view, error.errorCode, error.description.toString(), request.url.toString())
             }
         }
 

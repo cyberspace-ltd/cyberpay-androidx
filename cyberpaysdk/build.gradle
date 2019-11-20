@@ -64,4 +64,8 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
+    // Required -- JUnit 4 framework
+    testImplementation 'junit:junit:4.12'
+    testImplementation "com.google.truth.extensions:truth-java8-extension:0.40"
+
 }

@@ -27,11 +27,11 @@ internal interface TransactionService {
     @POST("payments/otp")
     fun verifyCardOtp(@Body transactionService : MutableMap<String, Any?>) : Observable<ApiResponse<OtpResponse>>
 
-    @POST("payments/bank/otp/{value}")
-    fun verifyBankOtp(@Body transactionService: MutableMap<String, Any?>, @Path("value") value : String) : Observable<JsonObject>
+    @POST("payments/bank/otp")
+    fun verifyBankOtp(@Body transactionService: MutableMap<String, Any?>) : Observable<ApiResponse<OtpResponse>>?
 
     @POST("payments/bank")
-    fun chargeBank(@Body transactionService: Map<String, String>) : Observable<JsonObject>
+    fun chargeBank(@Body transactionService: MutableMap<String, Any?>) : Observable<ApiResponse<ChargeBank>>
 
     @POST("payments/bank/enrol/otp")
     fun enrolOtp(@Body transactionService: Map<String, String>) : Observable<JsonObject>

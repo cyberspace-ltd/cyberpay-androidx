@@ -3,20 +3,23 @@ package com.cyberspace.cyberpaysdk.ui.checkout
 import android.annotation.SuppressLint
 import com.cyberspace.cyberpaysdk.data.bank.repository.BankRepository
 import com.cyberspace.cyberpaysdk.data.bank.repository.BankRepositoryImpl
+import com.cyberspace.cyberpaysdk.enums.PaymentOption
 import com.cyberspace.cyberpaysdk.rx.Scheduler
 import com.cyberspace.cyberpaysdk.rx.SchedulerImpl
 
-internal class CheckoutPresenter : CheckoutContract.Presenter{
+internal class CheckoutPresenter : CheckoutContract.Presenter {
 
     var mView : CheckoutContract.View? = null
     private lateinit var repository: BankRepository
     private lateinit var scheduler : Scheduler
     private var isLoading = false
+    var paymentOption = PaymentOption.Card
 
     @SuppressLint("CheckResult")
     override fun loadBanks() {
 
         if(isLoading) return
+        mView?.onLoad()
 
         repository = BankRepositoryImpl()
         scheduler = SchedulerImpl()
@@ -28,7 +31,7 @@ internal class CheckoutPresenter : CheckoutContract.Presenter{
             ?.subscribe(
                 {result ->
                     isLoading = false
-                   mView?.onLoadComplete(result)
+                    mView?.onLoadComplete(result)
                 },
                 {error ->
                     isLoading = false
@@ -39,10 +42,12 @@ internal class CheckoutPresenter : CheckoutContract.Presenter{
     }
 
     override fun bankPay() {
+        paymentOption = PaymentOption.Bank
         mView?.onBankPay()
     }
 
     override fun cardPay() {
+        paymentOption = PaymentOption.Card
         mView?.onCardPay()
     }
 

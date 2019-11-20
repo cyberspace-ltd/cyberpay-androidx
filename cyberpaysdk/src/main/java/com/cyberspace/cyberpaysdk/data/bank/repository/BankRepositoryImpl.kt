@@ -1,7 +1,8 @@
 package com.cyberspace.cyberpaysdk.data.bank.repository
 
-import com.cyberspace.cyberpaysdk.data.bank.Bank
+import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
 import com.cyberspace.cyberpaysdk.data.bank.remote.BankService
+import com.cyberspace.cyberpaysdk.data.bank.remote.response.AccountResponse
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
 import com.cyberspace.cyberpaysdk.data.base.remote.BaseService
 import com.cyberspace.cyberpaysdk.data.base.remote.Service
@@ -11,7 +12,7 @@ internal class BankRepositoryImpl : BankRepository {
 
     private var service : Service = BaseService()
 
-    override fun getBanks(): Observable<MutableList<Bank>>? {
+    override fun getBanks(): Observable<MutableList<BankResponse>>? {
 
       return when(com.cyberspace.cyberpaysdk.data.bank.local.Bank.list)
         {
@@ -25,7 +26,16 @@ internal class BankRepositoryImpl : BankRepository {
 
     }
 
-    override fun getAllBanks(): Observable<ApiResponse<MutableList<Bank>>>? {
+    override fun getAllBanks(): Observable<ApiResponse<MutableList<BankResponse>>>? {
         return service.create(BankService::class.java)?.getAllBanks()
+    }
+
+    override fun getAccountName(bankCode: String, accountNo: String): Observable<ApiResponse<AccountResponse>>? {
+
+        val param = mutableMapOf<String, Any?>()
+        param["bankCode"] = bankCode
+        param["accountId"] = accountNo
+
+        return service.create(BankService::class.java)?.getAccountName(param)
     }
 }

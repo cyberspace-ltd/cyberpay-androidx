@@ -29,6 +29,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_marginBottom="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/space_small"
                 android:layout_width="180dp"
                 android:src="@drawable/ic_cyberpay_logo"
@@ -66,6 +67,7 @@
 
 
             <com.cyberspace.cyberpaysdk.utils.fonts.Regular
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/horizontal_margin"
                 android:layout_marginBottom="@dimen/horizontal_margin"
                 android:layout_width="wrap_content"
@@ -196,24 +198,22 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_marginRight="-20dp"
-                        android:scaleType="centerInside"
+                        android:scaleType="fitEnd"
                         android:src="@drawable/visa_card"
-                        android:layout_width="wrap_content"
+                        android:layout_width="52dp"
                         android:layout_height="18dp"/>
 
                     <ImageView
-                        android:layout_marginRight="-20dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/master_card"
-                        android:layout_width="wrap_content"
+                        android:layout_width="52dp"
                         android:layout_height="18dp"/>
 
                     <ImageView
-                        android:scaleType="centerInside"
-                        android:src="@drawable/verve_card"
-                        android:layout_width="wrap_content"
-                        android:layout_height="16dp"/>
+                        android:layout_width="52dp"
+                        android:layout_height="15dp"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/verve_card" />
 
 
                 </LinearLayout>

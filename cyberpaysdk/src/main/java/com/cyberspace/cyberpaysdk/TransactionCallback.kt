@@ -1,6 +1,6 @@
 package com.cyberspace.cyberpaysdk
 
-import com.cyberspace.cyberpaysdk.data.transaction.Transaction
+import com.cyberspace.cyberpaysdk.model.Transaction
 
 abstract class TransactionCallback {
 

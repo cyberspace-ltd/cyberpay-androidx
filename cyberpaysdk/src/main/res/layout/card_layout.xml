@@ -42,7 +42,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
+            android:layout_width="52dp"
             android:layout_marginLeft="@dimen/horizontal_margin"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:layout_marginRight="@dimen/horizontal_margin"

@@ -46,8 +46,8 @@
         <item name="android:layout_width">wrap_content</item>
        <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/medium_font</item>
-        <item name="android:paddingTop">@dimen/space_small</item>
-        <item name="android:paddingBottom">@dimen/space_small</item>
+        <item name="android:paddingTop">@dimen/horizontal_margin</item>
+        <item name="android:paddingBottom">@dimen/horizontal_margin</item>
         <item name="android:paddingRight">@dimen/vertical_margin</item>
         <item name="android:paddingLeft">@dimen/vertical_margin</item>
         <item name="android:textColor">@android:color/white</item>

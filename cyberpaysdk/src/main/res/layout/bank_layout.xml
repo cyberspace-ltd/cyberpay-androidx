@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="@dimen/horizontal_margin"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -24,12 +24,13 @@
             android:focusable="false"
             android:layout_marginBottom="0dp"/>
 
-        <ImageView
+        <ProgressBar
+            android:id="@+id/bank_loading"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/arrow_down_sm"
             android:layout_width="14dp"
+            android:indeterminateDrawable= "@xml/progress_bar"
             android:layout_marginRight="@dimen/horizontal_margin"
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_height="14dp"/>
@@ -52,12 +53,15 @@
         android:layout_height="wrap_content">
 
     <EditText
+        android:focusable="false"
+        android:enabled="false"
         android:id="@+id/account_number"
         android:inputType="number"
         android:imeOptions="actionDone"
         android:hint="@string/account_hint"
         android:layout_width="match_parent"
         android:layout_height="@dimen/input_height"
+        android:maxLength="10"
         android:paddingStart="@dimen/vertical_margin"
         android:paddingLeft="@dimen/vertical_margin"
         style="@style/input"
@@ -73,6 +77,18 @@
             android:layout_marginLeft="@dimen/horizontal_margin"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:layout_height="16dp"/>
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/account_loading"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_width="14dp"
+            android:indeterminateDrawable= "@xml/progress_bar"
+            android:layout_marginRight="@dimen/horizontal_margin"
+            android:layout_marginEnd="@dimen/horizontal_margin"
+            android:layout_height="14dp"/>
 
     </RelativeLayout>
 

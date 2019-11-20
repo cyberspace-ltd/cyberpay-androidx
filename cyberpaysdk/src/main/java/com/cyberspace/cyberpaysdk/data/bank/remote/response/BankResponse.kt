@@ -1,6 +1,6 @@
-package com.cyberspace.cyberpaysdk.data.bank
+package com.cyberspace.cyberpaysdk.data.bank.remote.response
 
-internal class Bank {
+internal class BankResponse {
     var id = 0
     var bankCode = ""
     var bankName = ""
