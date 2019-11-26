@@ -1,26 +1,30 @@
 package com.cyberspace.cyberpaysdk.ui.secure3d
 
-import android.app.Dialog
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.FrameLayout
-import com.cyberspace.cyberpaysdk.R
-import com.cyberspace.cyberpaysdk.model.Transaction
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import android.graphics.Bitmap
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Bitmap
+import android.os.Build
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.webkit.*
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.cyberspace.cyberpaysdk.R
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
+import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.ui.widget.ProgressDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-internal class Secure3dFragment constructor(var context: AppCompatActivity, var transaction: Transaction, var listener: OnFinished) : BottomSheetDialogFragment(){
+
+internal class Secure3dFragment constructor(var context: AppCompatActivity, var transaction: Transaction, var formData : Any?,  var listener: OnFinished) : BottomSheetDialogFragment(){
 
     private lateinit var webView: WebView
     private lateinit var progressDialog: ProgressDialog
-    private lateinit var error_page : View
+    private lateinit var errorPage : View
     private lateinit var retry : View
     private lateinit var close : View
 
@@ -43,37 +47,53 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
         progressDialog = ProgressDialog(context)
 
         webView = view.findViewById(R.id.webView)
-        error_page = view.findViewById(R.id.error_page)
+        errorPage = view.findViewById(R.id.error_page)
         retry = view.findViewById(R.id.retry)
         close = view.findViewById(R.id.close)
 
-        close.setOnClickListener { dismiss() }
+        close.setOnClickListener {
+            dismiss()
+        }
 
         retry.setOnClickListener {
             setupWebView(transaction.returnUrl)
         }
 
-        error_page.visibility = View.GONE
+        errorPage.visibility = View.GONE
         setupWebView(transaction.returnUrl)
     }
+
+    override fun dismiss() {
+        super.dismiss()
+        listener.onCancel()
+    }
+
+
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView(data: String) {
         Log.e("URL", data)
-        webView.scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
         webView.keepScreenOn = true
-        webView.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
         webView.settings.javaScriptEnabled = true // enable
         webView.settings.javaScriptCanOpenWindowsAutomatically = true
         webView.settings.allowContentAccess = true
-        webView.settings.domStorageEnabled = true
+        //webView.settings.domStorageEnabled = true
         webView.settings.builtInZoomControls = true
         webView.settings.setSupportZoom(true)
         webView.settings.loadWithOverviewMode = true
         webView.settings.useWideViewPort = true
-        webView.settings.domStorageEnabled = true
-        webView.settings.builtInZoomControls = true
-        //webView.setWebChromeClient(CyberPayChromeClient(getApplicationContext<Context>()))
+        //webView.settings.domStorageEnabled = true
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                super.onProgressChanged(view, newProgress)
+
+                if(newProgress >=100) progressDialog.dismiss()
+
+            }
+
+
+
+        }
         webView.webViewClient = object : WebViewClient() {
 
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
@@ -83,7 +103,19 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
 
             override fun onLoadResource(view: WebView?, url: String?) {
                 super.onLoadResource(view, url)
+
                 progressDialog.show("Please Wait...")
+                val timerThread: Thread = object : Thread() {
+                    override fun run() {
+                        try {
+                            sleep(3000)
+                        } catch (e: InterruptedException) {
+                        } finally {
+                            progressDialog.dismiss()
+                        }
+                    }
+                }
+                timerThread.start()
             }
 
             override fun onReceivedHttpError(
@@ -99,32 +131,45 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                 super.onPageFinished(view, url)
                 progressDialog.dismiss()
 
-               if(!isError){
-                   webView.visibility = View.VISIBLE
-                   error_page.visibility = View.GONE
-               }
+
+                if (!isError) {
+                    webView.visibility = View.VISIBLE
+                    errorPage.visibility = View.GONE
+                }
 
                 if (url.startsWith("https://payment.staging.cyberpay.ng/notify?ref=")) {
                     webView.destroy()
                     //reference = url.substring(url.lastIndexOf("=") + 1)
                     listener.onFinish(transaction)
+                    dialog?.dismiss()
                 }
 
                 if (url.startsWith("https://payment.staging.cyberpay.ng/pay?reference")) {
-                    webView.destroy()
-                    listener.onFinish(transaction)
+                  //  webView.destroy()
+                  //  listener.onFinish(transaction)
+                 //   dialog?.dismiss()
                 }
 
                 if (url.startsWith("https://payment.cyberpay.ng/notify?ref=")) {
                     webView.destroy()
-                   // reference = url.substring(url.lastIndexOf("=") + 1)
+                    // reference = url.substring(url.lastIndexOf("=") + 1)
                     listener.onFinish(transaction)
+                    dialog?.dismiss()
                 }
+
+                if (url.startsWith("https://payment.staging.cyberpay.ng/url?ref")) {
+                    webView.destroy()
+                    // reference = url.substring(url.lastIndexOf("=") + 1)
+                    listener.onFinish(transaction)
+                    dialog?.dismiss()
+                }
+
 
                 if (url.startsWith("https://payment.cyberpay.ng/notify?ref=")) {
                     webView.destroy()
                     //reference = url.substring(url.lastIndexOf("=") + 1)
                     listener.onFinish(transaction)
+                    dialog?.dismiss()
                 }
             }
 
@@ -140,10 +185,10 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                 isError = true
                 progressDialog.dismiss()
                 webView.visibility = View.GONE
-                error_page.visibility = View.VISIBLE
+                errorPage.visibility = View.VISIBLE
             }
 
-            @TargetApi(android.os.Build.VERSION_CODES.M)
+            @TargetApi(Build.VERSION_CODES.M)
             override fun onReceivedError(
                 view: WebView,
                 request: WebResourceRequest,
@@ -154,9 +199,32 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
 
                 onReceivedError(view, error.errorCode, error.description.toString(), request.url.toString())
             }
+
         }
 
-        webView.loadUrl(data)
+
+        if(formData==null) webView.loadUrl(data)
+        else {
+            val param = formData as CardTransaction
+            val form = String.format("TermUrl=%s&MD=%s&PaReq=%s",param.termUrl, param.md, param.paReq)//termUrl, md, paReq
+
+            /*
+            val html = "<!DOCTYPE html>" +
+                    "<html>" +
+                    "<body onload='document.frm1.submit()'>" +
+                    "<form action="+param.acsUrl+" method='post' name='frm1'>" +
+                    "  <input type='hidden' name='TermUrl' value="+param.termUrl+"><br>" +
+                    "  <input type='hidden' name='MD' value="+param.md+"><br>" +
+                    "  <input type='hidden' name='PaReq' value="+param.paReq+"><br>" +
+                    "</form>" +
+                    "</body>" +
+                    "</html>"
+
+                    webView.loadData(html, "text/html", "UTF-8");
+             */
+             webView.postUrl(param.acsUrl, form.toByteArray())
+            //webView.loadUrl("https://payment.staging.cyberpay.ng/pay?reference=JAG000001261119447772")
+        }
     }
 
 

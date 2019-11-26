@@ -13,7 +13,7 @@
     <string name="pay">Pay ₦</string>
     <string name="secure">Secured by</string>
     <string name="otp_text">Enter OTP Sent</string>
-    <string name="default_otp_message">Kindly enter the one time password sent to your phone number to complete transaction</string>
+    <string name="default_otp_message">Kindly enter the one time password sent to your phone number or email address to complete transaction</string>
     <string name="otp">123456</string>
     <string name="one">1</string>
     <string name="two">2</string>
@@ -29,7 +29,7 @@
     <string name="pin_text">Enter Card Pin</string>
     <string name="default_pin_message">To ensure you own this card, kindly enter your pin to continue</string>
     <string name="checkout">Checkout</string>
-    <string name="process">Proccessing Transaction</string>
+    <string name="process">Processing Transaction</string>
     <string name="naira">NGN</string>
     <string name="page_error">There was an error loading the transaction page. kindly check your network connection</string>
     <string name="error_title">Oops!</string>
@@ -39,5 +39,8 @@
     <string name="redirect_auth">You will be redirected to your internet banking for authorization</string>
     <string name="redirect_bank">You will be redirected to your bank to complete the transaction</string>
     <string name="cancel">Cancel</string>
+    <string name="enrol_phone">Enroll Otp</string>
+    <string name="phone_hint">Phone Number</string>
+    <string name="enrol_text">You have not registered for OTP. Enter your phone number below to register</string>
 
 </resources>

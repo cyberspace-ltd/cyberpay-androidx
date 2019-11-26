@@ -8,7 +8,7 @@ import java.security.InvalidParameterException
 
 class Card {
 
-    var cardNumber : String? = null
+    var number : String? = null
     set(value) {
         if(value.isNullOrEmpty()) throw InvalidParameterException("Invalid Card Number Found")
         val result = CardValidator.isValid(value)
@@ -18,10 +18,11 @@ class Card {
         field  = result.cardNo
     }
 
-    var cardName = ""
-    var cardEmail = ""
+    var name = ""
+    var email = ""
     var address = ""
     var last4Digits = ""
+    var phoneNumber = ""
 
     var cvv : String? = null
     set(value) {
@@ -55,7 +56,7 @@ class Card {
         param["Name"] = ""
         param["ExpiryMonth"] = expiryMonth
         param["ExpiryYear"] = expiryYear
-        param["CardNumber"] = cardNumber
+        param["CardNumber"] = number
         param["CVV"] = cvv
         param["CardPin"] = pin
 

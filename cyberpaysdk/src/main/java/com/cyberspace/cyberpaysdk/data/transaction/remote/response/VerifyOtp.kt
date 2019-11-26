@@ -1,6 +1,6 @@
 package com.cyberspace.cyberpaysdk.data.transaction.remote.response
 
-internal class OtpResponse {
+internal class VerifyOtp {
 
     val reference: String? = null
     val processorReference: String? = null

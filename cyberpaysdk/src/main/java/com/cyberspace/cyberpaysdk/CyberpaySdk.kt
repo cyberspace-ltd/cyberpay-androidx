@@ -2,9 +2,9 @@ package com.cyberspace.cyberpaysdk
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.repository.TransactionRepository
 import com.cyberspace.cyberpaysdk.data.transaction.repository.TransactionRepositoryImpl
@@ -17,6 +17,8 @@ import com.cyberspace.cyberpaysdk.rx.Scheduler
 import com.cyberspace.cyberpaysdk.rx.SchedulerImpl
 import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutFragment
 import com.cyberspace.cyberpaysdk.ui.checkout.OnCheckoutSubmitted
+import com.cyberspace.cyberpaysdk.ui.enroll_otp.EnrollOtpFragment
+import com.cyberspace.cyberpaysdk.ui.enroll_otp.OnSubmitted
 import com.cyberspace.cyberpaysdk.ui.otp.OtpFragment
 import com.cyberspace.cyberpaysdk.ui.otp.OtpSubmitted
 import com.cyberspace.cyberpaysdk.ui.pin.PinFragment
@@ -53,6 +55,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
          if(key.isEmpty()) throw AuthenticationException("Invalid Integration Key Found")
          if(key=="*") throw SdkNotInitialisedException("CyberpaySdk has not been Initialised")
      }
+
 
      @SuppressLint("CheckResult")
      private fun verifyCardOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
@@ -102,7 +105,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
              override fun onSubmit(otp: String) {
                  // verify otp
                  transaction.otp = otp
-                 verifyBankOtp(context,transaction, transactionCallback)
+                 verifyCardOtp(context,transaction, transactionCallback)
 
              }
          })
@@ -115,7 +118,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
              override fun onSubmit(otp: String) {
                  // verify otp
                  transaction.otp = otp
-                 verifyCardOtp(context,transaction, transactionCallback)
+                 verifyBankOtp(context,transaction, transactionCallback)
 
              }
          })
@@ -124,25 +127,31 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
      }
 
      @SuppressLint("CheckResult")
-     private fun processSecure3DPayment(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
-         val secure3dFragment = Secure3dFragment(context, transaction ,object : OnFinished {
+     private fun processSecure3DPayment(context: AppCompatActivity, transaction: Transaction, data: CardTransaction?, transactionCallback: TransactionCallback){
+         val secure3dFragment = Secure3dFragment(context, transaction ,data, object : OnFinished {
              override fun onFinish(transaction: Transaction) {
                  // verify transaction status
-                 repository.verifyTransactionByReference(transaction.reference!!)
+                 repository.verifyTransactionByReference(transaction.reference)
                      ?.subscribeOn(scheduler.background())
                      ?.observeOn(scheduler.ui())
                      ?.subscribe(
                          { result ->
+
                              when(result.data?.status){
                                  "Successful", "Success" -> transactionCallback.onSuccess(transaction)
                                  else -> transactionCallback.onError(transaction, Throwable(result.data?.message))
                              }
                          },
                          { error ->
+                           //  var er = error
                              transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
                          }
                  )
 
+             }
+
+             override fun onCancel() {
+                 transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
              }
          })
 
@@ -156,7 +165,6 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                 ?.observeOn(scheduler.ui())
                 ?.subscribe (
                     {t ->
-
                         when(t.data?.status){
 
                             "Success", "Successful" -> {
@@ -168,12 +176,23 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
                             "EnrollOtp" -> {
                                 // inflate phone number ui
+                                val enrollFragment = EnrollOtpFragment(context, object : OnSubmitted {
+                                    override fun onSubmit(number: String) {
+                                        // verify otp
+                                        transaction.card?.phoneNumber = number
+                                        enrollCardOtp(context,transaction, transactionCallback)
+                                    }
+                                })
+
+                                enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
                             }
-                            "Secure3D" -> processSecure3DPayment(context,transaction, transactionCallback)
-                            "Secure3DMpgs" -> processSecure3DPayment(context,transaction, transactionCallback)
+                            "Secure3D" -> processSecure3DPayment(context,transaction,null, transactionCallback)
+                            "Secure3DMpgs" -> processSecure3DPayment(context,transaction,null, transactionCallback)
+                            "ProcessACS" -> processSecure3DPayment(context, transaction, t.data, transactionCallback)
                             else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
 
                         }
+
                     },
                     {e ->
                         transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
@@ -197,10 +216,12 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                                 // inflate phone number ui
 
                             }
-                            "Secure3D" -> processSecure3DPayment(context,transaction, transactionCallback)
-                            "Secure3DMpgs" -> processSecure3DPayment(context,transaction, transactionCallback)
+                            "Secure3D" -> processSecure3DPayment(context,transaction, null,transactionCallback)
+                            "Secure3DMpgs" -> processSecure3DPayment(context,transaction,null, transactionCallback)
                             else -> transactionCallback.onError(transaction, Throwable(result.data?.message))
                         }
+
+
                     },
                     { error ->
                         transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
@@ -215,7 +236,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
              transaction.type = TransactionType.Card
              transaction.key = key
              // set transaction
-             if(transaction.merchantReference.isEmpty())
+             //if(transaction.merchantReference.isEmpty())
                  transaction.merchantReference = SequenceGenerator.hash()
              // set transaction
              repository.beginTransaction(transaction)
@@ -223,33 +244,23 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                  ?.observeOn(scheduler.ui())
                  ?.subscribe({
                          t ->
-                     transaction.reference = t.data?.transactionReference
+                     transaction.reference = t.data?.transactionReference!!
                      transaction.charge = t.data?.charge
-                    transactionCallback.onSuccess(transaction)
+                     transactionCallback.onSuccess(transaction)
 
                  },
                      { e ->
-                        // Log.e("ERROR01_SERVER", e.message)
+                     //    Log.e("ERROR01_SERVER", e.message)
                          transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
                      })
          }
 
         @SuppressLint("CheckResult")
         fun getPayment(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
-            validateKey()
+
             transaction.type = TransactionType.Card
-            transaction.key = key
-            // set transaction
-            if(transaction.merchantReference.isEmpty())
-                transaction.merchantReference = SequenceGenerator.hash()
-            // set transaction
-            repository.beginTransaction(transaction)
-                ?.subscribeOn(scheduler.background())
-                ?.observeOn(scheduler.ui())
-                ?.subscribe({
-                    t ->
-                    transaction.reference = t.data?.transactionReference
-                    transaction.charge = t.data?.charge
+            createTransaction(context, transaction, object : TransactionCallback() {
+                override fun onSuccess(transaction: Transaction) {
                     // inflate pin ui
                     val pinFragment = PinFragment(object : PinSubmitted {
                         override fun onSubmit(pin: String) {
@@ -260,12 +271,16 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                     })
 
                     pinFragment.show(context.supportFragmentManager, pinFragment.tag)
+                }
 
-                    },
-                    { e ->
-                        transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
-                    })
+                override fun onError(transaction: Transaction, throwable: Throwable) {
+                    transactionCallback.onError(transaction, throwable)
+                }
 
+                override fun onValidate(transaction: Transaction) {
+                    transactionCallback.onValidate(transaction)
+                }
+            })
         }
 
      @SuppressLint("CheckResult")
@@ -286,6 +301,46 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
      }
 
      @SuppressLint("CheckResult")
+     private fun  enrollCardOtp(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+
+         repository.enrollCardOtp(transaction)
+             ?.subscribeOn(scheduler.background())
+             ?.observeOn(scheduler.ui())
+             ?.subscribe(
+                 { result ->
+                     when(result.data?.status) {
+                         "Successful", "Success" -> transactionCallback.onSuccess(transaction)
+                         "Otp" -> processCardOtp(context, transaction, transactionCallback)
+                         "ProvidePin" -> chargeCardWithPin(context,transaction, transactionCallback)
+                         else -> transactionCallback.onError(transaction, Throwable(result.message))
+                     }
+                 },
+                 {
+                     error -> transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                 }
+             )
+     }
+
+     @SuppressLint("CheckResult")
+     private fun  enrollBankOtp(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+         repository.enrollBankOtp(transaction)
+             ?.subscribeOn(scheduler.background())
+             ?.observeOn(scheduler.ui())
+             ?.subscribe(
+                 { result ->
+                     when(result.data?.status) {
+                         "Successful", "Success" -> transactionCallback.onSuccess(transaction)
+                         "Otp" -> processBankOtp(context, transaction, transactionCallback)
+                         else -> transactionCallback.onError(transaction, Throwable(result.message))
+                     }
+                 },
+                 {
+                         error -> transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                 }
+             )
+     }
+
+     @SuppressLint("CheckResult")
      private fun chargeBank(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
             transaction.type = TransactionType.Bank
             validateKey()
@@ -301,6 +356,18 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                          "Success", "Successful" -> {
                              transactionCallback.onSuccess(transaction)
                          }
+                         "EnrollOtp" ->  {
+                             // inflate phone ui
+                             val otpFragment = OtpFragment(object : OtpSubmitted {
+                                 override fun onSubmit(otp: String) {
+                                     // verify otp
+                                     transaction.otp = otp
+                                     enrollBankOtp(context,transaction, transactionCallback)
+                                 }
+                             })
+
+                             otpFragment.show(context.supportFragmentManager, otpFragment.tag)
+                         }
 
                          "Otp" -> processBankOtp(context, transaction, transactionCallback)
                          else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
@@ -308,17 +375,15 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                      }
                  },
                  {e ->
-                     Log.e("ERROR _SERVER", e.message)
+                    // Log.e("ERROR _SERVER", e.message)
                      transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
                  }
              )
-
-
             // set transaction
         }
 
      fun checkoutTransaction(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
-         // inflate pin ui
+
          validateKey()
          val progress = ProgressDialog(context)
          val checkoutFragment = CheckoutFragment(context,transaction, object : OnCheckoutSubmitted {
@@ -335,11 +400,13 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
                      override fun onError(transaction: Transaction, throwable: Throwable) {
                          progress.dismiss()
+                        // dialog?.dismiss()
                          transactionCallback.onError(transaction,throwable)
                      }
 
                      override fun onValidate(transaction: Transaction) {
                          progress.dismiss()
+                         //dialog?.dismiss()
                          transactionCallback.onValidate(transaction)
                      }
                  })
@@ -350,11 +417,10 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                  progress.show()
                  createTransaction(context, transaction, object : TransactionCallback() {
                      override fun onSuccess(transaction: Transaction) {
-
+                         progress.dismiss()
                          transaction.returnUrl = String.format("%s?reference=%s", bank.externalRedirectUrl, transaction.reference)
-                         processSecure3DPayment(context, transaction, object : TransactionCallback() {
+                         processSecure3DPayment(context, transaction, null, object : TransactionCallback() {
                              override fun onSuccess(transaction: Transaction) {
-                                 progress.dismiss()
                                  dialog?.dismiss()
                                  transactionCallback.onSuccess(transaction)
                              }

@@ -13,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,32 +26,39 @@ class MainActivity : AppCompatActivity() {
 
         val fab : FloatingActionButton = findViewById(R.id.fab)
 
-        val card = Card()//5061030000000000928
-        //5061 0300 0000 0000 928
-        /*card.cardNumber = "5061 0300 0000 0000 928"//"4399830000000008"
-        card.expiryMonth = 6
-        card.expiryYear = 50
-        card.cvv = "000"
-         */
-
-        val transaction = Transaction()
-        //
-        transaction.amount = 10000000.0
-        transaction.customerEmail = "test@test"
-        transaction.description = "description"
-        transaction.dateOfBirth = "120988"
-        transaction.bvn = "12345678909"
+        //transaction.merchantReference = "78ijdjhh4hj494hjrkrkr"
+        //transaction.bvn = "12345678909"
         //transaction.card = card
 
         fab.setOnClickListener {
 
-            CyberpaySdk.checkoutTransaction(this, transaction, object : TransactionCallback() {
+            val card = Card()//5061030000000000928
+            //5061 0300 0000 0000 928
+            card.number = "4000 0000 0000 0622"//"4399830000000008"
+            card.expiryMonth = 1
+            card.expiryYear = 20
+            card.cvv = "000"
+
+            val trans = Transaction()
+            //
+            trans.amount = 100000.0
+            trans.customerEmail = "test@test.com"
+            trans.description = "description"
+            trans.dateOfBirth = "120988"
+            trans.card = card
+
+            CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
                     Log.e("RESPONSE", "SUCCESSFUL")
+                    Log.e("TRANSACTION", transaction.reference)
+                    Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
                 }
 
                 override fun onError(transaction: Transaction, throwable: Throwable) {
-                    Log.e("ERROR", throwable.message)
+                    Log.e("ERROR", throwable.message!!)
+                    Log.e("TRANSACTION", transaction.reference)
+                    Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
+
                 }
 
                 override fun onValidate(transaction: Transaction) {
@@ -76,4 +84,5 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }

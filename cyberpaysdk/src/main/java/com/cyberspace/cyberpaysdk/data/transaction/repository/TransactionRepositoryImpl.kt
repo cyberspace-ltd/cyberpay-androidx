@@ -7,10 +7,9 @@ import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.TransactionService
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.*
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
-import com.cyberspace.cyberpaysdk.data.transaction.remote.response.OtpResponse
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.VerifyOtp
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.VerifyMerchantTransaction
-import com.google.gson.JsonObject
 import io.reactivex.Observable
 import java.lang.NullPointerException
 
@@ -30,6 +29,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["integrationKey"] = transaction.key
         param["returnUrl"] = transaction.returnUrl
         param["customerEmail"] = transaction.customerEmail
+        param["clientType"] = transaction.clientType
         param["splits"] = transaction.splits
 
         return service.create(TransactionService::class.java)?.beginTransaction(param)
@@ -41,7 +41,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["Name"] = ""
         param["ExpiryMonth"] = transaction.card?.expiryMonth
         param["ExpiryYear"] = transaction.card?.expiryYear
-        param["CardNumber"] = transaction.card?.cardNumber
+        param["CardNumber"] = transaction.card?.number
         param["CVV"] = transaction.card?.cvv
         param["Reference"] = transaction.reference
         param["CardPin"] = transaction.card?.pin
@@ -57,7 +57,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         return service.create(TransactionService::class.java)?.verifyTransactionByMerchantReference(merchantReference)
     }
 
-    override fun verifyCardOtp(transaction: Transaction): Observable<ApiResponse<OtpResponse>>? {
+    override fun verifyCardOtp(transaction: Transaction): Observable<ApiResponse<VerifyOtp>>? {
 
         val param = mutableMapOf<String, Any?>()
         param["otp"] = transaction.otp
@@ -67,7 +67,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         return service.create(TransactionService::class.java)?.verifyCardOtp(param)
     }
 
-    override fun verifyBankOtp(transaction: Transaction): Observable<ApiResponse<OtpResponse>>? {
+    override fun verifyBankOtp(transaction: Transaction): Observable<ApiResponse<VerifyOtp>>? {
         val param = mutableMapOf<String, Any?>()
         param["otp"] = transaction.otp
         param["reference"] = transaction.reference
@@ -86,5 +86,23 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["bvn"] = transaction.bvn
 
         return service.create(TransactionService::class.java)?.chargeBank(param)
+    }
+
+    override fun enrollBankOtp(transaction: Transaction): Observable<ApiResponse<EnrollOtp>>? {
+        val param = mutableMapOf<String, Any?>()
+        param["reference"] = transaction.reference
+        param["otp"] = transaction.otp
+
+        return service.create(TransactionService::class.java)?.enrolBankOtp(param)
+    }
+
+    override fun enrollCardOtp(transaction: Transaction): Observable<ApiResponse<EnrollOtp>>? {
+        val param = mutableMapOf<String, Any?>()
+        param["reference"] = transaction.reference
+        param["registeredPhoneNumber"] = transaction.card?.phoneNumber
+        param["cardModel"] = transaction.card?.toJson()
+
+        return service.create(TransactionService::class.java)?.enrolCardOtp(param)
+
     }
 }

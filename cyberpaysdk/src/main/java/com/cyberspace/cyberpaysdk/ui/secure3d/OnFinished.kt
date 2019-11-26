@@ -4,4 +4,5 @@ import com.cyberspace.cyberpaysdk.model.Transaction
 
 internal interface OnFinished {
     fun onFinish(transaction: Transaction)
+    fun onCancel()
 }

@@ -3,19 +3,18 @@ package com.cyberspace.cyberpaysdk.ui.checkout
 import android.app.Dialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.R
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
-import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.enums.Mode
 import com.cyberspace.cyberpaysdk.enums.PaymentOption
 import com.cyberspace.cyberpaysdk.model.Card
+import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.ui.bank.BankFragment
 import com.cyberspace.cyberpaysdk.ui.bank.OnSelected
 import com.cyberspace.cyberpaysdk.ui.confirm_redirect.ConfirmRedirect
@@ -80,6 +79,8 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
             val behavior = BottomSheetBehavior.from(bottomSheet)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
+
+        //dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         account_loading = view.findViewById(R.id.account_loading)
         bank_loading = view.findViewById(R.id.bank_loading)
@@ -157,7 +158,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 try{
-                    card.cardNumber = s.toString()
+                    card.number = s.toString()
                     when(card.cardType?.issuerName){
                         "MASTER" -> cardType.setImageResource(R.drawable.master_card)
                         "VISA" -> cardType.setImageResource(R.drawable.visa_card)

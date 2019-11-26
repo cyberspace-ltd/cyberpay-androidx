@@ -6,5 +6,6 @@
     <color name="primaryColor">#2F8ED6</color>
     <color name="light_text">#F9F9F9</color>
     <color name="white">#FFFFFF</color>
+    <color name="disable">#808080</color>
 
 </resources>

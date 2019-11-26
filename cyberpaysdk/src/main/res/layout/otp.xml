@@ -15,8 +15,8 @@
        android:id="@+id/pad"
        android:layout_width="match_parent"
        app:randomiseKeys="false"
+       app:minLength="1"
        app:desc="@string/default_otp_message"
-       android:text="@string/pin_text"
        app:title="@string/otp_text"
        app:pinLength="10"
        android:layout_height="match_parent"/>

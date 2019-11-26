@@ -139,26 +139,29 @@
             android:layout_height="@dimen/line_spacing"/>
 
 
-        <LinearLayout
-            android:id="@+id/bt_continue"
+        <RelativeLayout
             android:layout_marginBottom="@dimen/horizontal_margin"
             android:orientation="horizontal"
-            android:background="@drawable/primary_button_background"
             android:layout_width="match_parent"
             android:layout_height="@dimen/input_height">
 
             <com.cyberspace.cyberpaysdk.utils.fonts.Light
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
+                android:id="@+id/bt_continue"
+                android:layout_width="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
                 android:layout_marginLeft="@dimen/horizontal_margin"
                 android:layout_marginStart="@dimen/horizontal_margin"
+                android:background="@drawable/primary_button_background"
                 android:textSize="@dimen/medium_font"
                 android:textColor="@android:color/white"
                 android:text="@string/continue_text"
-                android:layout_height="wrap_content"/>
+                android:layout_height="@dimen/input_height"/>
 
             <ImageView
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/horizontal_margin"
                 android:layout_marginEnd="@dimen/horizontal_margin"
                 android:layout_gravity="center"
@@ -167,7 +170,7 @@
                 android:layout_height="24dp"/>
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </LinearLayout>

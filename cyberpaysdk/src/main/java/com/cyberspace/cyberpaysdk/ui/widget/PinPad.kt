@@ -2,7 +2,10 @@ package com.cyberspace.cyberpaysdk.ui.widget
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.text.Editable
 import android.text.InputFilter
+import android.text.InputType
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -11,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import com.cyberspace.cyberpaysdk.R
+import com.cyberspace.cyberpaysdk.utils.fonts.ExtraBold
 import java.lang.Exception
 
 
@@ -23,29 +27,33 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
     var title : String? = null
     var desc : String? = null
     var pinLength : Int? = 0
+    var obscured : Boolean? = false
+
+    var validate : Boolean? = false
+    var minLength : Int? = 0
+    var maxLength : Int? = 0
 
     /*
     pin-pad keys
      */
-    private lateinit var one : AppCompatTextView
-    private lateinit var two : AppCompatTextView
-    private lateinit var three : AppCompatTextView
-    private lateinit var four : AppCompatTextView
-    private lateinit var five : AppCompatTextView
-    private lateinit var six : AppCompatTextView
-    private lateinit var seven : AppCompatTextView
-    private lateinit var eight : AppCompatTextView
-    private lateinit var nine : AppCompatTextView
-    private lateinit var zero : AppCompatTextView
-    private lateinit var delete : ImageView
-    private lateinit var pin : TextView
+    private  var one : AppCompatTextView
+    private  var two : AppCompatTextView
+    private  var three : AppCompatTextView
+    private  var four : AppCompatTextView
+    private  var five : AppCompatTextView
+    private  var six : AppCompatTextView
+    private  var seven : AppCompatTextView
+    private  var eight : AppCompatTextView
+    private  var nine : AppCompatTextView
+    private  var zero : AppCompatTextView
+    private  var delete : ImageView
+    private  var pin : ExtraBold
 
-    private lateinit var mTitle : AppCompatTextView
-    private lateinit var  mDesc: AppCompatTextView
+    private  var mTitle : AppCompatTextView
+    private  var  mDesc: AppCompatTextView
 
     private var keyArray = mutableListOf<Int>()
-
-    private lateinit var btContinue : View
+    private var btContinue : TextView
 
     private var attributes: TypedArray? = null
 
@@ -70,6 +78,16 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
        }catch (error : Exception){
            return false
        }
+    }
+
+    private fun disableSubmit(){
+        btContinue.setBackgroundResource(R.drawable.disable_background)
+        btContinue.isEnabled = false
+    }
+
+    private fun enableSubmit(){
+        btContinue.setBackgroundResource(R.drawable.primary_button_background)
+        btContinue.isEnabled = true
     }
 
     private fun generateKeys(){
@@ -108,6 +126,39 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
         mTitle = findViewById(R.id.title)
         mDesc = findViewById(R.id.desc)
         pin = findViewById(R.id.pin)
+
+        pin.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                if(minLength!! > 0) {
+                    if (minLength!! <= s.toString().length ) enableSubmit()
+                    else disableSubmit()
+                }
+                else enableSubmit()
+
+                if(validate!!){
+                    if (s.toString().length == pinLength!!) enableSubmit()
+                    else disableSubmit()
+                }
+            }
+        })
 
         btContinue.setOnClickListener {
             if(onSubmitted != null) onSubmitted?.onSubmit(pin.text.toString())
@@ -172,6 +223,24 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
                 pin.text = pin.text.toString().substring(0, pin.text.length-1)
             }
         }
+
+        try{
+            obscured = attributes?.getBoolean(R.styleable.PinPad_obscured, false)
+            if(!obscured!!) pin.inputType = InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
+        }catch (error: Exception){}
+
+        try {
+            validate = attributes?.getBoolean(R.styleable.PinPad_validate,false)
+            when(validate){
+                true -> disableSubmit()
+                else -> enableSubmit()
+            }
+        }catch (error: Exception){}
+
+        try {
+            minLength = attributes?.getInteger(R.styleable.PinPad_minLength,0)
+            if(minLength!! > 0) disableSubmit()
+        }catch (e : Exception){}
 
         try {
             title = attributes?.getString(R.styleable.PinPad_title)

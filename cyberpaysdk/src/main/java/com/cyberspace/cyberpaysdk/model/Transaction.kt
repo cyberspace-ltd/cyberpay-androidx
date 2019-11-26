@@ -8,7 +8,7 @@ import java.security.InvalidParameterException
 class Transaction {
 
     var card : Card? = null
-    var reference : String? = null
+    var reference  = ""
     internal set
 
     var merchantReference = ""
@@ -33,5 +33,6 @@ class Transaction {
     var accountName : String? = ""
     var dateOfBirth : String? = ""
     var bvn : String? =  ""
+    internal val clientType = "Mobile"
 
 }

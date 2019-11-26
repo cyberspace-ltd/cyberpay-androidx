@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:gravity="bottom|center"
+    android:gravity="center|top"
+    android:fillViewport="true"
+    android:padding="@dimen/horizontal_margin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:layout_gravity="center_horizontal|top"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
 
     <com.cyberspace.cyberpaysdk.ui.widget.PinPad
         android:id="@+id/pad"
         android:layout_width="match_parent"
-        app:randomiseKeys="true"
-        app:desc="@string/default_pin_message"
-        app:title= "@string/pin_text"
-        app:obscured="true"
+        app:randomiseKeys="false"
+        app:obscured="false"
         app:validate="true"
-        app:pinLength="4"
+        app:desc="@string/enrol_text"
+        app:title="@string/enrol_phone"
+        app:pinLength="11"
         android:layout_height="match_parent"/>
 
-</FrameLayout>
+
+
+</androidx.core.widget.NestedScrollView>
