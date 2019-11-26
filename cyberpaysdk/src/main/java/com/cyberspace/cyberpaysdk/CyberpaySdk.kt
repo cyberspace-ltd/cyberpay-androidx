@@ -214,7 +214,15 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
                             "EnrollOtp" -> {
                                 // inflate phone number ui
+                                val enrollFragment = EnrollOtpFragment(context, object : OnSubmitted {
+                                    override fun onSubmit(number: String) {
+                                        // verify otp
+                                        transaction.card?.phoneNumber = number
+                                        enrollCardOtp(context,transaction, transactionCallback)
+                                    }
+                                })
 
+                                enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
                             }
                             "Secure3D" -> processSecure3DPayment(context,transaction, null,transactionCallback)
                             "Secure3DMpgs" -> processSecure3DPayment(context,transaction,null, transactionCallback)

@@ -91,8 +91,6 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
 
             }
 
-
-
         }
         webView.webViewClient = object : WebViewClient() {
 
