@@ -4,13 +4,13 @@ import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
 import com.cyberspace.cyberpaysdk.data.bank.remote.BankService
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.AccountResponse
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
-import com.cyberspace.cyberpaysdk.data.base.remote.BaseService
+import com.cyberspace.cyberpaysdk.data.base.remote.ApiClient
 import com.cyberspace.cyberpaysdk.data.base.remote.Service
 import io.reactivex.Observable
 
 internal class BankRepositoryImpl : BankRepository {
 
-    private var service : Service = BaseService()
+    private var service : Service = ApiClient()
 
     override fun getBanks(): Observable<MutableList<BankResponse>>? {
 

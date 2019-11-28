@@ -1,5 +1,7 @@
 package com.cyberspace.cyberpaysdk.data.base.remote
 
+import com.cyberspace.cyberpaysdk.CyberpaySdk
+import com.cyberspace.cyberpaysdk.enums.Mode
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -7,15 +9,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal class BaseService  @Inject constructor() : Service {
+internal class ApiClient : Service {
 
     private var retrofit: Retrofit? = null
-    private val baseUrl = "https://payment-api.staging.cyberpay.ng/api/v1/"
+    private val urlDebug = "https://payment-api.staging.cyberpay.ng/api/v1/"
+    private val urlLive = "https://payment-api.cyberpay.ng/api/v1/"
 
     private fun getRetrofitInstance(): Retrofit? {
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(when(CyberpaySdk.envMode){
+                    Mode.Debug -> urlDebug
+                    Mode.Live -> urlLive
+                })
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(

@@ -1,7 +1,7 @@
 package com.cyberspace.cyberpaysdk.data.transaction.repository
 
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
-import com.cyberspace.cyberpaysdk.data.base.remote.BaseService
+import com.cyberspace.cyberpaysdk.data.base.remote.ApiClient
 import com.cyberspace.cyberpaysdk.data.base.remote.Service
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.TransactionService
@@ -16,7 +16,7 @@ import java.lang.NullPointerException
 
 internal class TransactionRepositoryImpl : TransactionRepository{
 
-    private var service : Service = BaseService()
+    private var service : Service = ApiClient()
 
     override fun beginTransaction(transaction: Transaction): Observable<ApiResponse<SetTransaction>>? {
         if(transaction.customerEmail.isEmpty())throw  NullPointerException("Customer Email is required")
