@@ -16,6 +16,7 @@ class Card {
 
         this.cardType = result.cardType
         field  = result.cardNo
+        last4Digits = field?.substring(field?.length!! - 4, (field?.length!!))!!
     }
 
     var name = ""
@@ -27,7 +28,7 @@ class Card {
     var cvv : String? = null
     set(value) {
         if(value != null) {
-            if(value.length > 3 || value.length <3) throw InvalidParameterException("Invalid Card Cvv Found")
+            if(value.length > 3 || value.length < 3) throw InvalidParameterException("Invalid Card Cvv Found")
         }
         else throw InvalidParameterException("Invalid Card Cvv Found")
 
@@ -36,13 +37,13 @@ class Card {
 
     var expiryMonth : Int = 0
     set(value) {
-        if(value > 12 || value<1) throw InvalidParameterException("Invalid Card Expiry Month")
+        if(value > 12 || value < 1) throw InvalidParameterException("Invalid Card Expiry Month")
         field = value
     }
 
     var expiryYear : Int = 0
         set(value) {
-            if(value > 99 || value<19 ) throw InvalidParameterException("Invalid Card Expiry Year")
+            if(value > 99 || value < 19 ) throw InvalidParameterException("Invalid Card Expiry Year")
             field = value
         }
 
