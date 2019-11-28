@@ -12,7 +12,7 @@ internal interface TransactionService {
     fun beginTransaction(@Body transactionService : MutableMap<String, Any?>) : Observable<ApiResponse<SetTransaction>>
 
     @POST("payments/card")
-    fun chargeCard(@Body transactionService: MutableMap<String, Any?>) : Observable<ApiResponse<CardTransaction>>
+    fun chargeCard(@Body transactionService: MutableMap<String, Any?>) : Observable<ApiResponse<ChargeCard>>
 
     @GET("payments/{reference}")
     fun verifyTransactionByReference(@Path("reference") transactionReference : String) : Observable<ApiResponse<VerifyTransaction>>

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
-import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.ChargeCard
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.repository.TransactionRepository
 import com.cyberspace.cyberpaysdk.data.transaction.repository.TransactionRepositoryImpl
@@ -127,7 +127,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
      }
 
      @SuppressLint("CheckResult")
-     private fun processSecure3DPayment(context: AppCompatActivity, transaction: Transaction, data: CardTransaction?, transactionCallback: TransactionCallback){
+     private fun processSecure3DPayment(context: AppCompatActivity, transaction: Transaction, data: ChargeCard?, transactionCallback: TransactionCallback){
          val secure3dFragment = Secure3dFragment(context, transaction ,data, object : OnFinished {
              override fun onFinish(transaction: Transaction) {
                  // verify transaction status

@@ -2,7 +2,7 @@ package com.cyberspace.cyberpaysdk.data.transaction.remote.response
 
 import java.net.URLEncoder
 
-internal class CardTransaction {
+internal class ChargeCard {
     var reference = ""
     var status = ""
     var redirectUrl = ""

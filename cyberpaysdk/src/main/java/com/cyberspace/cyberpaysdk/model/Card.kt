@@ -1,6 +1,5 @@
 package com.cyberspace.cyberpaysdk.model
 
-import android.util.Log
 import com.cyberspace.cyberpaysdk.enums.CardType
 import com.cyberspace.cyberpaysdk.utils.validator.CardValidator
 import org.json.JSONObject

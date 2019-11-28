@@ -6,7 +6,7 @@ import com.cyberspace.cyberpaysdk.data.base.remote.Service
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.TransactionService
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.*
-import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.ChargeCard
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.VerifyOtp
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.VerifyMerchantTransaction
@@ -35,7 +35,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         return service.create(TransactionService::class.java)?.beginTransaction(param)
     }
 
-    override fun chargeCard(transaction: Transaction): Observable<ApiResponse<CardTransaction>>? {
+    override fun chargeCard(transaction: Transaction): Observable<ApiResponse<ChargeCard>>? {
 
         val param = mutableMapOf<String, Any?>()
         param["Name"] = ""
@@ -47,6 +47,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["CardPin"] = transaction.card?.pin
 
         return service.create(TransactionService::class.java)?.chargeCard(param)
+
     }
 
     override fun verifyTransactionByReference(reference: String): Observable<ApiResponse<VerifyTransaction>>? {

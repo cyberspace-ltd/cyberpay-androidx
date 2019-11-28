@@ -3,7 +3,6 @@ package com.cyberspace.cyberpaysdk.ui.secure3d
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
@@ -13,7 +12,7 @@ import android.webkit.*
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.cyberspace.cyberpaysdk.R
-import com.cyberspace.cyberpaysdk.data.transaction.remote.response.CardTransaction
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.ChargeCard
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.ui.widget.ProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -203,7 +202,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
 
         if(formData==null) webView.loadUrl(data)
         else {
-            val param = formData as CardTransaction
+            val param = formData as ChargeCard
             val form = String.format("TermUrl=%s&MD=%s&PaReq=%s",param.termUrl, param.md, param.paReq)//termUrl, md, paReq
 
             /*
