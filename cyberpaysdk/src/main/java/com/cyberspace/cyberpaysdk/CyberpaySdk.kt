@@ -2,6 +2,9 @@ package com.cyberspace.cyberpaysdk
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.ChargeCard
@@ -33,6 +36,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
         private var key = "*"
         internal var envMode : Mode = Mode.Debug
+
+        var merchantLogo : Drawable? = null
 
        //these dependencies can be injected -> work for another time
        private var repository : TransactionRepository = TransactionRepositoryImpl()
@@ -71,9 +76,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                         else -> transactionCallback.onError(transaction, Throwable(result.data?.reason))
                      }
                  },
-                 { error ->
-                    // Log.e("RESPONSE", error.toString())
-                     transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                 {
+                         throwable -> transactionCallback.onError(transaction, throwable)
                  }
              )
 
@@ -92,9 +96,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                          else -> transactionCallback.onError(transaction, Throwable(result.data?.reason))
                      }
                  },
-                 { error ->
-                     // Log.e("RESPONSE", error.toString())
-                     transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                 {
+                         throwable -> transactionCallback.onError(transaction, throwable)
                  }
              )
      }
@@ -127,8 +130,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
      }
 
      @SuppressLint("CheckResult")
-     private fun processSecure3DPayment(context: AppCompatActivity, transaction: Transaction, data: ChargeCard?, transactionCallback: TransactionCallback){
-         val secure3dFragment = Secure3dFragment(context, transaction ,data, object : OnFinished {
+     private fun processSecure3DPayment(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+         val secure3dFragment = Secure3dFragment(context, transaction ,object : OnFinished {
              override fun onFinish(transaction: Transaction) {
                  // verify transaction status
                  repository.verifyTransactionByReference(transaction.reference)
@@ -165,6 +168,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                 ?.observeOn(scheduler.ui())
                 ?.subscribe (
                     {t ->
+                       // var result = t
                         when(t.data?.status){
 
                             "Success", "Successful" -> {
@@ -186,16 +190,25 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
                                 enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
                             }
-                            "Secure3D" -> processSecure3DPayment(context,transaction,null, transactionCallback)
-                            "Secure3DMpgs" -> processSecure3DPayment(context,transaction,null, transactionCallback)
-                            "ProcessACS" -> processSecure3DPayment(context, transaction, t.data, transactionCallback)
+                            "Secure3D" -> {
+                                transaction.returnUrl = t.data!!.redirectUrl
+                                processSecure3DPayment(context,transaction, transactionCallback)
+                            }
+                            "Secure3DMpgs" -> {
+                                transaction.returnUrl = t.data!!.redirectUrl
+                                processSecure3DPayment(context,transaction, transactionCallback)
+                            }
+                            "ProcessACS" -> {
+                                transaction.returnUrl = t.data!!.redirectUrl
+                                processSecure3DPayment(context, transaction, transactionCallback)
+                            }
                             else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
 
                         }
 
                     },
-                    {e ->
-                        transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                    {
+                            throwable -> transactionCallback.onError(transaction, throwable)
                     }
                 )
         }
@@ -224,15 +237,21 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
                                 enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
                             }
-                            "Secure3D" -> processSecure3DPayment(context,transaction, null,transactionCallback)
-                            "Secure3DMpgs" -> processSecure3DPayment(context,transaction,null, transactionCallback)
+                            "Secure3D" -> {
+                                transaction.returnUrl = result.data!!.redirectUrl
+                                processSecure3DPayment(context,transaction,transactionCallback)
+                            }
+                            "Secure3DMpgs" -> {
+                                transaction.returnUrl = result.data!!.redirectUrl
+                                processSecure3DPayment(context,transaction, transactionCallback)
+                            }
                             else -> transactionCallback.onError(transaction, Throwable(result.data?.message))
                         }
 
 
                     },
-                    { error ->
-                        transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                    {
+                            throwable -> transactionCallback.onError(transaction, throwable)
                     }
                 )
         }
@@ -244,7 +263,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
              transaction.type = TransactionType.Card
              transaction.key = key
              // set transaction
-             //if(transaction.merchantReference.isEmpty())
+             if(transaction.merchantReference.isEmpty())
                  transaction.merchantReference = SequenceGenerator.hash()
              // set transaction
              repository.beginTransaction(transaction)
@@ -257,10 +276,10 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                      transactionCallback.onSuccess(transaction)
 
                  },
-                     { e ->
-                     //    Log.e("ERROR01_SERVER", e.message)
-                         transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
-                     })
+                 {
+                         throwable -> transactionCallback.onError(transaction, throwable)
+                 }
+                 )
          }
 
         @SuppressLint("CheckResult")
@@ -324,7 +343,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                      }
                  },
                  {
-                     error -> transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                         throwable -> transactionCallback.onError(transaction, throwable)
                  }
              )
      }
@@ -343,7 +362,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                      }
                  },
                  {
-                         error -> transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                         throwable -> transactionCallback.onError(transaction, throwable)
                  }
              )
      }
@@ -382,9 +401,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
                      }
                  },
-                 {e ->
-                    // Log.e("ERROR _SERVER", e.message)
-                     transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                 {
+                         throwable -> transactionCallback.onError(transaction, throwable)
                  }
              )
             // set transaction
@@ -427,7 +445,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                      override fun onSuccess(transaction: Transaction) {
                          progress.dismiss()
                          transaction.returnUrl = String.format("%s?reference=%s", bank.externalRedirectUrl, transaction.reference)
-                         processSecure3DPayment(context, transaction, null, object : TransactionCallback() {
+                         processSecure3DPayment(context, transaction, object : TransactionCallback() {
                              override fun onSuccess(transaction: Transaction) {
                                  dialog?.dismiss()
                                  transactionCallback.onSuccess(transaction)

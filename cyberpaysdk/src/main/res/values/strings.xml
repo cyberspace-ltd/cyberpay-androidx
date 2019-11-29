@@ -42,5 +42,6 @@
     <string name="enrol_phone">Enroll Otp</string>
     <string name="phone_hint">Phone Number</string>
     <string name="enrol_text">You have not registered for OTP. Enter your phone number below to register</string>
+    <string name="pay_title">Pay</string>
 
 </resources>

@@ -36,6 +36,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
     lateinit var bankName : EditText
     lateinit var accountNumber : EditText
     lateinit var cardType : ImageView
+    lateinit var logo : ImageView
 
     lateinit var close : View
     lateinit var testView : View
@@ -98,6 +99,10 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         expiry = view.findViewById(R.id.expiry)
         cvv = view.findViewById(R.id.cvv)
         cardType = view.findViewById(R.id.card_type)
+        logo = view.findViewById(R.id.logo)
+
+        if(CyberpaySdk.merchantLogo!=null)
+            logo.setImageDrawable(CyberpaySdk.merchantLogo)
 
         pay = view.findViewById(R.id.pay)
         amount = view.findViewById(R.id.amount)

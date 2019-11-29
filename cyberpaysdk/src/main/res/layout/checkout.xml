@@ -13,13 +13,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/close"
-            android:layout_gravity="end"
-            android:layout_width="24dp"
-            android:layout_margin="@dimen/space_small"
-            android:src="@drawable/ic_close_black_24dp"
-            android:layout_height="24dp"/>
+       <LinearLayout
+           android:padding="@dimen/space_small"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:textStyle="bold"
+               android:textSize="@dimen/medium_font"
+               android:gravity="center"
+               android:text="@string/pay_title"
+               android:layout_height="wrap_content"/>
+
+           <ImageView
+               android:id="@+id/close"
+               android:layout_gravity="end"
+               android:layout_width="24dp"
+               android:src="@drawable/ic_close_black_24dp"
+               android:layout_height="24dp"/>
+
+       </LinearLayout>
 
 
         <LinearLayout
@@ -29,12 +45,14 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/logo"
                 android:layout_marginBottom="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/space_small"
-                android:layout_width="180dp"
+                android:layout_width="wrap_content"
+                android:scaleType="centerInside"
                 android:src="@drawable/ic_cyberpay_logo"
                 android:contentDescription="@string/logo_content_desc"
-                android:layout_height="32dp"/>
+                android:layout_height="64dp"/>
 
 
             <LinearLayout
