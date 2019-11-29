@@ -200,6 +200,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                             }
                             "ProcessACS" -> {
                                 transaction.returnUrl = t.data!!.redirectUrl
+                                //transaction.returnUrl = String.format("https://payment.staging.cyberpay.ng/pay?reference=%s",transaction.reference)
                                 processSecure3DPayment(context, transaction, transactionCallback)
                             }
                             else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
@@ -263,7 +264,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
              transaction.type = TransactionType.Card
              transaction.key = key
              // set transaction
-             if(transaction.merchantReference.isEmpty())
+             //if(transaction.merchantReference.isEmpty())
                  transaction.merchantReference = SequenceGenerator.hash()
              // set transaction
              repository.beginTransaction(transaction)

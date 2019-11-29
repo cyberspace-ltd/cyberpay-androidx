@@ -130,14 +130,13 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                     errorPage.visibility = View.GONE
                 }
 
-                /*
                 if (url.startsWith("https://payment.staging.cyberpay.ng/notify?ref=")) {
                     webView.destroy()
                     //reference = url.substring(url.lastIndexOf("=") + 1)
                     listener.onFinish(transaction)
                     dialog?.dismiss()
                 }
-                */
+
 
                 if (url.startsWith("https://payment.staging.cyberpay.ng/pay?reference")) {
                     webView.destroy()
@@ -152,6 +151,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                     dialog?.dismiss()
                 }
 
+
                 if (url.startsWith("https://payment.staging.cyberpay.ng/url?ref")) {
                     webView.destroy()
                     // reference = url.substring(url.lastIndexOf("=") + 1)
@@ -159,14 +159,14 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                     dialog?.dismiss()
                 }
 
-            /*
+
+
                 if (url.startsWith("https://payment.cyberpay.ng/notify?ref=")) {
                     webView.destroy()
                     //reference = url.substring(url.lastIndexOf("=") + 1)
                     listener.onFinish(transaction)
                     dialog?.dismiss()
                 }
-            */
 
             }
 
@@ -178,7 +178,6 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                 failingUrl: String?
             ) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
-                Log.e("ERROR", description.toString())
                 isError = true
                 progressDialog.dismiss()
                 webView.visibility = View.GONE
@@ -198,7 +197,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
 
         }
 
-        //Log.e("URL", data)
+        Log.e("URL", data)
         webView.loadUrl(data)
             /*
         if(formData==null) webView.loadUrl(data)

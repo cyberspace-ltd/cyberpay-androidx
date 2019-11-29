@@ -42,13 +42,14 @@ internal class TransactionRepositoryImpl : TransactionRepository{
     override fun chargeCard(transaction: Transaction): Observable<ApiResponse<ChargeCard>>? {
 
         val param = mutableMapOf<String, Any?>()
-        param["Name"] = ""
+        //param["Name"] = ""
+        //param["Expiry"] = "01/20"
         param["ExpiryMonth"] = transaction.card?.expiryMonth
-        param["ExpiryYear"] = transaction.card?.expiryYear
+        param["ExpiryYear"] =  transaction.card?.expiryYear
         param["CardNumber"] = transaction.card?.number
         param["CVV"] = transaction.card?.cvv
         param["Reference"] = transaction.reference
-        param["CardPin"] = transaction.card?.pin
+        //param["CardPin"] = transaction.card?.pin
 
         return service.create(TransactionService::class.java)?.chargeCard(param)
             ?.onErrorResumeNext { throwable : Throwable ->
