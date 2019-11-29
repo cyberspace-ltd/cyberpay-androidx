@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-internal class Secure3dFragment constructor(var context: AppCompatActivity, var transaction: Transaction, var formData : Any?,  var listener: OnFinished) : BottomSheetDialogFragment(){
+internal class Secure3dFragment constructor(var context: AppCompatActivity, var transaction: Transaction,  var listener: OnFinished) : BottomSheetDialogFragment(){
 
     private lateinit var webView: WebView
     private lateinit var progressDialog: ProgressDialog
@@ -67,8 +67,6 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
         listener.onCancel()
     }
 
-
-
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView(data: String) {
         Log.e("URL", data)
@@ -87,9 +85,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                 super.onProgressChanged(view, newProgress)
 
                 if(newProgress >=100) progressDialog.dismiss()
-
             }
-
         }
         webView.webViewClient = object : WebViewClient() {
 
@@ -134,17 +130,19 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                     errorPage.visibility = View.GONE
                 }
 
+                /*
                 if (url.startsWith("https://payment.staging.cyberpay.ng/notify?ref=")) {
                     webView.destroy()
                     //reference = url.substring(url.lastIndexOf("=") + 1)
                     listener.onFinish(transaction)
                     dialog?.dismiss()
                 }
+                */
 
                 if (url.startsWith("https://payment.staging.cyberpay.ng/pay?reference")) {
-                  //  webView.destroy()
-                  //  listener.onFinish(transaction)
-                 //   dialog?.dismiss()
+                    webView.destroy()
+                    listener.onFinish(transaction)
+                    dialog?.dismiss()
                 }
 
                 if (url.startsWith("https://payment.cyberpay.ng/notify?ref=")) {
@@ -161,13 +159,15 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                     dialog?.dismiss()
                 }
 
-
+            /*
                 if (url.startsWith("https://payment.cyberpay.ng/notify?ref=")) {
                     webView.destroy()
                     //reference = url.substring(url.lastIndexOf("=") + 1)
                     listener.onFinish(transaction)
                     dialog?.dismiss()
                 }
+            */
+
             }
 
             @SuppressWarnings("deprecation")
@@ -193,13 +193,14 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
             ) {
                 super.onReceivedError(view, request, error)
                 //swipeRefreshLayout.setRefreshing(false)
-
                 onReceivedError(view, error.errorCode, error.description.toString(), request.url.toString())
             }
 
         }
 
-
+        //Log.e("URL", data)
+        webView.loadUrl(data)
+            /*
         if(formData==null) webView.loadUrl(data)
         else {
             val param = formData as ChargeCard
@@ -222,6 +223,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
              webView.postUrl(param.acsUrl, form.toByteArray())
             //webView.loadUrl("https://payment.staging.cyberpay.ng/pay?reference=JAG000001261119447772")
         }
+             */
     }
 
 

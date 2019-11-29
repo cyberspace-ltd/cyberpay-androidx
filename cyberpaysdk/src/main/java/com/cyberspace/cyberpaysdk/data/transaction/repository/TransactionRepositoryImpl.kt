@@ -1,7 +1,8 @@
 package com.cyberspace.cyberpaysdk.data.transaction.repository
 
-import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiClient
+import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
+import com.cyberspace.cyberpaysdk.data.base.remote.ErrorHandler
 import com.cyberspace.cyberpaysdk.data.base.remote.Service
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.TransactionService
@@ -19,8 +20,8 @@ internal class TransactionRepositoryImpl : TransactionRepository{
     private var service : Service = ApiClient()
 
     override fun beginTransaction(transaction: Transaction): Observable<ApiResponse<SetTransaction>>? {
-        if(transaction.customerEmail.isEmpty())throw  NullPointerException("Customer Email is required")
-      //  if(transaction.customerEmail.contains("@"))
+        if(transaction.customerEmail.isEmpty())throw  NullPointerException("Customer Email Is Required")
+        if(!transaction.customerEmail.contains("@")) throw  IllegalArgumentException("Invalid Customer Email Address Found")
         val param  = mutableMapOf<String, Any?>()
         param["currency"] = transaction.currency
         param["merchantRef"] = transaction.merchantReference
@@ -33,6 +34,9 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["splits"] = transaction.splits
 
         return service.create(TransactionService::class.java)?.beginTransaction(param)
+            ?.onErrorResumeNext { throwable : Throwable ->
+               Observable.error(ErrorHandler.getError(throwable))
+            }
     }
 
     override fun chargeCard(transaction: Transaction): Observable<ApiResponse<ChargeCard>>? {
@@ -47,11 +51,17 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["CardPin"] = transaction.card?.pin
 
         return service.create(TransactionService::class.java)?.chargeCard(param)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                Observable.error(ErrorHandler.getError(throwable))
+            }
 
     }
 
     override fun verifyTransactionByReference(reference: String): Observable<ApiResponse<VerifyTransaction>>? {
       return service.create(TransactionService::class.java)?.verifyTransactionByReference(reference)
+          ?.onErrorResumeNext { throwable : Throwable ->
+              Observable.error(ErrorHandler.getError(throwable))
+          }
     }
 
     override fun verifyTransactionByMerchantReference(merchantReference: String): Observable<ApiResponse<VerifyMerchantTransaction>>? {
@@ -66,6 +76,9 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["card"] = transaction.card?.toJson()
 
         return service.create(TransactionService::class.java)?.verifyCardOtp(param)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                Observable.error(ErrorHandler.getError(throwable))
+            }
     }
 
     override fun verifyBankOtp(transaction: Transaction): Observable<ApiResponse<VerifyOtp>>? {
@@ -74,6 +87,9 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["reference"] = transaction.reference
 
         return service.create(TransactionService::class.java)?.verifyBankOtp(param)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                Observable.error(ErrorHandler.getError(throwable))
+            }
 
     }
 
@@ -87,14 +103,19 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["bvn"] = transaction.bvn
 
         return service.create(TransactionService::class.java)?.chargeBank(param)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                Observable.error(ErrorHandler.getError(throwable))
+            }
     }
 
     override fun enrollBankOtp(transaction: Transaction): Observable<ApiResponse<EnrollOtp>>? {
         val param = mutableMapOf<String, Any?>()
         param["reference"] = transaction.reference
         param["otp"] = transaction.otp
-
         return service.create(TransactionService::class.java)?.enrolBankOtp(param)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                Observable.error(ErrorHandler.getError(throwable))
+            }
     }
 
     override fun enrollCardOtp(transaction: Transaction): Observable<ApiResponse<EnrollOtp>>? {
@@ -104,6 +125,9 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["cardModel"] = transaction.card?.toJson()
 
         return service.create(TransactionService::class.java)?.enrolCardOtp(param)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                Observable.error(ErrorHandler.getError(throwable))
+            }
 
     }
 }
