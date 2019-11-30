@@ -1,5 +1,6 @@
 package com.cyberspace.cyberpaysdk.data.transaction.repository
 
+import android.util.Log
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiClient
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
 import com.cyberspace.cyberpaysdk.data.base.remote.ErrorHandler
@@ -42,14 +43,13 @@ internal class TransactionRepositoryImpl : TransactionRepository{
     override fun chargeCard(transaction: Transaction): Observable<ApiResponse<ChargeCard>>? {
 
         val param = mutableMapOf<String, Any?>()
-        //param["Name"] = ""
-        //param["Expiry"] = "01/20"
+        param["Expiry"] = transaction.card?.expiry
         param["ExpiryMonth"] = transaction.card?.expiryMonth
         param["ExpiryYear"] =  transaction.card?.expiryYear
         param["CardNumber"] = transaction.card?.number
         param["CVV"] = transaction.card?.cvv
         param["Reference"] = transaction.reference
-        //param["CardPin"] = transaction.card?.pin
+        if(!transaction.card?.pin.isNullOrEmpty()) param["CardPin"] = transaction.card?.pin
 
         return service.create(TransactionService::class.java)?.chargeCard(param)
             ?.onErrorResumeNext { throwable : Throwable ->

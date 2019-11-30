@@ -176,7 +176,20 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                             }
 
                             "Otp" -> processCardOtp(context, transaction, transactionCallback)
-                            "ProvidePin" -> chargeCardWithPin(context,transaction, transactionCallback)
+                            "ProvidePin" -> {
+
+                                // inflate pin ui
+                                val pinFragment = PinFragment(object : PinSubmitted {
+                                    override fun onSubmit(pin: String) {
+                                        // verify otp
+                                        transaction.card?.pin = pin
+                                        chargeCardWithPin(context,transaction, transactionCallback)
+                                    }
+                                })
+
+                                pinFragment.show(context.supportFragmentManager, pinFragment.tag)
+
+                            }
 
                             "EnrollOtp" -> {
                                 // inflate phone number ui
@@ -289,16 +302,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
             transaction.type = TransactionType.Card
             createTransaction(context, transaction, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
-                    // inflate pin ui
-                    val pinFragment = PinFragment(object : PinSubmitted {
-                        override fun onSubmit(pin: String) {
-                            // verify otp
-                            transaction.card?.pin = pin
-                            chargeCardWithoutPin(context,transaction, transactionCallback)
-                        }
-                    })
 
-                    pinFragment.show(context.supportFragmentManager, pinFragment.tag)
+                    chargeCardWithoutPin(context,transaction, transactionCallback)
                 }
 
                 override fun onError(transaction: Transaction, throwable: Throwable) {

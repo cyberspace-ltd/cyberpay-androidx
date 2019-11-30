@@ -18,6 +18,12 @@ class Card {
         last4Digits = field?.substring(field?.length!! - 4, (field?.length!!))!!
     }
 
+    var expiry = ""
+     get() {
+          return String.format("%02d/%02d",expiryMonth, expiryYear)
+     }
+    private set
+
     var name = ""
     var email = ""
     var address = ""
