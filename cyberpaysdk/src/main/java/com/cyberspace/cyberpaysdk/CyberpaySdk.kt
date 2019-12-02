@@ -145,9 +145,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                                  else -> transactionCallback.onError(transaction, Throwable(result.data?.message))
                              }
                          },
-                         { error ->
-                           //  var er = error
-                             transactionCallback.onError(transaction, Throwable(Constant.errorGeneric))
+                         {
+                                 error -> transactionCallback.onError(transaction, error)
                          }
                  )
 
