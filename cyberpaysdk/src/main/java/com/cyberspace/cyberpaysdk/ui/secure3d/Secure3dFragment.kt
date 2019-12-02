@@ -69,17 +69,14 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView(data: String) {
-        Log.e("URL", data)
         webView.keepScreenOn = true
         webView.settings.javaScriptEnabled = true // enable
         webView.settings.javaScriptCanOpenWindowsAutomatically = true
         webView.settings.allowContentAccess = true
-        //webView.settings.domStorageEnabled = true
         webView.settings.builtInZoomControls = true
         webView.settings.setSupportZoom(true)
         webView.settings.loadWithOverviewMode = true
         webView.settings.useWideViewPort = true
-        //webView.settings.domStorageEnabled = true
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
@@ -197,7 +194,6 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
 
         }
 
-        Log.e("URL", data)
         webView.loadUrl(data)
             /*
         if(formData==null) webView.loadUrl(data)
