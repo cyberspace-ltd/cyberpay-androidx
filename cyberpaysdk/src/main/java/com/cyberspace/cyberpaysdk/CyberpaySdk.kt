@@ -283,7 +283,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                  ?.subscribeOn(scheduler.background())
                  ?.observeOn(scheduler.ui())
                  ?.subscribe({
-                         t ->
+                     t ->
                      transaction.reference = t.data?.transactionReference!!
                      transaction.charge = t.data?.charge
                      transactionCallback.onSuccess(transaction)
@@ -301,8 +301,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
             transaction.type = TransactionType.Card
             createTransaction(context, transaction, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
-
-                    chargeCardWithoutPin(context,transaction, transactionCallback)
+                    processPayment(context, transaction, transactionCallback)
                 }
 
                 override fun onError(transaction: Transaction, throwable: Throwable) {
@@ -315,21 +314,35 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
             })
         }
 
+    private fun processPayment(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+         // inflate pin ui
+         when(transaction.card?.type?.name) {
+
+             "VERVE" -> {
+                 val pinFragment = PinFragment(object : PinSubmitted {
+                     override fun onSubmit(pin: String) {
+                         // verify otp
+                         transaction.card?.pin = pin
+                         chargeCardWithoutPin(context,transaction, transactionCallback)
+                     }
+                 })
+
+                 pinFragment.show(context.supportFragmentManager, pinFragment.tag)
+             }
+             else -> {
+                 chargeCardWithoutPin(context,transaction, transactionCallback)
+             }
+         }
+
+     }
+
      @SuppressLint("CheckResult")
      fun chargeCard(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
          validateKey()
          transaction.type = TransactionType.Card
          // set transaction
-         // inflate pin ui
-         val pinFragment = PinFragment(object : PinSubmitted {
-             override fun onSubmit(pin: String) {
-                 // verify otp
-                 transaction.card?.pin = pin
-                 chargeCardWithoutPin(context,transaction, transactionCallback)
-             }
-         })
+         processPayment(context, transaction, transactionCallback)
 
-         pinFragment.show(context.supportFragmentManager, pinFragment.tag)
      }
 
      @SuppressLint("CheckResult")
