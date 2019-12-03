@@ -31,8 +31,9 @@ import com.cyberspace.cyberpaysdk.ui.secure3d.Secure3dFragment
 import com.cyberspace.cyberpaysdk.ui.widget.ProgressDialog
 import com.cyberspace.cyberpaysdk.utils.Constant
 import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
+import java.security.InvalidParameterException
 
- object CyberpaySdk {
+object CyberpaySdk {
 
         private var key = "*"
         internal var envMode : Mode = Mode.Debug
@@ -315,7 +316,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
         }
 
     private fun processPayment(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
-         // inflate pin ui
+        if(transaction.card == null) throw InvalidParameterException("Card Not Found")
+        // inflate pin ui
          when(transaction.card?.type?.name) {
 
              "VERVE" -> {
