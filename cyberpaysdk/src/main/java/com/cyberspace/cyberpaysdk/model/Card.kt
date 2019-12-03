@@ -13,7 +13,7 @@ class Card {
         val result = CardValidator.isValid(value)
         if(!result.isValid) throw InvalidParameterException("Invalid Card Number Found")
 
-        this.cardType = result.cardType
+        this.type = result.cardType
         field  = result.cardNo
         last4Digits = field?.substring(field?.length!! - 4, (field?.length!!))!!
     }
@@ -52,7 +52,7 @@ class Card {
             field = value
         }
 
-    var cardType : CardType? = null
+    var type : CardType? = null
 
     internal var pin : String? = null
 
