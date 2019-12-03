@@ -318,7 +318,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
          // inflate pin ui
          when(transaction.card?.type?.name) {
 
-             "VISA" -> {
+             "VERVE" -> {
                  val pinFragment = PinFragment(object : PinSubmitted {
                      override fun onSubmit(pin: String) {
                          // verify otp
