@@ -1,2 +1,2 @@
-include ':cyberpaysdk'
+include ':app', ':cyberpaysdk'
 rootProject.name='CyberpayApp'
