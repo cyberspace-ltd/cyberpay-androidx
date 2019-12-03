@@ -43,9 +43,9 @@ class MainActivity : AppCompatActivity() {
             //
             trans.amount = 100000.0
             trans.customerEmail = "test@test.com"
-            trans.description = "description"
-            trans.dateOfBirth = "120988"
-            trans.card = card
+            //trans.description = "description"
+            //trans.dateOfBirth = "120988"
+            //trans.card = card
 
             CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
