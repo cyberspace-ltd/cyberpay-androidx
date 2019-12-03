@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(p: CharSequence?, start: Int, before: Int, count: Int) {
                 try {
                     card.number = p.toString()
-                    when (card.cardType?.issuerName){
+                    when (card.type?.issuerName){
                         "MASTER" -> cardType.setImageResource(R.drawable.master_card)
                         "VISA" -> cardType.setImageResource(R.drawable.visa_card)
                         "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
