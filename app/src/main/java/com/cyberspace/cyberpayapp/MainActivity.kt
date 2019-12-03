@@ -1,10 +1,16 @@
 package com.cyberspace.cyberpayapp
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.TransactionCallback
 import com.cyberspace.cyberpaysdk.model.Transaction
@@ -14,6 +20,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
+import java.security.InvalidParameterException
+import java.text.DecimalFormat
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,32 +30,128 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+//        setSupportActionBar(toolbar)
 
-        val fab : FloatingActionButton = findViewById(R.id.fab)
+        var cardNumber : EditText = findViewById(R.id.card_number)
+        var cardType : ImageView = findViewById(R.id.card_type)
+        var progressBar : ProgressBar
+
+        var expiry : EditText = findViewById(R.id.expiry)
+        var cvv : EditText = findViewById(R.id.cvv)
+        var logo : ImageView = findViewById(R.id.logo)
+
+        var transac = Transaction()
+
+        var isCardNumberError : Boolean = true
+        var isCardCvvError : Boolean = true
+        var isCardExpiryError : Boolean = true
+        var card = Card()
+
+        transac.amount = 100000.0
+
+        cardNumber.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p: Editable?) {
+            }
+
+            override fun beforeTextChanged(p: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(p: CharSequence?, start: Int, before: Int, count: Int) {
+                try {
+                    card.number = p.toString()
+                    when (card.cardType?.issuerName){
+                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
+                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
+                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
+                    }
+                    isCardNumberError = false
+
+
+                }catch (e : Exception){
+                    if(p.toString().length > 15) cardNumber.error = "Invalid Card Number"
+                    cardType.setImageResource(0)
+                    isCardNumberError = true
+                }
+            }
+
+        })
+
+        cvv.addTextChangedListener(object  : TextWatcher {
+            override fun afterTextChanged(p: Editable?) {
+            }
+
+            override fun beforeTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                try {
+                    card.cvv = p.toString()
+                    isCardCvvError = false
+                }catch (error : java.lang.Exception){
+                    cvv.error = "Invalid Card CVV"
+                    isCardCvvError = true
+
+                }
+            }
+
+        })
+
+        expiry.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p: Editable?) {
+            }
+
+            override fun beforeTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                try {
+                    isCardExpiryError = false
+                    var exp = p.toString().split("/")
+                    card.expiryMonth = exp[0].toInt()
+                    card.expiryYear = exp[1].toInt()
+                }
+                catch (ex : InvalidParameterException){
+                    expiry.error = ex.message
+                    isCardExpiryError = true
+                }
+                catch (error : java.lang.Exception){
+                    isCardExpiryError = true
+                }
+            }
+
+        })
+
+       val pay : TextView = findViewById(R.id.pay)
+
+        val df = DecimalFormat("###,###.##")
+        pay.text = String.format("%s%s", pay.text, df.format((transac.amount/ 100)).toString())
 
         //transaction.merchantReference = "78ijdjhh4hj494hjrkrkr"
         //transaction.bvn = "12345678909"
         //transaction.card = card
 
-        fab.setOnClickListener {
+        pay.setOnClickListener {
 
-            val card = Card()//5061030000000000928
-            //5061 0300 0000 0000 928
-            card.number = "4000 0000 0000 0622"//"4399830000000008"
-            card.expiryMonth = 1
-            card.expiryYear = 20
-            card.cvv = "000"
+            if(!isCardCvvError && !isCardExpiryError && !isCardNumberError){
+
+            }
+
+//            val card = Card()//5061030000000000928
+//            //5061 0300 0000 0000 928
+//            card.number = "5399 8300 0000 0008"//"4000 0000 0000 0622"//"4399830000000008"
+//            card.expiryMonth = 5 //1
+//            card.expiryYear = 30 //20
+//            card.cvv = "000"
 
             val trans = Transaction()
             //
             trans.amount = 100000.0
             trans.customerEmail = "test@test.com"
             trans.description = "description"
-            trans.dateOfBirth = "120988"
+           // trans.dateOfBirth = "120988"
             trans.card = card
 
-            CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
+            CyberpaySdk.getPayment(this, trans, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
                     Log.e("RESPONSE", "SUCCESSFUL")
                     Log.e("TRANSACTION", transaction.reference)
