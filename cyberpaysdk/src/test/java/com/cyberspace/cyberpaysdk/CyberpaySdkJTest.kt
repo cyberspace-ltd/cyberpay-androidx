@@ -57,8 +57,8 @@ class CyberpaySdkJTest {
         val card = Card()
         // insert an valid master card number
         card.number = "5453 0100 0006 4261"
-        assertThat(card.cardType?.name).isEqualTo("MASTERCARD")
-        assertThat(card.cardType?.issuerName).isEqualTo("MASTER")
+        assertThat(card.type?.name).isEqualTo("MASTERCARD")
+        assertThat(card.type?.issuerName).isEqualTo("MASTER")
     }
 
     // tests expected to pass
@@ -68,8 +68,8 @@ class CyberpaySdkJTest {
         val card = Card()
         // insert an valid visa card number
         card.number = "4000 0000 0000 0622"
-        assertThat(card.cardType?.name).isEqualTo("VISA")
-        assertThat(card.cardType?.issuerName).isEqualTo("VISA")
+        assertThat(card.type?.name).isEqualTo("VISA")
+        assertThat(card.type?.issuerName).isEqualTo("VISA")
     }
 
 
@@ -82,8 +82,8 @@ class CyberpaySdkJTest {
         val card = Card()
         // insert an valid verve card number
         card.number = "5061 0300 0000 0000 928"
-        assertThat(card.cardType?.name).isEqualTo("VERVE")
-        assertThat(card.cardType?.issuerName).isEqualTo("VERVE")
+        assertThat(card.type?.name).isEqualTo("VERVE")
+        assertThat(card.type?.issuerName).isEqualTo("VERVE")
     }
 
     // tests expected to pass
