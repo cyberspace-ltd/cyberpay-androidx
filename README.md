@@ -95,18 +95,7 @@ class App : Application() {
 
 ---
 
-**Note** : Ensure when going live, you initialize the Live API key `CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Live)` instead of the Test API key `CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Debug)`. 
-This key can be gotten from the merchant dashboard on the cyberpay merchant portal
-
-**Demo**
-
-The demo is running in test mode -- use `5399 8300 0000 0008` as a test card number with CVC: 000, future expiration date: 05/30.
-
-OTP: 123456
-
-
-Use the `4000 0000 0000 0622` test card number to trigger a 3D Secure payment flow with CVC: 535 future expiration date: 01/20..
-
+## Making Payments
 
 **Easy Approach:**
 
@@ -135,7 +124,7 @@ First you need to set Transaction Object, set amount and customer Email Address
 ```	
 
 ---
-## Initiate Transaction
+##Initiate Transaction
 > Java
 
 ```java
@@ -261,6 +250,21 @@ CyberpaySdk.getPayment(this, trans, object : TransactionCallback() {
 
 ```
 
+---
+
+**Note** : Ensure when going live, you initialize the Live API key `CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Live)` instead of the Test API key `CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Debug)`. 
+This key can be gotten from the merchant dashboard on the cyberpay merchant portal
+
+**Demo**
+
+The demo is running in test mode -- use `5399 8300 0000 0008` as a test card number with CVC: 000, future expiration date: 05/30.
+
+OTP: 123456
+
+
+Use the `4000 0000 0000 0622` test card number to trigger a 3D Secure payment flow with CVC: 535 future expiration date: 01/20..
+
+---
 ## FAQs
 
 Q: Where can I get my integration key?
