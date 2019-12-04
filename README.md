@@ -11,6 +11,16 @@ The Cyberpay SDK makes it quick and easy to build seamless payment into your and
 - Single implementation across 
 
 
+<!-- prettier-ignore -->
+|     | client-only | client-and-server
+:--- | :---: | :---:
+ **Custombuilt checkout page.** Create a custom payment page with your business logo and name. | ✅  | ✅ |
+ **Dynamic checkout amounts.** Dynamically define product amounts rather than relying on predefined SKUs.  | ❌  | ✅ |
+ **Capture payments later.** Optionally split the capture and authorization steps to place a hold on the card and charge later. | ❌ | ✅ |
+
+### Client-only flowchart
+
+
 ## Requirements
 The Cyberpay Android SDK is compatible with Android Apps supported from Android 4.1 (Jelly Bean).
 
