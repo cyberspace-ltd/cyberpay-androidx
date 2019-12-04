@@ -14,7 +14,7 @@ The Cyberpay SDK makes it quick and easy to build seamless payment into your and
 <!-- prettier-ignore -->
 |     | client-only | client-and-server
 :--- | :---: | :---:
- **Custombuilt checkout page.** Create a custom payment page with your business logo and name. | ✅  | ✅ |
+ **Custom built checkout page.** Create a custom payment page with your business logo and name. | ✅  | ✅ |
  **Dynamic checkout amounts.** Dynamically define product amounts rather than relying on predefined SKUs.  | ❌  | ✅ |
  **Capture payments later.** Optionally split the capture and authorization steps to place a hold on the card and charge later. | ❌ | ✅ |
 
@@ -53,6 +53,8 @@ The Cyberpay Android SDK is compatible with Android Apps supported from Android 
 ### Configure your Cyberpay integration in your Application Class
 **Step 1**: Configure API Keys
 After installation of the Cyberpay SDK, configure it with your API Integration Key gotten from your merchant dashboard, for test and production
+
+> Java
 ```java
 public class App extends Application{
     @Override
@@ -62,32 +64,30 @@ public class App extends Application{
         //Test Environment
         CyberpaySdk.initialiseSdk(" TEST INTEGRATION KEY", Mode.Debug)
 		
-		//Live Environment
+	//Live Environment
         //CyberpaySdk.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
 		
-		
-		// Optional set your company logo to overrride default Cyberpay Logo
+	// Optional set your company logo to overrride default Cyberpay Logo
         CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
 
     }
 }
 
 ```
-
+> Kotlin
 ```kotlin
-
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
 		
-		//Test Environment
+	//Test Environment
         CyberpaySdk.initialiseSdk("TEST INTEGRATION KEY", Mode.Debug)
 		
-		//Live Environment
+	//Live Environment
         //CyberpaySdk.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
 		
-		// Optional set your company logo to overrride default Cyberpay Logo
+	// Optional set your company logo to overrride default Cyberpay Logo
         CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
     }
 }
@@ -110,64 +110,49 @@ Use the `4000 0000 0000 0622` test card number to trigger a 3D Secure payment fl
 
 **Easy Approach:**
 
-##Initialise your Transaction
+This creates a custom checkout page with just a few lines of code
+This allows the user implement payment without having to worry about the boiler plate of implenmentation
+We have abstracted the Card details input and validation for you.
+
+First you need to set Transaction Object, set amount and customer Email Address
+
+##Set your Transaction Object
 > Java 
 ```java
-	 CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Debug);
+	 Transaction trans = new Transaction();
+	 `Note Amount is in Kobo so you should multiply by 100` 
+	 trans.amount = 1000000.0;
+	 trans.email = "name@email.com";
 	 
-	 // Optional set your company logo to overrride default Cyberpay Logo
-     CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card);
 ```
 > Kotlin
 ```kotlin
 
- 	CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Debug)
-	
-	// Optional set your company logo to overrride default Cyberpay Logo
-    CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
+ 	 var trans = Transaction()
+	 `Note Amount is in Kobo so you should multiply by 100` 
+	 trans.amount = 1000000.0
+	 trans.email = "name@email.com"
 ```	
 
-##Initialize your Card Object
-> Java
-
-```java
-
-	Card card = new Card();
-	card.number = "5399 8300 0000 0008";
-    card.expiryMonth = 5; 
-    card.expiryYear = 30; 
-    card.cvv = "000";
-```
-
-> Kotlin
-```kotlin
-
-    val card = Card()
-    card.number = "5399 8300 0000 0008"
-    card.expiryMonth = 5 
-    card.expiryYear = 30 
-    card.cvv = "000"
-```
-
 ---
-## Make Transaction
+## Initiate Transaction
 > Java
 
 ```java
 	CyberpaySdk.checkoutTransaction(this, trans, new TransactionCallback() {
 	
         @override 
-		public void onSuccess(transaction: Transaction) {
+	public void onSuccess(transaction: Transaction) {
             
         }
 
         @override 
-		public void onError(transaction: Transaction, throwable: Throwable) {
+	public void onError(transaction: Transaction, throwable: Throwable) {
 
         }
 
         @Override 
-		public void onValidate(transaction: Transaction) {
+	public void onValidate(transaction: Transaction) {
 
         }
     });	
@@ -178,12 +163,11 @@ Use the `4000 0000 0000 0622` test card number to trigger a 3D Secure payment fl
 ```kotlin
 CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
         override fun onSuccess(transaction: Transaction) {
-            
+            //transaction is succesfull
         }
 
         override fun onError(transaction: Transaction, throwable: Throwable) {
-            
-
+            //transaction error occured
         }
 
         override fun onValidate(transaction: Transaction) {
@@ -201,6 +185,8 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 
 	Transaction trans = new Transaction();
 	Card card = new Card();
+	
+	
 ```
 > Kotlin
 ```kotlin
@@ -210,6 +196,28 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 
 ---
 
+##Initialize your Card Object
+> Java
+
+```java
+
+	Card card = new Card();
+	card.number = "5399 8300 0000 0008";
+    	card.expiryMonth = 5; 
+    	card.expiryYear = 30; 
+    	card.cvv = "000";
+```
+
+> Kotlin
+```kotlin
+
+    val card = Card()
+    card.number = "5399 8300 0000 0008"
+    card.expiryMonth = 5 
+    card.expiryYear = 30 
+    card.cvv = "000"
+```
+
 ##
 > Java
 
@@ -217,22 +225,17 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 	CyberpaySdk.getPayment(this, trans, new TransactionCallback() {
 	
         @override 
-		public void onSuccess(transaction: Transaction) {
-            Log.e("RESPONSE", "SUCCESSFUL")
-            Log.e("TRANSACTION", transaction.reference)
-            Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
+	public void onSuccess(transaction: Transaction) {
+            //transaction is succesfull
         }
 
         @override 
-		public void onError(transaction: Transaction, throwable: Throwable) {
-            Log.e("ERROR", throwable.message!!)
-            Log.e("TRANSACTION", transaction.reference)
-            Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
-
+	public void onError(transaction: Transaction, throwable: Throwable) {
+            //transaction error occured
         }
 
         @Override 
-		public void onValidate(transaction: Transaction) {
+	public void onValidate(transaction: Transaction) {
 
         }
     });	
@@ -244,16 +247,11 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 
 CyberpaySdk.getPayment(this, trans, object : TransactionCallback() {
 	    override fun onSuccess(transaction: Transaction) {
-	        Log.e("RESPONSE", "SUCCESSFUL")
-	        Log.e("TRANSACTION", transaction.reference)
-	        Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
+	        //transaction is succesfull
 	    }
 	
 	    override fun onError(transaction: Transaction, throwable: Throwable) {
-	        Log.e("ERROR", throwable.message!!)
-	        Log.e("TRANSACTION", transaction.reference)
-	        Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
-	
+		//transaction error occured
 	    }
 	
 	    override fun onValidate(transaction: Transaction) {
