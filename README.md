@@ -4,7 +4,10 @@
 Integrate payment in less than a minute with `ONE` line of code.
 The Android SDK to integrate to the cyberpay payment gateway
 The Cyberpay SDK makes it quick and easy to build seamless payment into your android application. The SDK contains custom views, and helps in quick integration of the .
+```
+	CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() { ... })
 
+```
 **Features:**
 ## Features
 - The SDK provides custom native UI elements to get you started easily without having to design the elements yourself.
@@ -107,10 +110,16 @@ This allows the user implement payment without having to worry about the boiler 
 We have abstracted the Card details input and validation for you.
 
 First you need to set Transaction Object, set amount and customer Email Address
-![Home Screen](https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png)
-![OTP Screen](https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/otp_screen.png)
-![Home Screen](https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif)
-![Home Screen](https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/secure3dpayment.gif)
+
+
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
+
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/secure3dpayment.gif" width="30%" />
+
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png" width="30%" />
+
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/otp_screen.png" width="30%" />
+
 
 
 ### Cyberpay payment page & One Time Payment passcode modes for mastercard payment
