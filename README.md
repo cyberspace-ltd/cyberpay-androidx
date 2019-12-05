@@ -99,12 +99,27 @@ class App : Application() {
 
 **Easy Approach:**
 
+<img src="https://raw.githubusercontent.com/ncapdevi/FragNav/master/FragNavDemo.gif" width="30%" />
+
+
 This creates a custom checkout page with just a few lines of code
 This allows the user implement payment without having to worry about the boiler plate of implenmentation
 We have abstracted the Card details input and validation for you.
 
 First you need to set Transaction Object, set amount and customer Email Address
-![Home Screen](https://github.com/cyberspace-ltd/cyberpay-androidx/blob/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/Screenshot_1575537688.png)
+![Home Screen](https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png)
+![OTP Screen](https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/otp_screen.png)
+![Home Screen](https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif)
+![Home Screen](https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/secure3dpayment.gif)
+
+
+### Cyberpay payment page & One Time Payment passcode modes for mastercard payment
+Here first we have to choose between two flavors (see below for details), then we'll have to provide a callback that handles the tab switch trigger (This is required so that our UI element that also contain the state of the selected tab can update itself - aka switching the tabs always triggered by the application never by FragNav).
+
+|           CYBERPAY_HOME_SCREEN           |          CYBERPAY_OTP_PAGE           |
+| :--------------------------------------: | :----------------------------------: |
+| ![Screenrecord ](screenrecord.gif) | ![Secure3dpayment ](secure3dpayment.gif) |
+
 
 ##Set your Transaction Object
 > Java 
