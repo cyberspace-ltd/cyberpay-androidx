@@ -127,7 +127,11 @@ Here first we have to choose between two flavors (see below for details), then w
 
 |           CYBERPAY_HOME_SCREEN           |          CYBERPAY_OTP_PAGE           |
 | :--------------------------------------: | :----------------------------------: |
-| ![Screenrecord ](screenrecord.gif) | ![Secure3dpayment ](secure3dpayment.gif) |
+| 
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png" width="30%" />
+ | 
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/otp_screen.png" width="30%" />
+ |
 
 
 ##Set your Transaction Object
