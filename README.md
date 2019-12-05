@@ -99,7 +99,7 @@ class App : Application() {
 
 **Easy Approach:**
 
-<img src="https://raw.githubusercontent.com/ncapdevi/FragNav/master/FragNavDemo.gif" width="30%" />
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
 
 
 This creates a custom checkout page with just a few lines of code
