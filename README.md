@@ -62,12 +62,12 @@ public class App extends Application{
         super.onCreate();
 
         //Test Environment
-        CyberpaySdk.initialiseSdk(" TEST INTEGRATION KEY", Mode.Debug)
+		CyberpaySdk.INSTANCE.initialiseSdk("TEST INTEGRATION KEY", Mode.Debug);
 		
-	//Live Environment
-        //CyberpaySdk.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
+		//Live Environment
+        //CyberpaySdk.INSTANCE.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
 		
-	// Optional set your company logo to overrride default Cyberpay Logo
+		// Optional set your company logo to overrride default Cyberpay Logo
         CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
 
     }
@@ -110,8 +110,8 @@ First you need to set Transaction Object, set amount and customer Email Address
 ```java
 	 Transaction trans = new Transaction();
 	 `Note Amount is in Kobo so you should multiply by 100` 
-	 trans.amount = 1000000.0;
-	 trans.email = "name@email.com";
+	 trans.setAmount(100000.0);
+	 trans.setCustomerEmail("test@test.com");
 	 
 ```
 > Kotlin
@@ -120,7 +120,7 @@ First you need to set Transaction Object, set amount and customer Email Address
  	 var trans = Transaction()
 	 `Note Amount is in Kobo so you should multiply by 100` 
 	 trans.amount = 1000000.0
-	 trans.email = "name@email.com"
+	 trans.customerEmail = "name@email.com"
 ```	
 
 ---
@@ -128,7 +128,7 @@ First you need to set Transaction Object, set amount and customer Email Address
 > Java
 
 ```java
-	CyberpaySdk.checkoutTransaction(this, trans, new TransactionCallback() {
+	CyberpaySdk.INSTANCE.checkoutTransaction(this, trans, new TransactionCallback() {
 	
         @override 
 	public void onSuccess(transaction: Transaction) {
