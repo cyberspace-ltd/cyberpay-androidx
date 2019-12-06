@@ -19,7 +19,6 @@ The Android SDK allows you to integrate with the cyberpay payment gateway seamle
 The SDK contains Custom Views, and helps in quick integrating a checkout page faster than the blink of your eye.
 
 
-**Features:**
 ## Features
 - The SDK provides custom native UI elements to get you started easily without having to design the elements yourself.
 - Single implementation across 
@@ -46,11 +45,11 @@ The Cyberpay Android SDK is compatible with Android Apps supported from Android 
 1. Add it in your root build.gradle at the end of repositories:
 
 ```
-  allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+	allprojects {
+	   repositories {
+		   ...
+		   maven { url 'https://jitpack.io' }
+	   }
 	}
 ```
 
@@ -59,7 +58,7 @@ The Cyberpay Android SDK is compatible with Android Apps supported from Android 
 ```
 
 	dependencies {
-	       implementation 'com.github.cyberspace-ltd:cyberpay-androidx:0.0.2'
+	   implementation 'com.github.cyberspace-ltd:cyberpay-androidx:0.0.2'
 	}
   
 ```
@@ -76,13 +75,13 @@ public class App extends Application{
     public void onCreate() {
         super.onCreate();
 
-        //Test Environment
-		CyberpaySdk.INSTANCE.initialiseSdk("TEST INTEGRATION KEY", Mode.Debug);
+	    //Test Environment
+	    CyberpaySdk.INSTANCE.initialiseSdk("TEST INTEGRATION KEY", Mode.Debug);
 		
-		//Live Environment
+	    //Live Environment
         //CyberpaySdk.INSTANCE.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
 		
-		// Optional set your company logo to overrride default Cyberpay Logo
+	    // Optional set your company logo to overrride default Cyberpay Logo
         CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
 
     }
@@ -97,13 +96,13 @@ class App : Application() {
         super.onCreate()
 		
 	//Test Environment
-        CyberpaySdk.initialiseSdk("TEST INTEGRATION KEY", Mode.Debug)
+	CyberpaySdk.initialiseSdk("TEST INTEGRATION KEY", Mode.Debug)
 		
 	//Live Environment
-    //CyberpaySdk.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
+	//CyberpaySdk.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
 		
 	// Optional set your company logo to overrride default Cyberpay Logo
-    CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
+	CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
 	
     }
 }
