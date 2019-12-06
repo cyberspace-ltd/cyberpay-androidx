@@ -1,7 +1,7 @@
 # cyberpay-androidx
 [![](https://jitpack.io/v/cyberspace-ltd/cyberpay-androidx.svg)](https://jitpack.io/#cyberspace-ltd/cyberpay-androidx)
 
-Integrate payment in less than a minute with `ONE` line of code as seen bellow.
+Integrate payment in less than a minute with `ONE` line of code as seen below.
 
 > Kotlin
 ```kotlin
@@ -32,14 +32,15 @@ The SDK contains Custom Views, and helps in quick integrating a checkout page fa
  **Dynamic checkout amounts.** Dynamically define product amounts rather than relying on predefined SKUs.  | ❌  | ✅ |
  **Capture payments later.** Optionally split the capture and authorization steps to place a hold on the card and charge later. | ❌ | ✅ |
 
-### Client-only flowchart
+## Client-only flowchart
 
-### STEPS
+**Steps**
+
 ## Requirements 
 The Cyberpay Android SDK is compatible with Android Apps supported from Android 4.1 (Jelly Bean).
 
 
-## Getting Started (SETUP)
+**Getting Started**
 
 ### Install and Configure the SDK
 1. Add it in your root build.gradle at the end of repositories:
@@ -110,9 +111,9 @@ class App : Application() {
 
 ---
 
-## Making Payments
+### Making Payments
 
-### 3 Approaches to Integrate Cyberpay SDK
+## 3 Approaches to Integrate Cyberpay SDK
 
 **1 Easy Approach: Simple Checkout Page**
 
