@@ -15,8 +15,8 @@ Integrate payment in less than a minute with `ONE` line of code as seen bellow.
  	CyberpaySdk.INSTANCE.checkoutTransaction(MainActivity.this, transaction, new TransactionCallback() { ... });
 ```
 ---
-The Android SDK allows you to integrate with the cyberpay payment gateway seamlessly with just a few steps
-The Cyberpay SDK makes it quick and easy to build seamless payment into your android application. The SDK contains custom views, and helps in quick integrating a checkout page faster than the blink of your eye.
+The Android SDK allows you to integrate with the cyberpay payment gateway seamlessly with just a few STEPS.
+The SDK contains Custom Views, and helps in quick integrating a checkout page faster than the blink of your eye.
 
 
 **Features:**
@@ -34,12 +34,12 @@ The Cyberpay SDK makes it quick and easy to build seamless payment into your and
 
 ### Client-only flowchart
 
-
-## Requirements
+### STEPS
+## Requirements 
 The Cyberpay Android SDK is compatible with Android Apps supported from Android 4.1 (Jelly Bean).
 
 
-## Getting Started
+## Getting Started (SETUP)
 
 ### Install and Configure the SDK
 1. Add it in your root build.gradle at the end of repositories:
@@ -99,10 +99,11 @@ class App : Application() {
         CyberpaySdk.initialiseSdk("TEST INTEGRATION KEY", Mode.Debug)
 		
 	//Live Environment
-        //CyberpaySdk.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
+    //CyberpaySdk.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
 		
 	// Optional set your company logo to overrride default Cyberpay Logo
-        CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
+    CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
+	
     }
 }
 ```
@@ -111,7 +112,9 @@ class App : Application() {
 
 ## Making Payments
 
-**Easy Approach:**
+### 3 Approaches to Integrate Cyberpay SDK
+
+**1 Easy Approach: Simple Checkout Page**
 
 
 This creates a custom checkout page with just a few lines of code
@@ -220,7 +223,10 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 
 ---
 
-**Long Approach:**
+**2 Long Approach: Your Own implementation**
+If you want to have full control of the implementatuin while mentaining the same look and feel across your screens, 
+we got you covered and you can implement the same way with just a few lines of code. 
+However, you will have to implement the progressbar and your textfield to get the card details from your users.
 ## Inititalize the Variables
 > Java 
 ```java
