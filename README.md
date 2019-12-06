@@ -1,19 +1,23 @@
 # cyberpay-androidx
 [![](https://jitpack.io/v/cyberspace-ltd/cyberpay-androidx.svg)](https://jitpack.io/#cyberspace-ltd/cyberpay-androidx)
 
-Integrate payment in less than a minute with `ONE` line of code.
-The Android SDK to integrate to the cyberpay payment gateway
-The Cyberpay SDK makes it quick and easy to build seamless payment into your android application. The SDK contains custom views, and helps in quick integration of the .
+Integrate payment in less than a minute with `ONE` line of code as seen bellow.
 
+> Kotlin
 ```kotlin
 	CyberpaySdk.checkoutTransaction(this, transaction, object : TransactionCallback() { ... })
 ```
 
 ---
 
+> Java
 ```java
  	CyberpaySdk.INSTANCE.checkoutTransaction(MainActivity.this, transaction, new TransactionCallback() { ... });
 ```
+---
+The Android SDK allows you to integrate with the cyberpay payment gateway seamlessly with just a few steps
+The Cyberpay SDK makes it quick and easy to build seamless payment into your android application. The SDK contains custom views, and helps in quick integrating a checkout page faster than the blink of your eye.
+
 
 **Features:**
 ## Features
@@ -187,12 +191,14 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 ---
 
 
-|           CYBERPAY_MASTER CARD                   |          CYBERPAY_ SECURE 3D           |
-| :--------------------------------------: | :----------------------------------: |
+|           CYBERPAY_MASTER CARD                   |          CYBERPAY_ SECURE 3D                     |                CYBERPAY_BANK PAYMENT
+| :----------------------------------------------: | :----------------------------------------------: |  :----------------------------------------------: |
 | 
 <img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
  | 
 <img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/secure3dpayment.gif" width="30%" />
+ |
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/bankpayment.gif" width="30%" />
  |
 
 
@@ -200,12 +206,14 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 
 ### Cyberpay payment page & One Time Payment passcode modes for mastercard payment
 
-|           CYBERPAY_HOME_SCREEN                   |          CYBERPAY_OTP_PAGE           |
-| :--------------------------------------: | :----------------------------------: |
+|           CYBERPAY_CHECKOUT_SCREEN               |                  CYBERPAY_OTP_PAGE               |                CYBERPAY_CARD_PIN_PAGE            |
+| :----------------------------------------------: | :----------------------------------------------: | :----------------------------------------------: |
 | 
 <img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png" width="30%" />
  | 
 <img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/otp_screen.png" width="30%" />
+ | 
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cardpin.png" width="30%" />
  |
 
 
