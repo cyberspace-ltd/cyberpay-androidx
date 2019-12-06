@@ -115,7 +115,8 @@ class App : Application() {
 
 ### 3 Approaches to Integrate Cyberpay SDK
 
-**1 Easy Approach: Simple Checkout Page**
+
+**1) Easy Approach: Simple Checkout Page**
 
 This creates a custom checkout page with just a few lines of code
 This allows the user implement payment without having to worry about the boiler plate of implenmentation
@@ -223,7 +224,7 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 
 ---
 
-**2 Long Approach: Your Own implementation**
+**2) Long Approach: Your Own implementation**
 If you want to have full control of the implementatuin while mentaining the same look and feel across your screens, 
 we got you covered and you can implement the same way with just a few lines of code. 
 However, you will have to implement the progressbar and your textfield to get the card details from your users.
