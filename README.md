@@ -40,9 +40,9 @@ The SDK contains Custom Views, and helps in quick integrating a checkout page fa
 The Cyberpay Android SDK is compatible with Android Apps supported from Android 4.1 (Jelly Bean).
 
 
-**Getting Started**
+## Getting Started 
 
-### Install and Configure the SDK
+###Install and Configure the SDK
 1. Add it in your root build.gradle at the end of repositories:
 
 ```
@@ -111,12 +111,11 @@ class App : Application() {
 
 ---
 
-### Making Payments
+## Making Payments
 
-## 3 Approaches to Integrate Cyberpay SDK
+### 3 Approaches to Integrate Cyberpay SDK
 
 **1 Easy Approach: Simple Checkout Page**
-
 
 This creates a custom checkout page with just a few lines of code
 This allows the user implement payment without having to worry about the boiler plate of implenmentation
@@ -125,7 +124,7 @@ We have abstracted the Card details input and validation for you.
 First you need to set Transaction Object, set amount and customer Email Address
 
 
-##Set your Transaction Object
+### Set your Transaction Object
 > Java 
 ```java
 	 Transaction trans = new Transaction();
@@ -147,7 +146,7 @@ First you need to set Transaction Object, set amount and customer Email Address
 
 
 
-##Initiate Transaction
+## Initiate Transaction
 
 
 > Java
@@ -228,6 +227,7 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 If you want to have full control of the implementatuin while mentaining the same look and feel across your screens, 
 we got you covered and you can implement the same way with just a few lines of code. 
 However, you will have to implement the progressbar and your textfield to get the card details from your users.
+
 ## Inititalize the Variables
 > Java 
 ```java
@@ -245,7 +245,7 @@ However, you will have to implement the progressbar and your textfield to get th
 
 ---
 
-##Initialize your Card Object
+## Initialize your Card Object
 > Java
 
 ```java
@@ -267,7 +267,7 @@ However, you will have to implement the progressbar and your textfield to get th
     card.cvv = "000"
 ```
 
-##
+## Implement your custom payment checkout page
 > Java
 
 ```java
@@ -329,7 +329,7 @@ Use the `4000 0000 0000 0622` test card number to trigger a 3D Secure payment fl
 
 Q: Where can I get my integration key?
 
-A: 
+A: You can get your integration key on the merchant dashboad of the Cyberpay official web portal.
 ## Author(s)
 
-[@mobile-cyberpay](https://)
+[Mobile Unit](mobileunit@cyberspace.net.ng)
