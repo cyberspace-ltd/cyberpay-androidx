@@ -193,8 +193,8 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 ---
 
 
-|           CYBERPAY_MASTER CARD                   |          CYBERPAY_ SECURE 3D                     |                CYBERPAY_BANK PAYMENT
-| :----------------------------------------------: | :----------------------------------------------: |  :----------------------------------------------: |
+|           CYBERPAY_MASTER CARD                           |          CYBERPAY_ SECURE 3D                             |                CYBERPAY_BANK PAYMENT                      | 
+| :------------------------------------------------------: | :------------------------------------------------------: |  :------------------------------------------------------: |
 | 
 <img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
  | 
