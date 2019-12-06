@@ -113,7 +113,7 @@ class App : Application() {
 
 ## Making Payments
 
-### 3 Approaches to Integrate Cyberpay SDK
+### There are Three (3) Approaches to Integrate Cyberpay SDK
 
 
 **1) Easy Approach: Simple Checkout Page**
