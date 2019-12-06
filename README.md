@@ -4,10 +4,17 @@
 Integrate payment in less than a minute with `ONE` line of code.
 The Android SDK to integrate to the cyberpay payment gateway
 The Cyberpay SDK makes it quick and easy to build seamless payment into your android application. The SDK contains custom views, and helps in quick integration of the .
-```
-	CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() { ... })
 
+```kotlin
+	CyberpaySdk.checkoutTransaction(this, transaction, object : TransactionCallback() { ... })
 ```
+
+---
+
+```java
+ 	CyberpaySdk.INSTANCE.checkoutTransaction(MainActivity.this, transaction, new TransactionCallback() { ... });
+```
+
 **Features:**
 ## Features
 - The SDK provides custom native UI elements to get you started easily without having to design the elements yourself.
@@ -102,36 +109,12 @@ class App : Application() {
 
 **Easy Approach:**
 
-<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
-
 
 This creates a custom checkout page with just a few lines of code
 This allows the user implement payment without having to worry about the boiler plate of implenmentation
 We have abstracted the Card details input and validation for you.
 
 First you need to set Transaction Object, set amount and customer Email Address
-
-
-<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
-
-<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/secure3dpayment.gif" width="30%" />
-
-<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png" width="30%" />
-
-<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/otp_screen.png" width="30%" />
-
-
-
-### Cyberpay payment page & One Time Payment passcode modes for mastercard payment
-Here first we have to choose between two flavors (see below for details), then we'll have to provide a callback that handles the tab switch trigger (This is required so that our UI element that also contain the state of the selected tab can update itself - aka switching the tabs always triggered by the application never by FragNav).
-
-|           CYBERPAY_HOME_SCREEN           |          CYBERPAY_OTP_PAGE           |
-| :--------------------------------------: | :----------------------------------: |
-| 
-<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png" width="30%" />
- | 
-<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/otp_screen.png" width="30%" />
- |
 
 
 ##Set your Transaction Object
@@ -153,6 +136,11 @@ Here first we have to choose between two flavors (see below for details), then w
 ```	
 
 ---
+
+
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
+
+
 ##Initiate Transaction
 > Java
 
@@ -193,6 +181,22 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
         }
     })
 ```
+
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/secure3dpayment.gif" width="30%" />
+
+
+### Cyberpay payment page & One Time Payment passcode modes for mastercard payment
+Here first we have to choose between two flavors (see below for details), then we'll have to provide a callback that handles the tab switch trigger (This is required so that our UI element that also contain the state of the selected tab can update itself - aka switching the tabs always triggered by the application never by FragNav).
+
+|           CYBERPAY_HOME_SCREEN                   |          CYBERPAY_OTP_PAGE           |
+| :--------------------------------------: | :----------------------------------: |
+| 
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png" width="30%" />
+ | 
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/otp_screen.png" width="30%" />
+ |
+
+
 
 ---
 
