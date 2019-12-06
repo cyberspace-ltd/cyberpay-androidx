@@ -33,7 +33,6 @@ The SDK contains Custom Views, and helps in quick integrating a checkout page fa
 
 ## Client-only flowchart
 
-**Steps**
 
 ## Requirements 
 The Cyberpay Android SDK is compatible with Android Apps supported from Android 4.1 (Jelly Bean).
@@ -79,10 +78,10 @@ public class App extends Application{
 	    CyberpaySdk.INSTANCE.initialiseSdk("TEST INTEGRATION KEY", Mode.Debug);
 		
 	    //Live Environment
-        //CyberpaySdk.INSTANCE.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
+	    //CyberpaySdk.INSTANCE.initialiseSdk("LIVE INTEGRATION KEY", Mode.Live)
 		
 	    // Optional set your company logo to overrride default Cyberpay Logo
-        CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
+		CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
 
     }
 }
