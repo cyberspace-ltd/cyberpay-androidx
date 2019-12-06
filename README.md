@@ -193,8 +193,8 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 ---
 
 
-|                     CYBERPAY_MASTER CARD                           |                       CYBERPAY_ SECURE 3D                             |                      CYBERPAY_BANK PAYMENT                      | 
-| :------------------------------------------------------: | :------------------------------------------------------: |  :------------------------------------------------------: |
+|                     CYBERPAY MASTER CARD                           |                       CYBERPAY  SECURE 3D                             |                      CYBERPAY BANK PAYMENT                | 
+| :----------------------------------------------------------------: | :-------------------------------------------------------------------: |  :------------------------------------------------------: |
 | 
 <img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
  | 
@@ -208,7 +208,7 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 
 ### Cyberpay payment page & One Time Payment passcode modes for mastercard payment
 
-|           CYBERPAY_CHECKOUT_SCREEN               |                  CYBERPAY_OTP_PAGE               |                CYBERPAY_CARD_PIN_PAGE            |
+|           CYBERPAY CHECKOUT PAGE                 |                  CYBERPAY OTP PAGE               |                CYBERPAY CARD PIN PAGE            |
 | :----------------------------------------------: | :----------------------------------------------: | :----------------------------------------------: |
 | 
 <img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/cyberpay.png" width="30%" />
