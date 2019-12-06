@@ -138,10 +138,10 @@ First you need to set Transaction Object, set amount and customer Email Address
 ---
 
 
-<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
-
 
 ##Initiate Transaction
+
+
 > Java
 
 ```java
@@ -166,6 +166,8 @@ First you need to set Transaction Object, set amount and customer Email Address
 
 > Kotlin
 
+
+
 ```kotlin
 CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
         override fun onSuccess(transaction: Transaction) {
@@ -182,11 +184,21 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
     })
 ```
 
+---
+
+
+|           CYBERPAY_MASTER CARD                   |          CYBERPAY_ SECURE 3D           |
+| :--------------------------------------: | :----------------------------------: |
+| 
+<img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/screenrecord.gif" width="30%" />
+ | 
 <img src="https://raw.githubusercontent.com/cyberspace-ltd/cyberpay-androidx/dev/cyberpaysdk/src/main/java/com/cyberspace/cyberpaysdk/utils/screenshot/secure3dpayment.gif" width="30%" />
+ |
+
+
 
 
 ### Cyberpay payment page & One Time Payment passcode modes for mastercard payment
-Here first we have to choose between two flavors (see below for details), then we'll have to provide a callback that handles the tab switch trigger (This is required so that our UI element that also contain the state of the selected tab can update itself - aka switching the tabs always triggered by the application never by FragNav).
 
 |           CYBERPAY_HOME_SCREEN                   |          CYBERPAY_OTP_PAGE           |
 | :--------------------------------------: | :----------------------------------: |
