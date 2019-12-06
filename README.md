@@ -42,7 +42,7 @@ The Cyberpay Android SDK is compatible with Android Apps supported from Android 
 
 ## Getting Started 
 
-###Install and Configure the SDK
+### Install and Configure the SDK
 1. Add it in your root build.gradle at the end of repositories:
 
 ```
