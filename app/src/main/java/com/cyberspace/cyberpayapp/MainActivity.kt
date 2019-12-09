@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity() {
                         "VISA" -> expiry.requestFocus()
                         "VERVE" -> expiry.requestFocus()
                     }
-                    expiry.requestFocus()
 
                 }catch (e : Exception){
                     if(p.toString().length > 15) cardNumber.error = "Invalid Card Number"

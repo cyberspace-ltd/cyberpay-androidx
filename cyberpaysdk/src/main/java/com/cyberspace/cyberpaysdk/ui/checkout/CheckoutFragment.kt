@@ -172,6 +172,12 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
                     isCardNumberError = false
 
+                    when(card.type?.issuerName) {
+                        "MASTER" -> expiry.requestFocus()
+                        "VISA" -> expiry.requestFocus()
+                        "VERVE" -> expiry.requestFocus()
+                    }
+
                 }catch (e : Exception){
                     if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
                     cardType.setImageResource(0)
@@ -217,6 +223,10 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
                         val exp = s.toString().split("/")
                         card.expiryMonth = exp[0].toInt()
                         card.expiryYear = exp[1].toInt()
+
+                        if(exp[1].length == 2){
+                            cvv.requestFocus()
+                        }
                     }
                     catch (ex : InvalidParameterException){
                         expiry.error = ex.message
