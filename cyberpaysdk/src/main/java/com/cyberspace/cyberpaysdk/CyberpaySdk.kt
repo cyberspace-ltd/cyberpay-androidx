@@ -38,6 +38,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
         internal var envMode : Mode = Mode.Debug
 
         var merchantLogo : Drawable? = null
+        private var autoGenerateMerchantReference = false
 
        //these dependencies can be injected -> work for another time
        private var repository : TransactionRepository = TransactionRepositoryImpl()
@@ -276,8 +277,10 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
              transaction.type = TransactionType.Card
              transaction.key = key
              // set transaction
-             //if(transaction.merchantReference.isEmpty())
+             if(transaction.merchantReference.isEmpty()  && !autoGenerateMerchantReference) {
                  transaction.merchantReference = SequenceGenerator.hash()
+                 autoGenerateMerchantReference = true
+             }
              // set transaction
              repository.beginTransaction(transaction)
                  ?.subscribeOn(scheduler.background())
