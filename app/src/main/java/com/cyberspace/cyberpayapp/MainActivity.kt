@@ -50,19 +50,14 @@ class MainActivity : AppCompatActivity() {
             CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
                     Log.e("RESPONSE", "SUCCESSFUL")
-                    Log.e("TRANSACTION", transaction.reference)
-                    Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
                 }
 
                 override fun onError(transaction: Transaction, throwable: Throwable) {
                     Log.e("ERROR", throwable.message!!)
-                    Log.e("TRANSACTION", transaction.reference)
-                    Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
-
                 }
 
                 override fun onValidate(transaction: Transaction) {
-
+                    //
                 }
             })
         }

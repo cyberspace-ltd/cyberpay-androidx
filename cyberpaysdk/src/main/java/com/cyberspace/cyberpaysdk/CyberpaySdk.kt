@@ -35,27 +35,27 @@ import java.security.InvalidParameterException
 
 object CyberpaySdk {
 
-        private var key = "*"
-        internal var envMode : Mode = Mode.Debug
+    private var key = "*"
+    internal var envMode : Mode = Mode.Debug
 
-        var merchantLogo : Drawable? = null
+    var merchantLogo : Drawable? = null
 
-       //these dependencies can be injected -> work for another time
-       private var repository : TransactionRepository = TransactionRepositoryImpl()
+   //these dependencies can be injected -> work for another time
+   private var repository : TransactionRepository = TransactionRepositoryImpl()
 
-        //these dependencies can be injected -> work for another time
-        private var scheduler : Scheduler = SchedulerImpl()
+    //these dependencies can be injected -> work for another time
+    private var scheduler : Scheduler = SchedulerImpl()
 
-        fun initialiseSdk(integrationKey : String) {
-            this.key = integrationKey
-            validateKey()
-        }
+    fun initialiseSdk(integrationKey : String) {
+        this.key = integrationKey
+        validateKey()
+    }
 
-        fun initialiseSdk(integrationKey  : String, mode: Mode)  {
-            this.key = integrationKey
-            this.envMode = mode
-            validateKey()
-        }
+    fun initialiseSdk(integrationKey  : String, mode: Mode)  {
+        this.key = integrationKey
+        this.envMode = mode
+        validateKey()
+    }
 
      private fun validateKey(){
          if(key.isEmpty()) throw AuthenticationException("Invalid Integration Key Found")
@@ -270,14 +270,13 @@ object CyberpaySdk {
                 )
         }
 
-
          @SuppressLint("CheckResult")
          fun createTransaction(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
              validateKey()
              transaction.type = TransactionType.Card
              transaction.key = key
              // set transaction
-             //if(transaction.merchantReference.isEmpty())
+             if(transaction.merchantReference.isEmpty())
                  transaction.merchantReference = SequenceGenerator.hash()
              // set transaction
              repository.beginTransaction(transaction)
