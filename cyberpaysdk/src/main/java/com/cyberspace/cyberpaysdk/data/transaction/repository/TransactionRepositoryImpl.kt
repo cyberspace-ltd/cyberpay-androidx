@@ -76,7 +76,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         val param = mutableMapOf<String, Any?>()
         param["otp"] = transaction.otp
         param["reference"] = transaction.reference
-        param["card"] = transaction.card?.toJson()
+       // param["card"] = transaction.card?.toJson()
 
         return service.create(TransactionService::class.java)?.verifyCardOtp(param)
             ?.onErrorResumeNext { throwable : Throwable ->

@@ -56,17 +56,4 @@ class Card {
 
     internal var pin : String? = null
 
-    fun toJson () : JSONObject {
-        //val param = mutableMapOf<String, Any?>()
-        val param= HashMap<String, Any?>()
-        param["Name"] = ""
-        param["ExpiryMonth"] = expiryMonth
-        param["ExpiryYear"] = expiryYear
-        param["CardNumber"] = number
-        param["CVV"] = cvv
-        param["CardPin"] = pin
-
-        return JSONObject(param)
-    }
-
 }
