@@ -1,9 +1,11 @@
 package com.cyberspace.cyberpaysdk.data.transaction.repository
 
 import android.util.Log
+import com.cyberspace.cyberpaysdk.data.base.remote.*
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiClient
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
 import com.cyberspace.cyberpaysdk.data.base.remote.ErrorHandler
+import com.cyberspace.cyberpaysdk.data.base.remote.Repository
 import com.cyberspace.cyberpaysdk.data.base.remote.Service
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.TransactionService
@@ -74,7 +76,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         val param = mutableMapOf<String, Any?>()
         param["otp"] = transaction.otp
         param["reference"] = transaction.reference
-        param["card"] = transaction.card?.toJson()
+       // param["card"] = transaction.card?.toJson()
 
         return service.create(TransactionService::class.java)?.verifyCardOtp(param)
             ?.onErrorResumeNext { throwable : Throwable ->

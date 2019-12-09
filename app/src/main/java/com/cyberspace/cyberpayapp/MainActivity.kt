@@ -158,26 +158,24 @@ class MainActivity : AppCompatActivity() {
             //
             trans.amount = 100000.0
             trans.customerEmail = "test@test.com"
+
+            trans.merchantReference = "JJHJRJOI39OHNKDJIUE" // Optional, will be auto generate by SDK if not present
             trans.description = "description"
            // trans.dateOfBirth = "120988"
             trans.card = card
 
+
             CyberpaySdk.getPayment(this, trans, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
                     Log.e("RESPONSE", "SUCCESSFUL")
-                    Log.e("TRANSACTION", transaction.reference)
-                    Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
                 }
 
                 override fun onError(transaction: Transaction, throwable: Throwable) {
                     Log.e("ERROR", throwable.message!!)
-                    Log.e("TRANSACTION", transaction.reference)
-                    Log.e("TRANSACTION-MERCHANT", transaction.merchantReference)
-
                 }
 
                 override fun onValidate(transaction: Transaction) {
-
+                    //
                 }
             })
         }

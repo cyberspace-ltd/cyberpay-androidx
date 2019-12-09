@@ -31,30 +31,33 @@ import com.cyberspace.cyberpaysdk.ui.secure3d.Secure3dFragment
 import com.cyberspace.cyberpaysdk.ui.widget.ProgressDialog
 import com.cyberspace.cyberpaysdk.utils.Constant
 import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
+import java.security.InvalidParameterException
 
- object CyberpaySdk {
+object CyberpaySdk {
 
-        private var key = "*"
-        internal var envMode : Mode = Mode.Debug
+    private var key = "*"
+    internal var envMode : Mode = Mode.Debug
 
-        var merchantLogo : Drawable? = null
+    var merchantLogo : Drawable? = null
+    private var autoGenerateMerchantReference = false
 
-       //these dependencies can be injected -> work for another time
-       private var repository : TransactionRepository = TransactionRepositoryImpl()
 
-        //these dependencies can be injected -> work for another time
-        private var scheduler : Scheduler = SchedulerImpl()
+   //these dependencies can be injected -> work for another time
+   private var repository : TransactionRepository = TransactionRepositoryImpl()
 
-        fun initialiseSdk(integrationKey : String) {
-            this.key = integrationKey
-            validateKey()
-        }
+    //these dependencies can be injected -> work for another time
+    private var scheduler : Scheduler = SchedulerImpl()
 
-        fun initialiseSdk(integrationKey  : String, mode: Mode)  {
-            this.key = integrationKey
-            this.envMode = mode
-            validateKey()
-        }
+    fun initialiseSdk(integrationKey : String) {
+        this.key = integrationKey
+        validateKey()
+    }
+
+    fun initialiseSdk(integrationKey  : String, mode: Mode)  {
+        this.key = integrationKey
+        this.envMode = mode
+        validateKey()
+    }
 
      private fun validateKey(){
          if(key.isEmpty()) throw AuthenticationException("Invalid Integration Key Found")
@@ -162,6 +165,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
         @SuppressLint("CheckResult")
         private fun chargeCardWithoutPin(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+            transaction.type = TransactionType.Card
             repository.chargeCard(transaction)
                 ?.subscribeOn(scheduler.background())
                 ?.observeOn(scheduler.ui())
@@ -269,15 +273,17 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
                 )
         }
 
-
          @SuppressLint("CheckResult")
          fun createTransaction(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
              validateKey()
-             transaction.type = TransactionType.Card
+             //transaction.type = TransactionType.Card
              transaction.key = key
+
              // set transaction
-             //if(transaction.merchantReference.isEmpty())
-                 transaction.merchantReference = SequenceGenerator.hash()
+             if(transaction.merchantReference.isEmpty()  && !autoGenerateMerchantReference)
+                 autoGenerateMerchantReference = true
+
+             if(autoGenerateMerchantReference) transaction.merchantReference = SequenceGenerator.hash()
              // set transaction
              repository.beginTransaction(transaction)
                  ?.subscribeOn(scheduler.background())
@@ -315,7 +321,8 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
         }
 
     private fun processPayment(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
-         // inflate pin ui
+        if(transaction.card == null) throw InvalidParameterException("Card Not Found")
+        // inflate pin ui
          when(transaction.card?.type?.name) {
 
              "VERVE" -> {
@@ -444,7 +451,7 @@ import com.cyberspace.cyberpaysdk.utils.SequenceGenerator
 
                      override fun onError(transaction: Transaction, throwable: Throwable) {
                          progress.dismiss()
-                        // dialog?.dismiss()
+                         if(!autoGenerateMerchantReference) dialog?.dismiss()
                          transactionCallback.onError(transaction,throwable)
                      }
 
