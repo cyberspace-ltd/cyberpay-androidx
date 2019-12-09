@@ -63,9 +63,16 @@ class MainActivity : AppCompatActivity() {
                         "MASTER" -> cardType.setImageResource(R.drawable.master_card)
                         "VISA" -> cardType.setImageResource(R.drawable.visa_card)
                         "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
+
                     }
                     isCardNumberError = false
 
+                    when (card.type?.issuerName){
+                        "MASTER" -> expiry.requestFocus()
+                        "VISA" -> expiry.requestFocus()
+                        "VERVE" -> expiry.requestFocus()
+                    }
+                    expiry.requestFocus()
 
                 }catch (e : Exception){
                     if(p.toString().length > 15) cardNumber.error = "Invalid Card Number"
@@ -109,6 +116,10 @@ class MainActivity : AppCompatActivity() {
                     var exp = p.toString().split("/")
                     card.expiryMonth = exp[0].toInt()
                     card.expiryYear = exp[1].toInt()
+
+                    if(exp[1].length == 2 ){
+                        cvv.requestFocus()
+                    }
                 }
                 catch (ex : InvalidParameterException){
                     expiry.error = ex.message
