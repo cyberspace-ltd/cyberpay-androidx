@@ -277,12 +277,13 @@ object CyberpaySdk {
              validateKey()
              transaction.type = TransactionType.Card
              transaction.key = key
-             // set transaction
 
-             if(transaction.merchantReference.isEmpty()  && !autoGenerateMerchantReference) {
-                 transaction.merchantReference = SequenceGenerator.hash()
+
+             // set transaction
+             if(transaction.merchantReference.isEmpty()  && !autoGenerateMerchantReference)
                  autoGenerateMerchantReference = true
-             }
+
+             if(autoGenerateMerchantReference) transaction.merchantReference = SequenceGenerator.hash()
              // set transaction
              repository.beginTransaction(transaction)
                  ?.subscribeOn(scheduler.background())
@@ -450,7 +451,7 @@ object CyberpaySdk {
 
                      override fun onError(transaction: Transaction, throwable: Throwable) {
                          progress.dismiss()
-                        // dialog?.dismiss()
+                         if(!autoGenerateMerchantReference) dialog?.dismiss()
                          transactionCallback.onError(transaction,throwable)
                      }
 

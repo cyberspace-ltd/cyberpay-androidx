@@ -147,15 +147,12 @@ class MainActivity : AppCompatActivity() {
             //
             trans.amount = 100000.0
             trans.customerEmail = "test@test.com"
-<<<<<<< HEAD
-            //trans.description = "description"
-            //trans.dateOfBirth = "120988"
-            //trans.card = card
-=======
+
+            trans.merchantReference = "JJHJRJOI39OHNKDJIUE" // Optional, will be auto generate by SDK if not present
             trans.description = "description"
            // trans.dateOfBirth = "120988"
             trans.card = card
->>>>>>> staging
+
 
             CyberpaySdk.getPayment(this, trans, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
