@@ -164,7 +164,7 @@ class MainActivity : AppCompatActivity() {
             trans.card = card
 
 
-            CyberpaySdk.getPayment(this, trans, object : TransactionCallback() {
+            CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
                     Log.e("RESPONSE", "SUCCESSFUL")
                 }

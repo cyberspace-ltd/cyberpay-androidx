@@ -206,17 +206,11 @@ object CyberpaySdk {
 
                                 enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
                             }
-                            "Secure3D" -> {
-                                transaction.returnUrl = t.data!!.redirectUrl
-                                processSecure3DPayment(context,transaction, transactionCallback)
-                            }
-                            "Secure3DMpgs" -> {
-                                transaction.returnUrl = t.data!!.redirectUrl
-                                processSecure3DPayment(context,transaction, transactionCallback)
-                            }
+
+                            "Secure3D" ,
+                            "Secure3DMpgs" ,
                             "ProcessACS" -> {
                                 transaction.returnUrl = t.data!!.redirectUrl
-                                //transaction.returnUrl = String.format("https://payment.staging.cyberpay.ng/pay?reference=%s",transaction.reference)
                                 processSecure3DPayment(context, transaction, transactionCallback)
                             }
                             else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
@@ -254,10 +248,7 @@ object CyberpaySdk {
 
                                 enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
                             }
-                            "Secure3D" -> {
-                                transaction.returnUrl = result.data!!.redirectUrl
-                                processSecure3DPayment(context,transaction,transactionCallback)
-                            }
+                            "Secure3D",
                             "Secure3DMpgs" -> {
                                 transaction.returnUrl = result.data!!.redirectUrl
                                 processSecure3DPayment(context,transaction, transactionCallback)
