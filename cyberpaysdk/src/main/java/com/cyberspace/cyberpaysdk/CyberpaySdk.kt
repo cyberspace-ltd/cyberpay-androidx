@@ -165,6 +165,7 @@ object CyberpaySdk {
 
         @SuppressLint("CheckResult")
         private fun chargeCardWithoutPin(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+            transaction.type = TransactionType.Card
             repository.chargeCard(transaction)
                 ?.subscribeOn(scheduler.background())
                 ?.observeOn(scheduler.ui())
@@ -275,9 +276,8 @@ object CyberpaySdk {
          @SuppressLint("CheckResult")
          fun createTransaction(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
              validateKey()
-             transaction.type = TransactionType.Card
+             //transaction.type = TransactionType.Card
              transaction.key = key
-
 
              // set transaction
              if(transaction.merchantReference.isEmpty()  && !autoGenerateMerchantReference)
