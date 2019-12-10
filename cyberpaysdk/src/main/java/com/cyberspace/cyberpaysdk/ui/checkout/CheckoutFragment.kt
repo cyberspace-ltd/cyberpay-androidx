@@ -3,6 +3,7 @@ package com.cyberspace.cyberpaysdk.ui.checkout
 import android.app.Dialog
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -107,6 +108,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         pay = view.findViewById(R.id.pay)
         amount = view.findViewById(R.id.amount)
 
+
         val df = DecimalFormat("###,###.##")
         pay.text = String.format("%s%s",pay.text, df.format((transaction.amount/100)).toString())
 
@@ -152,35 +154,35 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         viewPresenter = CheckoutPresenter()
         attachPresenter(viewPresenter)
 
-        cardNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                try{
-                    card.number = s.toString()
-                    when(card.type?.issuerName){
-                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
-                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
-                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
-                    }
-
-                    isCardNumberError = false
-
-                    expiry.requestFocus()
-
-                }catch (e : Exception){
-                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
-                    cardType.setImageResource(0)
-                    isCardNumberError = true
-                }
-            }
-        })
+//        cardNumber.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {
+//
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//
+//            }
+//
+////            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+////                try{
+////                    card.number = s.toString()
+////                    when(card.type?.issuerName){
+////                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
+////                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
+////                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
+////                    }
+////
+////                    isCardNumberError = false
+////                    expiry.requestFocus()
+////
+////                }catch (e : Exception){
+////                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
+////                    cardType.setImageResource(0)
+////                    isCardNumberError = true
+////                    Log.e("ERROR",e.message)
+////                }
+////            }
+//        })
 
         cvv.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
