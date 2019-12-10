@@ -1,11 +1,13 @@
 package com.cyberspace.cyberpaysdk.ui.checkout
 
 import android.app.Dialog
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.cyberspace.cyberpaysdk.CyberpaySdk
@@ -196,6 +198,19 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
                 try {
                     card.cvv = s.toString()
                     isCardCvvError = false
+
+                    // clear soft keyboard
+
+                    cvv.clearFocus()
+                    context.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+
+                    //val vw = context.currentFocus
+//                    vw?.let { v ->
+//                        val im = context.getSystemService(Context.INPUT_METHOD_SERVICE)  as? InputMethodManager
+//                        im?.hideSoftInputFromWindow(v.windowToken, 0)
+//                    }
+
+
                 }catch (error : java.lang.Exception){
                     cvv.error = "Invalid Card CVV"
                     isCardCvvError = true
