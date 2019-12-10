@@ -65,7 +65,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
     private lateinit var viewPresenter: CheckoutContract.Presenter
 
-    private val card = Card()
+    private val card : Card? = null
 
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
@@ -152,39 +152,42 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         viewPresenter = CheckoutPresenter()
         attachPresenter(viewPresenter)
 
-        cardNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
 
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                try{
-                    card.number = s.toString()
-                    when(card.type?.issuerName){
-                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
-                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
-                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
-                    }
-
-                    isCardNumberError = false
-
-                    when(card.type?.issuerName) {
-                        "MASTER" -> expiry.requestFocus()
-                        "VISA" -> expiry.requestFocus()
-                        "VERVE" -> expiry.requestFocus()
-                    }
-
-                }catch (e : Exception){
-                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
-                    cardType.setImageResource(0)
-                    isCardNumberError = true
-                }
-            }
-        })
+//        cardNumber.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {
+//
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                try{
+//
+//                    expiry.requestFocus()
+//                   // card.number = s.toString()
+////                    when(card.type?.issuerName){
+////                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
+////                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
+////                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
+////                    }
+////
+////                    isCardNumberError = false
+////
+////                    when(card.type?.issuerName) {
+////                        "MASTER" -> expiry.requestFocus()
+////                        "VISA" -> expiry.requestFocus()
+////                        "VERVE" -> expiry.requestFocus()
+////                    }
+//
+//                }catch (e : Exception){
+////                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
+////                    cardType.setImageResource(0)
+////                    isCardNumberError = true
+//                }
+//            }
+//        })
 
         cvv.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -198,7 +201,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 try {
-                    card.cvv = s.toString()
+                    card?.cvv = s.toString()
                     isCardCvvError = false
                 }catch (error : java.lang.Exception){
                     cvv.error = "Invalid Card CVV"
@@ -220,8 +223,8 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     try{
                         val exp = s.toString().split("/")
-                        card.expiryMonth = exp[0].toInt()
-                        card.expiryYear = exp[1].toInt()
+                        card?.expiryMonth = exp[0].toInt()
+                        card?.expiryYear = exp[1].toInt()
 
                         cvv.requestFocus()
                         isCardExpiryError = false
@@ -241,7 +244,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
             //check for card option
            if((viewPresenter as CheckoutPresenter).paymentOption == PaymentOption.Card){
                if(!isCardCvvError && !isCardExpiryError && !isCardNumberError){
-                   listener.onCardSubmit(this.dialog,card)
+                   listener.onCardSubmit(this.dialog,card!!)
                }
 
                else {
