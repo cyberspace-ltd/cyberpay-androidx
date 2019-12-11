@@ -230,12 +230,14 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     try{
-                        isCardExpiryError = false
                         val exp = s.toString().split("/")
                         card.expiryMonth = exp[0].toInt()
                         card.expiryYear = exp[1].toInt()
 
                         cvv.requestFocus()
+
+                        isCardExpiryError = false
+
                     }
                     catch (ex : InvalidParameterException){
                         expiry.error = ex.message
