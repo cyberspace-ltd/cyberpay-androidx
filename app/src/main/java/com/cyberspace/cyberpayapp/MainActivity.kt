@@ -32,12 +32,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 //        setSupportActionBar(toolbar)
 
-        var cardNumber : EditText = findViewById(R.id.card_number)
+        var cardNumber : EditText = findViewById(R.id.cc_card_number)
         var cardType : ImageView = findViewById(R.id.card_type)
         var progressBar : ProgressBar
 
-        var expiry : EditText = findViewById(R.id.expiry)
-        var cvv : EditText = findViewById(R.id.cvv)
+        var expiry : EditText = findViewById(R.id.cc_expiry)
+        var cvv : EditText = findViewById(R.id.cc_cvv)
         var logo : ImageView = findViewById(R.id.logo)
 
         var transac = Transaction()
@@ -67,11 +67,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     isCardNumberError = false
 
-                    when (card.type?.issuerName){
-                        "MASTER" -> expiry.requestFocus()
-                        "VISA" -> expiry.requestFocus()
-                        "VERVE" -> expiry.requestFocus()
-                    }
+                    expiry.requestFocus()
 
                 }catch (e : Exception){
                     if(p.toString().length > 15) cardNumber.error = "Invalid Card Number"
@@ -93,6 +89,8 @@ class MainActivity : AppCompatActivity() {
                 try {
                     card.cvv = p.toString()
                     isCardCvvError = false
+                    cvv.clearFocus()
+                    cvv.isFocusableInTouchMode = true
                 }catch (error : java.lang.Exception){
                     cvv.error = "Invalid Card CVV"
                     isCardCvvError = true
@@ -116,9 +114,7 @@ class MainActivity : AppCompatActivity() {
                     card.expiryMonth = exp[0].toInt()
                     card.expiryYear = exp[1].toInt()
 
-                    if(exp[1].length == 2 ){
-                        cvv.requestFocus()
-                    }
+                    cvv.requestFocus()
                 }
                 catch (ex : InvalidParameterException){
                     expiry.error = ex.message

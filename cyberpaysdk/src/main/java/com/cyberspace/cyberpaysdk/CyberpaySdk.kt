@@ -425,7 +425,6 @@ object CyberpaySdk {
         }
 
      fun checkoutTransaction(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
-
          validateKey()
          val progress = ProgressDialog(context)
          val checkoutFragment = CheckoutFragment(context,transaction, object : OnCheckoutSubmitted {
