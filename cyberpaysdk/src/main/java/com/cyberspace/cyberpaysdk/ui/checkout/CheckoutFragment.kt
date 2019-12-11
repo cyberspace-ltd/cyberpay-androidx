@@ -158,35 +158,36 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         viewPresenter = CheckoutPresenter()
         attachPresenter(viewPresenter)
 
-//        cardNumber.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//
-//            }
-//
-////            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-////                try{
-////                    card.number = s.toString()
-////                    when(card.type?.issuerName){
-////                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
-////                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
-////                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
-////                    }
-////
-////                    isCardNumberError = false
-////                    expiry.requestFocus()
-////
-////                }catch (e : Exception){
-////                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
-////                    cardType.setImageResource(0)
-////                    isCardNumberError = true
-////                    Log.e("ERROR",e.message)
-////                }
-////            }
-//        })
+        cardNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                try{
+
+                    card.number = s.toString()
+                    when(card.type?.issuerName){
+                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
+                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
+                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
+                    }
+
+                    isCardNumberError = false
+                    expiry.requestFocus()
+
+
+                }catch (e : Exception){
+                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
+                    cardType.setImageResource(0)
+                    isCardNumberError = true
+                }
+            }
+        })
 
         cvv.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
