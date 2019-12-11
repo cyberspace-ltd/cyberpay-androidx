@@ -1,5 +1,6 @@
 package com.cyberspace.cyberpaysdk.ui.checkout
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.text.Editable
@@ -11,6 +12,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.R
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
@@ -156,35 +158,36 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         viewPresenter = CheckoutPresenter()
         attachPresenter(viewPresenter)
 
-//        cardNumber.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//
-//            }
-//
-////            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-////                try{
-////                    card.number = s.toString()
-////                    when(card.type?.issuerName){
-////                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
-////                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
-////                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
-////                    }
-////
-////                    isCardNumberError = false
-////                    expiry.requestFocus()
-////
-////                }catch (e : Exception){
-////                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
-////                    cardType.setImageResource(0)
-////                    isCardNumberError = true
-////                    Log.e("ERROR",e.message)
-////                }
-////            }
-//        })
+        cardNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                try{
+
+                    card.number = s.toString()
+                    when(card.type?.issuerName){
+                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
+                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
+                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
+                    }
+
+                    isCardNumberError = false
+                    expiry.requestFocus()
+
+
+                }catch (e : Exception){
+                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
+                    cardType.setImageResource(0)
+                    isCardNumberError = true
+                }
+            }
+        })
 
         cvv.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -203,14 +206,8 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
                     // clear soft keyboard
 
-                    cvv.clearFocus()
-                    context.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-
-                    //val vw = context.currentFocus
-//                    vw?.let { v ->
-//                        val im = context.getSystemService(Context.INPUT_METHOD_SERVICE)  as? InputMethodManager
-//                        im?.hideSoftInputFromWindow(v.windowToken, 0)
-//                    }
+//                    cvv.clearFocus()
+                    context.hideKeyboard(view)
 
 
                 }catch (error : java.lang.Exception){
@@ -285,6 +282,11 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
            }
         }
+    }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     fun confirmRedirect(bank: BankResponse){
