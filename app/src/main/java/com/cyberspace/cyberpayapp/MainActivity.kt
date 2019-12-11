@@ -32,12 +32,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 //        setSupportActionBar(toolbar)
 
-        var cardNumber : EditText = findViewById(R.id.cc_card_number)
+        var cardNumber : EditText = findViewById(R.id.card_number)
         var cardType : ImageView = findViewById(R.id.card_type)
         var progressBar : ProgressBar
 
-        var expiry : EditText = findViewById(R.id.cc_expiry)
-        var cvv : EditText = findViewById(R.id.cc_cvv)
+        var expiry : EditText = findViewById(R.id.expiry)
+        var cvv : EditText = findViewById(R.id.cvv)
         var logo : ImageView = findViewById(R.id.logo)
 
         var transac = Transaction()

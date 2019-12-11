@@ -1,13 +1,17 @@
 package com.cyberspace.cyberpaysdk.ui.checkout
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.R
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
@@ -65,7 +69,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
     private lateinit var viewPresenter: CheckoutContract.Presenter
 
-    private val card : Card? = null
+    private val card = Card()
 
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
@@ -153,41 +157,36 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         attachPresenter(viewPresenter)
 
 
-//        cardNumber.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                try{
-//
-//                    expiry.requestFocus()
-//                   // card.number = s.toString()
-////                    when(card.type?.issuerName){
-////                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
-////                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
-////                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
-////                    }
-////
-////                    isCardNumberError = false
-////
-////                    when(card.type?.issuerName) {
-////                        "MASTER" -> expiry.requestFocus()
-////                        "VISA" -> expiry.requestFocus()
-////                        "VERVE" -> expiry.requestFocus()
-////                    }
-//
-//                }catch (e : Exception){
-////                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
-////                    cardType.setImageResource(0)
-////                    isCardNumberError = true
-//                }
-//            }
-//        })
+        cardNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                try{
+
+                    card.number = s.toString()
+                    when(card.type?.issuerName){
+                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
+                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
+                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
+                    }
+
+                    isCardNumberError = false
+                    expiry.requestFocus()
+
+
+                }catch (e : Exception){
+                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
+                    cardType.setImageResource(0)
+                    isCardNumberError = true
+                }
+            }
+        })
 
         cvv.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -203,6 +202,13 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
                 try {
                     card?.cvv = s.toString()
                     isCardCvvError = false
+
+                    // clear soft keyboard
+
+//                    cvv.clearFocus()
+                    context.hideKeyboard(view)
+
+
                 }catch (error : java.lang.Exception){
                     cvv.error = "Invalid Card CVV"
                     isCardCvvError = true
@@ -228,6 +234,9 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
                         cvv.requestFocus()
                         isCardExpiryError = false
+
+
+                        cvv.requestFocus()
 
                     }
                     catch (ex : InvalidParameterException){
@@ -274,6 +283,11 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
            }
         }
+    }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     fun confirmRedirect(bank: BankResponse){

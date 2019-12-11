@@ -34,7 +34,7 @@
             android:layout_height="wrap_content">
 
             <com.cyberspace.cyberpaysdk.ui.widget.maskededittext.MaskedEditText
-                android:id="@+id/cc_card_number"
+                android:id="@+id/card_number"
                 android:hint="@string/card_hint"
                 android:paddingLeft="@dimen/vertical_margin"
                 android:paddingStart="@dimen/vertical_margin"
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content">
 
                 <com.cyberspace.cyberpaysdk.ui.widget.maskededittext.MaskedEditText
-                    android:id="@+id/cc_expiry"
+                    android:id="@+id/expiry"
                     style="@style/input"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/input_height"
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content">
 
                 <com.cyberspace.cyberpaysdk.ui.widget.maskededittext.MaskedEditText
-                    android:id="@+id/cc_cvv"
+                    android:id="@+id/cvv"
                     android:hint="@string/cvv_hint"
                     android:inputType="number"
                     android:imeOptions="actionDone"
