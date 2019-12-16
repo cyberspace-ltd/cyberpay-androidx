@@ -129,6 +129,7 @@ First you need to set Transaction Object, set amount and customer Email Address
 	 Transaction trans = new Transaction();
 	 `Note Amount is in Kobo so you should multiply by 100` 
 	 trans.setAmount(100000.0);
+	 trans.setMerchantReference("YOUR REFERENCE"); // optional. auto generated if not provided
 	 trans.setCustomerEmail("test@test.com");
 	 
 ```
@@ -138,6 +139,7 @@ First you need to set Transaction Object, set amount and customer Email Address
  	 var trans = Transaction()
 	 `Note Amount is in Kobo so you should multiply by 100` 
 	 trans.amount = 1000000.0
+	 trans.merchantReference = "YOUR REFERENCE"// optional. auto generated if not provided
 	 trans.customerEmail = "name@email.com"
 ```	
 
