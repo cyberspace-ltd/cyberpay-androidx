@@ -234,14 +234,18 @@ However, you will have to implement the progressbar and your textfield to get th
 ```java
 
 	Transaction trans = new Transaction();
-	Card card = new Card();
-	
+        trans.setMerchantReference("YOUR REFERENCE"); // optional. auto generated if not provided
+	trans.setCustomerEmail("mycustomer@email.com");
+	trans.setAmout(10000); // amount in kobo
 	
 ```
 > Kotlin
 ```kotlin
 	var trans = Transaction()
-	var card = Card()
+	trans.merchantReference = "YOUR REFERENCE" // optional. auto generated if not provided
+        trans.customerEmail = "mycustomer@email.com"
+        trans.amout = 10000 // amount in kobo
+
 ```
 
 ---
@@ -250,7 +254,7 @@ However, you will have to implement the progressbar and your textfield to get th
 > Java
 
 ```java
-
+	
 	Card card = new Card();
 	card.number = "5399 8300 0000 0008";
     	card.expiryMonth = 5; 
