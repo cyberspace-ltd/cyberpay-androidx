@@ -34,5 +34,6 @@ class Transaction {
     var dateOfBirth : String? = ""
     var bvn : String? =  ""
     internal val clientType = "Mobile"
+    var message = ""
 
 }

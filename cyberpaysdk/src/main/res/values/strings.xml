@@ -39,9 +39,11 @@
     <string name="redirect_auth">You will be redirected to your internet banking for authorization</string>
     <string name="redirect_bank">You will be redirected to your bank to complete the transaction</string>
     <string name="cancel">Cancel</string>
-    <string name="enrol_phone">Enroll Otp</string>
+    <string name="enrol_otp">Enroll Otp</string>
+    <string name="enrol_phone">Enter Phone Number</string>
     <string name="phone_hint">Phone Number</string>
     <string name="enrol_text">You have not registered for OTP. Enter your phone number below to register</string>
+    <string name="default_bank_otp">You have not registered for OTP. Kindly enter the one time password sent to your phone number or email address to register</string>
     <string name="pay_title">Pay</string>
 
 </resources>

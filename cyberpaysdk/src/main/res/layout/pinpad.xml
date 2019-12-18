@@ -10,11 +10,11 @@
 
         <com.cyberspace.cyberpaysdk.utils.fonts.ExtraBold
             android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="@dimen/large_font"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textStyle="bold" />
 
         <com.cyberspace.cyberpaysdk.utils.fonts.Medium
             android:id="@+id/desc"
