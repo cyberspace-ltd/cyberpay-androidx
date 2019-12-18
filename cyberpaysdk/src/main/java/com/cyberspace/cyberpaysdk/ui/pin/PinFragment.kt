@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.cyberspace.cyberpaysdk.R
+import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.ui.widget.PinPad
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-internal class PinFragment constructor(listener: PinSubmitted) : BottomSheetDialogFragment(){
-
-    var onSubmitted = listener
+internal class PinFragment constructor(var transaction: Transaction, var listener: PinSubmitted) : BottomSheetDialogFragment(){
 
     private lateinit var pinPad: PinPad
 
@@ -34,10 +33,8 @@ internal class PinFragment constructor(listener: PinSubmitted) : BottomSheetDial
 
         val listener = object : PinPad.Submitted {
             override fun onSubmit(pin: String) {
-                if(onSubmitted != null){
-                    onSubmitted?.onSubmit(pin)
-                    dialog.dismiss()
-                }
+                listener.onSubmit(pin)
+                dialog.dismiss()
             }
         }
 

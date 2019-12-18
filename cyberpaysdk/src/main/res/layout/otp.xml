@@ -16,6 +16,7 @@
        android:layout_width="match_parent"
        app:randomiseKeys="false"
        app:minLength="1"
+       app:obscured="true"
        app:desc="@string/default_otp_message"
        app:title="@string/otp_text"
        app:pinLength="10"

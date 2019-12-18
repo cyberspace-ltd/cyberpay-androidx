@@ -25,7 +25,17 @@ internal class PinPad constructor(context: Context, attributeSet: AttributeSet?)
      */
     var randomKeys : Boolean? = false
     var title : String? = null
+        set(value) {
+            mTitle.text = value
+            field = value
+        }
+
     var desc : String? = null
+        set(value) {
+            mDesc.text = value
+            field = value
+        }
+
     var pinLength : Int? = 0
     var obscured : Boolean? = false
 

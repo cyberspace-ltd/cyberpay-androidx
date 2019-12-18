@@ -22,6 +22,7 @@ import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutFragment
 import com.cyberspace.cyberpaysdk.ui.checkout.OnCheckoutSubmitted
 import com.cyberspace.cyberpaysdk.ui.enroll_otp.EnrollOtpFragment
 import com.cyberspace.cyberpaysdk.ui.enroll_otp.OnSubmitted
+import com.cyberspace.cyberpaysdk.ui.enroll_otp_bank.EnrollOtpBankFragment
 import com.cyberspace.cyberpaysdk.ui.otp.OtpFragment
 import com.cyberspace.cyberpaysdk.ui.otp.OtpSubmitted
 import com.cyberspace.cyberpaysdk.ui.pin.PinFragment
@@ -73,7 +74,7 @@ object CyberpaySdk {
              ?.observeOn(scheduler.ui())
              ?.subscribe(
                  { result ->
-                     //Log.e("RESULT", result.data?.status)
+                     transaction.message = result.data?.message!!
                      when(result.data?.status){
                       "Successful", "Success" -> transactionCallback.onSuccess(transaction)
                         else -> transactionCallback.onError(transaction, Throwable(result.data?.reason))
@@ -93,7 +94,7 @@ object CyberpaySdk {
              ?.observeOn(scheduler.ui())
              ?.subscribe(
                  { result ->
-                     //Log.e("RESULT", result.data?.status)
+                     transaction.message = result.data?.message!!
                      when(result.data?.status){
                          "Successful", "Success" -> transactionCallback.onSuccess(transaction)
                          else -> transactionCallback.onError(transaction, Throwable(result.data?.reason))
@@ -107,7 +108,7 @@ object CyberpaySdk {
 
 
      private fun processCardOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
-         val otpFragment = OtpFragment(object : OtpSubmitted {
+         val otpFragment = OtpFragment(transaction, object : OtpSubmitted {
              override fun onSubmit(otp: String) {
                  // verify otp
                  transaction.otp = otp
@@ -120,7 +121,7 @@ object CyberpaySdk {
      }
 
      private fun processBankOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
-         val otpFragment = OtpFragment(object : OtpSubmitted {
+         val otpFragment = OtpFragment(transaction, object : OtpSubmitted {
              override fun onSubmit(otp: String) {
                  // verify otp
                  transaction.otp = otp
@@ -132,6 +133,19 @@ object CyberpaySdk {
          otpFragment.show(context.supportFragmentManager, otpFragment.tag)
      }
 
+    private fun processEnrollCardOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback) {
+
+        val enrollFragment = EnrollOtpFragment(context, object : OnSubmitted {
+            override fun onSubmit(number: String) {
+                // verify otp
+                transaction.card?.phoneNumber = number
+                enrollCardOtp(context,transaction, transactionCallback)
+            }
+        })
+
+        enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
+    }
+
      @SuppressLint("CheckResult")
      private fun processSecure3DPayment(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
          val secure3dFragment = Secure3dFragment(context, transaction ,object : OnFinished {
@@ -142,7 +156,7 @@ object CyberpaySdk {
                      ?.observeOn(scheduler.ui())
                      ?.subscribe(
                          { result ->
-
+                             transaction.message = result.data?.message!!
                              when(result.data?.status){
                                  "Successful", "Success" -> transactionCallback.onSuccess(transaction)
                                  else -> transactionCallback.onError(transaction, Throwable(result.data?.message))
@@ -172,6 +186,7 @@ object CyberpaySdk {
                 ?.subscribe (
                     {t ->
                        // var result = t
+                        transaction.message = t.data?.message!!
                         when(t.data?.status){
 
                             "Success", "Successful" -> {
@@ -182,7 +197,7 @@ object CyberpaySdk {
                             "ProvidePin" -> {
 
                                 // inflate pin ui
-                                val pinFragment = PinFragment(object : PinSubmitted {
+                                val pinFragment = PinFragment(transaction, object : PinSubmitted {
                                     override fun onSubmit(pin: String) {
                                         // verify otp
                                         transaction.card?.pin = pin
@@ -194,18 +209,7 @@ object CyberpaySdk {
 
                             }
 
-                            "EnrollOtp" -> {
-                                // inflate phone number ui
-                                val enrollFragment = EnrollOtpFragment(context, object : OnSubmitted {
-                                    override fun onSubmit(number: String) {
-                                        // verify otp
-                                        transaction.card?.phoneNumber = number
-                                        enrollCardOtp(context,transaction, transactionCallback)
-                                    }
-                                })
-
-                                enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
-                            }
+                            "EnrollOtp" -> processEnrollCardOtp(context, transaction, transactionCallback)
 
                             "Secure3D" ,
                             "Secure3DMpgs" ,
@@ -231,23 +235,12 @@ object CyberpaySdk {
                 ?.observeOn(scheduler.ui())
                 ?.subscribe (
                     { result ->
-
+                        transaction.message = result.data?.message!!
                         when(result.data?.status){
                             "Success", "Successful" -> transactionCallback.onSuccess(transaction)
                             "Otp" -> processCardOtp(context, transaction, transactionCallback)
 
-                            "EnrollOtp" -> {
-                                // inflate phone number ui
-                                val enrollFragment = EnrollOtpFragment(context, object : OnSubmitted {
-                                    override fun onSubmit(number: String) {
-                                        // verify otp
-                                        transaction.card?.phoneNumber = number
-                                        enrollCardOtp(context,transaction, transactionCallback)
-                                    }
-                                })
-
-                                enrollFragment.show(context.supportFragmentManager, enrollFragment.tag)
-                            }
+                            "EnrollOtp" -> processEnrollCardOtp(context, transaction, transactionCallback)
                             "Secure3D",
                             "Secure3DMpgs" -> {
                                 transaction.returnUrl = result.data!!.redirectUrl
@@ -317,7 +310,7 @@ object CyberpaySdk {
          when(transaction.card?.type?.name) {
 
              "VERVE" -> {
-                 val pinFragment = PinFragment(object : PinSubmitted {
+                 val pinFragment = PinFragment(transaction, object : PinSubmitted {
                      override fun onSubmit(pin: String) {
                          // verify otp
                          transaction.card?.pin = pin
@@ -351,6 +344,7 @@ object CyberpaySdk {
              ?.observeOn(scheduler.ui())
              ?.subscribe(
                  { result ->
+                     transaction.message = result.data?.message!!
                      when(result.data?.status) {
                          "Successful", "Success" -> transactionCallback.onSuccess(transaction)
                          "Otp" -> processCardOtp(context, transaction, transactionCallback)
@@ -371,6 +365,7 @@ object CyberpaySdk {
              ?.observeOn(scheduler.ui())
              ?.subscribe(
                  { result ->
+                     transaction.message = result.data?.message!!
                      when(result.data?.status) {
                          "Successful", "Success" -> transactionCallback.onSuccess(transaction)
                          "Otp" -> processBankOtp(context, transaction, transactionCallback)
@@ -393,7 +388,7 @@ object CyberpaySdk {
              ?.observeOn(scheduler.ui())
              ?.subscribe (
                  {t ->
-
+                     transaction.message = t.data?.message!!
                      when(t.data?.status){
 
                          "Success", "Successful" -> {
@@ -401,7 +396,7 @@ object CyberpaySdk {
                          }
                          "EnrollOtp" ->  {
                              // inflate phone ui
-                             val otpFragment = OtpFragment(object : OtpSubmitted {
+                             val otpFragment = EnrollOtpBankFragment(object : com.cyberspace.cyberpaysdk.ui.enroll_otp_bank.OnSubmitted {
                                  override fun onSubmit(otp: String) {
                                      // verify otp
                                      transaction.otp = otp
