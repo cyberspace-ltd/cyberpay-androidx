@@ -65,6 +65,10 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
+    //for observing changes from views
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
+    implementation 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
+
     // Required -- JUnit 4 framework
     testImplementation 'junit:junit:4.12'
     testImplementation "com.google.truth.extensions:truth-java8-extension:0.40"

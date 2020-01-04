@@ -9,6 +9,7 @@ internal object ErrorHandler {
 
     fun getError(throwable: Throwable?): Throwable? {
         val body = getBody(throwable)
+        println(throwable?.message)
         if (body != null)
         {
             val message = getError(body)

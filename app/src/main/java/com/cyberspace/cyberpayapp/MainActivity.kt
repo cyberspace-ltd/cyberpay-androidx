@@ -151,10 +151,10 @@ class MainActivity : AppCompatActivity() {
 
             val trans = Transaction()
             //
-            trans.amount = 100000.0
+            trans.amount = 1000.0
             trans.customerEmail = "test@test.com"
 
-            trans.merchantReference = "JJHJRJOI39OHNKDJIUE" // Optional, will be auto generate by SDK if not present
+            //trans.merchantReference = "JJHJRJOI39OHNKDJIUE" // Optional, will be auto generate by SDK if not present
             trans.description = "description"
            // trans.dateOfBirth = "120988"
             trans.card = card

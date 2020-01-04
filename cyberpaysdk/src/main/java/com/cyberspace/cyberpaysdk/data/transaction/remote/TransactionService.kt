@@ -32,6 +32,15 @@ internal interface TransactionService {
     @POST("payments/bank/enrol/otp")
     fun enrolBankOtp(@Body request: MutableMap<String, Any?>) : Observable<ApiResponse<EnrollOtp>>?
 
+    @POST("payments/bank/enroll")
+    fun enrolBank(@Body request: MutableMap<String, Any?>) : Observable<ApiResponse<EnrollBank>>?
+
+    @POST("payments/bank/finalotp")
+    fun finalBankOtp(@Body request: MutableMap<String, Any?>) : Observable<ApiResponse<VerifyOtp>>?
+
+    @POST("payments/bank/mandateotp")
+    fun mandateBankOtp(@Body request: MutableMap<String, Any?>) : Observable<ApiResponse<EnrollOtp>>?
+
     @POST("payments/card/enrol")
     fun enrolCardOtp(@Body request: MutableMap<String, Any?>): Observable<ApiResponse<EnrollOtp>>?
 

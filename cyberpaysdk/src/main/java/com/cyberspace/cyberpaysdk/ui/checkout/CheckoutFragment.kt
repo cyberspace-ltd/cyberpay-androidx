@@ -15,19 +15,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.R
+import com.cyberspace.cyberpaysdk.data.bank.remote.response.AccountResponse
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
 import com.cyberspace.cyberpaysdk.enums.Mode
 import com.cyberspace.cyberpaysdk.enums.PaymentOption
+import com.cyberspace.cyberpaysdk.model.BankAccount
 import com.cyberspace.cyberpaysdk.model.Card
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.ui.bank.BankFragment
 import com.cyberspace.cyberpaysdk.ui.bank.OnSelected
 import com.cyberspace.cyberpaysdk.ui.confirm_redirect.ConfirmRedirect
 import com.cyberspace.cyberpaysdk.ui.confirm_redirect.OnConfirmed
+import com.cyberspace.cyberpaysdk.utils.DelayedTextWatcher
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.jakewharton.rxbinding.widget.RxTextView
 import java.security.InvalidParameterException
 import java.text.DecimalFormat
+import java.util.*
 
 
 internal class CheckoutFragment constructor(var context: AppCompatActivity,
@@ -57,16 +62,20 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
     private lateinit var cardLayout: LinearLayout
     private lateinit var account_loading : View
     private lateinit var bank_loading : View
+    private lateinit var verified: View
+    private lateinit var accountName : TextView
 
     private lateinit var bankList: MutableList<BankResponse>
 
-    private var mBank: BankResponse? =  null
+    private var bankAccount = BankAccount()
 
     //indicators
     private lateinit var cardIndicator: View
     private lateinit var bankIndicator: View
 
     private lateinit var pay : TextView
+
+    private var canContinue = false
 
     private lateinit var viewPresenter: CheckoutContract.Presenter
 
@@ -86,8 +95,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
-        //dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
+        verified = view.findViewById(R.id.verified)
         account_loading = view.findViewById(R.id.account_loading)
         bank_loading = view.findViewById(R.id.bank_loading)
 
@@ -123,18 +131,36 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
 
         bankName = view.findViewById(R.id.bank_name)
         accountNumber = view.findViewById(R.id.account_number)
+        accountName = view.findViewById(R.id.account_name)
         close = view.findViewById(R.id.close)
+
+        accountNumber.addTextChangedListener(DelayedTextWatcher(
+            object : DelayedTextWatcher.DelayedTextWatcherListener {
+                override fun onTimeout(text: CharSequence?) {
+                    if(text.toString().length == 10){
+                        context.hideKeyboard(view)
+                        accountNumber.isEnabled = false
+                        canContinue = true
+                        accountName.text = context.resources.getString(R.string.verify)
+                        verified.visibility = View.GONE
+                        viewPresenter.getAccountName(bankAccount.bank?.bankCode!!, text.toString())
+                    }
+                }
+            }
+        ))
 
         bankName.setOnClickListener {
             // inflate banks list
            try {
                val bankFragment = BankFragment(context , bankList, object : OnSelected {
                    override fun onSelect(bank: BankResponse) {
-                       mBank = bank
+                       bankAccount.bank = bank
                        bankName.setText(bank.bankName)
                        when (bank.processingType){
                            "External" -> confirmRedirect(bank)
                        }
+
+                       accountNumber.isEnabled = true
                    }
                })
 
@@ -158,95 +184,52 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         viewPresenter = CheckoutPresenter()
         attachPresenter(viewPresenter)
 
-        cardNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                try{
-
-                    card.number = s.toString()
-                    when(card.type?.issuerName){
-                        "MASTER" -> cardType.setImageResource(R.drawable.master_card)
-                        "VISA" -> cardType.setImageResource(R.drawable.visa_card)
-                        "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
-                    }
-
-                    isCardNumberError = false
-                    expiry.requestFocus()
-
-
-                }catch (e : Exception){
-                    if(s.toString().length > 15) cardNumber.error = "Invalid Card Number"
-                    cardType.setImageResource(0)
-                    isCardNumberError = true
-                }
-            }
-        })
-
-        cvv.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                try {
-                    card.cvv = s.toString()
-                    isCardCvvError = false
-
-                    // clear soft keyboard
-
-//                    cvv.clearFocus()
-                    context.hideKeyboard(view)
-
-
-                }catch (error : java.lang.Exception){
-                    cvv.error = "Invalid Card CVV"
-                    isCardCvvError = true
+        RxTextView.textChanges(cardNumber).subscribe{
+            try{
+                card.number = it.toString()
+                when(card.type?.issuerName){
+                    "MASTER" -> cardType.setImageResource(R.drawable.master_card)
+                    "VISA" -> cardType.setImageResource(R.drawable.visa_card)
+                    "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
                 }
 
+                isCardNumberError = false
+                expiry.requestFocus()
+            }catch (e : Exception){
+                if(it.toString().length > 15) cardNumber.error = "Invalid Card Number"
+                cardType.setImageResource(0)
+                isCardNumberError = true
             }
-        })
+        }
 
-        expiry.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
+       RxTextView.textChanges(cvv).subscribe {
+               try {
+                   card.cvv = it.toString()
+                   isCardCvvError = false
+                   context.hideKeyboard(view)
+               }catch (error : java.lang.Exception){
+                   cvv.error = "Invalid Card CVV"
+                   isCardCvvError = true
+               }
+           }
 
+
+        RxTextView.textChanges(expiry).subscribe{
+            try{
+                val exp = it.toString().split("/")
+                card.expiryMonth = exp[0].toInt()
+                card.expiryYear = exp[1].toInt()
+                cvv.requestFocus()
+                isCardExpiryError = false
             }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+            catch (ex : InvalidParameterException){
+                expiry.error = ex.message
+                isCardExpiryError = true
             }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    try{
-                        val exp = s.toString().split("/")
-                        card.expiryMonth = exp[0].toInt()
-                        card.expiryYear = exp[1].toInt()
-
-                        cvv.requestFocus()
-
-                        isCardExpiryError = false
-
-                    }
-                    catch (ex : InvalidParameterException){
-                        expiry.error = ex.message
-                        isCardExpiryError = true
-                    }
-                    catch (ex: java.lang.Exception) {
-                        isCardExpiryError = true
-                    }
+            catch (ex: java.lang.Exception) {
+                isCardExpiryError = true
             }
-        })
+        }
 
         pay.setOnClickListener {
             //check for card option
@@ -268,19 +251,35 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
                    err = true
                }
 
-               if(accountNumber.text.toString().isEmpty() && mBank?.processingType.equals("Internal")) {
+               if(accountNumber.text.toString().isEmpty() && bankAccount.bank?.processingType.equals("Internal")) {
                    accountNumber.error = "This is required"
+                   err = true
+               } else if(bankAccount.bank?.processingType.equals("Internal") && accountNumber.text.toString().length!=10){
+                   accountNumber.error = "Invalid account number"
                    err = true
                }
 
               if(err)  return@setOnClickListener
 
-               when(mBank?.processingType){
-                   "External" -> confirmRedirect(mBank!!)
-                   "Internal" -> listener.onBankSubmit(dialog, mBank!!)
+               when(bankAccount.bank?.processingType){
+                   "External" -> confirmRedirect(bankAccount.bank!!)
+                   "Internal" -> listener.onBankSubmit(dialog, bankAccount)
                }
 
            }
+        }
+    }
+
+    override fun onAccountName(account: AccountResponse) {
+        verified.visibility = View.VISIBLE
+        accountName.text = ""
+        accountNumber.isEnabled = true
+
+        bankAccount.accountNumber = accountNumber.text.toString()
+        bankAccount.accountName = account.accountName
+
+        account.accountName.split(' ').map {
+            accountName.text = "${accountName.text} ${it.toLowerCase().capitalize()}"
         }
     }
 
@@ -305,7 +304,10 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
     }
 
     override fun onError(message: String) {
-
+        accountNumber.isEnabled = true
+        verified.visibility = View.GONE
+        accountName.text = ""
+        println(message)
     }
 
     override fun onBankPay() {

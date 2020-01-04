@@ -9,6 +9,8 @@ import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.ui.widget.PinPad
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.pinpad.*
+import kotlinx.android.synthetic.main.pinpad.view.*
 
 internal class PinFragment constructor(var transaction: Transaction, var listener: PinSubmitted) : BottomSheetDialogFragment(){
 
@@ -30,6 +32,8 @@ internal class PinFragment constructor(var transaction: Transaction, var listene
 
         this.isCancelable = false
         pinPad = view.findViewById(R.id.pad)
+
+        pinPad.desc = transaction.message
 
         val listener = object : PinPad.Submitted {
             override fun onSubmit(pin: String) {

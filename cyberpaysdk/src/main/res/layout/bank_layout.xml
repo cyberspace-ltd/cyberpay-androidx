@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_marginTop="@dimen/horizontal_margin"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -53,8 +53,6 @@
         android:layout_height="wrap_content">
 
     <EditText
-        android:focusable="false"
-        android:enabled="false"
         android:id="@+id/account_number"
         android:inputType="number"
         android:imeOptions="actionDone"
@@ -90,17 +88,33 @@
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_height="14dp"/>
 
-        <com.cyberspace.cyberpaysdk.utils.fonts.Regular
-            android:visibility="gone"
-            android:id="@+id/account_name"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:textSize="@dimen/medium_font"
+        <LinearLayout
+            android:gravity="center"
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_marginRight="@dimen/horizontal_margin"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.cyberspace.cyberpaysdk.utils.fonts.Regular
+                android:textColor="@android:color/black"
+                android:id="@+id/account_name"
+                android:layout_width="wrap_content"
+                android:textSize="@dimen/small_font"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:visibility="gone"
+                android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/verified"
+                android:src="@drawable/ic_correct"
+                android:layout_width="18dp"
+                android:layout_height="18dp"/>
+        </LinearLayout>
 
     </RelativeLayout>
 

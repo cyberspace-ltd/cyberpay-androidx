@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    android:orientation="vertical"
+    android:gravity="bottom|center"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal|top"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+
+      <com.cyberspace.cyberpaysdk.utils.fonts.ExtraBold
+          android:layout_marginTop="@dimen/horizontal_margin"
+          android:id="@+id/title"
+          android:text="@string/dob_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="@dimen/large_font"
+          android:textStyle="bold" />
+
+
+      <com.cyberspace.cyberpaysdk.utils.fonts.Medium
+          android:id="@+id/desc"
+          android:layout_marginTop="@dimen/space_small"
+          android:layout_width="wrap_content"
+          android:lineSpacingExtra="5dp"
+          android:textSize="@dimen/medium_font"
+          android:layout_gravity="center"
+          android:textAlignment="center"
+          android:gravity="center"
+          android:layout_height="wrap_content"/>
+
+      <Space
+          android:layout_width="0dp"
+          android:layout_height="@dimen/horizontal_margin"/>
+
+
+
+      <RelativeLayout
+          android:layout_margin="@dimen/horizontal_margin"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+          <EditText
+              android:id="@+id/dob"
+              android:hint="@string/dob_hint"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/input_height"
+              android:paddingStart="@dimen/vertical_margin"
+              android:paddingLeft="@dimen/vertical_margin"
+              style="@style/input"
+              android:focusable="false"
+              android:layout_marginBottom="0dp"/>
+
+
+          <ImageView
+              android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true"
+              android:layout_centerVertical="true"
+              android:src="@drawable/ic_date_exp"
+              android:layout_width="16dp"
+              android:layout_marginLeft="@dimen/horizontal_margin"
+              android:layout_marginStart="@dimen/horizontal_margin"
+              android:layout_height="16dp"/>
+
+      </RelativeLayout>
+
+      <Space
+          android:layout_width="0dp"
+          android:layout_height="@dimen/horizontal_margin"/>
+
+
+      <RelativeLayout
+          android:layout_margin="@dimen/horizontal_margin"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/input_height">
+
+          <com.cyberspace.cyberpaysdk.utils.fonts.Light
+              android:id="@+id/bt_continue"
+              android:layout_width="match_parent"
+              android:layout_centerInParent="true"
+              android:gravity="center"
+              android:background="@drawable/primary_button_background"
+              android:textSize="@dimen/medium_font"
+              android:textColor="@android:color/white"
+              android:text="@string/continue_text"
+              android:layout_height="@dimen/input_height"/>
+
+          <ImageView
+              android:layout_centerVertical="true"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_marginRight="@dimen/horizontal_margin"
+              android:layout_marginEnd="@dimen/horizontal_margin"
+              android:layout_gravity="center"
+              android:src="@drawable/ic_button_icon"
+              android:layout_width="24dp"
+              android:layout_height="24dp"/>
+
+
+      </RelativeLayout>
+
+      <Space
+          android:layout_width="0dp"
+          android:layout_height="@dimen/horizontal_margin"/>
+
+  </LinearLayout>
+
+</FrameLayout>

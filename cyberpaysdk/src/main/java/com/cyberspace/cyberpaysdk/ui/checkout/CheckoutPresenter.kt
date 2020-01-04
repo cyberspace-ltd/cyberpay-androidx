@@ -41,6 +41,22 @@ internal class CheckoutPresenter : CheckoutContract.Presenter {
 
     }
 
+    @SuppressLint("CheckResult")
+    override fun getAccountName(bankCode: String, account: String) {
+        repository.getAccountName(bankCode, account)
+            ?.subscribeOn(scheduler.background())
+            ?.observeOn(scheduler.ui())
+            ?.subscribe(
+                {
+                    mView?.onAccountName(it.data!!)
+                },
+                {
+                    mView?.onError(it.message!!)
+                }
+            )
+
+    }
+
     override fun bankPay() {
         paymentOption = PaymentOption.Bank
         mView?.onBankPay()

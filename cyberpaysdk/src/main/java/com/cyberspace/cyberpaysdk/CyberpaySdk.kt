@@ -15,11 +15,13 @@ import com.cyberspace.cyberpaysdk.enums.Mode
 import com.cyberspace.cyberpaysdk.enums.TransactionType
 import com.cyberspace.cyberpaysdk.exception.AuthenticationException
 import com.cyberspace.cyberpaysdk.exception.SdkNotInitialisedException
+import com.cyberspace.cyberpaysdk.model.BankAccount
 import com.cyberspace.cyberpaysdk.model.Card
 import com.cyberspace.cyberpaysdk.rx.Scheduler
 import com.cyberspace.cyberpaysdk.rx.SchedulerImpl
 import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutFragment
 import com.cyberspace.cyberpaysdk.ui.checkout.OnCheckoutSubmitted
+import com.cyberspace.cyberpaysdk.ui.dob.DobFragment
 import com.cyberspace.cyberpaysdk.ui.enroll_otp.EnrollOtpFragment
 import com.cyberspace.cyberpaysdk.ui.enroll_otp.OnSubmitted
 import com.cyberspace.cyberpaysdk.ui.enroll_otp_bank.EnrollOtpBankFragment
@@ -36,7 +38,7 @@ import java.security.InvalidParameterException
 
 object CyberpaySdk {
 
-    private var key = "*"
+    internal var key = "*"
     internal var envMode : Mode = Mode.Debug
 
     var merchantLogo : Drawable? = null
@@ -378,6 +380,97 @@ object CyberpaySdk {
              )
      }
 
+    @SuppressLint("CheckResult")
+    private fun enrollBank(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+        repository.enrolBank(transaction)
+            ?.subscribeOn(scheduler.background())
+            ?.observeOn(scheduler.ui())
+            ?.subscribe (
+                {
+                        t ->
+                    transaction.message = t.data?.message!!
+                    when(t.data?.status) {
+
+                        "Success", "Successful" -> transactionCallback.onSuccess(transaction)
+
+                        "MandateOtp" -> {
+
+                            val otpFragment = EnrollOtpBankFragment(transaction, object : com.cyberspace.cyberpaysdk.ui.enroll_otp_bank.OnSubmitted {
+                                override fun onSubmit(otp: String) {
+                                    // verify otp
+                                    transaction.otp = otp
+                                    processMandateBankOtp(context, transaction, transactionCallback)
+                                }
+                            })
+
+                            otpFragment.show(context.supportFragmentManager, otpFragment.tag)
+                            //
+                        }
+
+                        else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
+
+                    }
+                },
+                {
+                        throwable -> transactionCallback.onError(transaction, throwable)
+                }
+            )
+    }
+
+    @SuppressLint("CheckResult")
+    private fun processBankFinalOtp(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+        repository.finalBankOtp(transaction)
+            ?.subscribeOn(scheduler.background())
+            ?.observeOn(scheduler.ui())
+            ?.subscribe (
+                { t ->
+                    when (t.data?.status) {
+
+                        "Success", "Successful" -> transactionCallback.onSuccess(transaction)
+
+                        else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
+                    }
+
+                },
+                {
+                        throwable -> transactionCallback.onError(transaction, throwable)
+                }
+            )
+    }
+
+    @SuppressLint("CheckResult")
+    private fun processMandateBankOtp(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+        repository.mandateBankOtp(transaction)
+            ?.subscribeOn(scheduler.background())
+            ?.observeOn(scheduler.ui())
+            ?.subscribe (
+                { t ->
+                    when (t.data?.status) {
+
+                        "Success", "Successful" -> transactionCallback.onSuccess(transaction)
+                        "FinalOtp" -> {
+
+                            val otpFragment = OtpFragment(transaction, object : OtpSubmitted {
+                                override fun onSubmit(otp: String) {
+                                    // verify otp
+                                    transaction.otp = otp
+                                    processBankFinalOtp(context, transaction, transactionCallback)
+                                }
+                            })
+
+                            otpFragment.show(context.supportFragmentManager, otpFragment.tag)
+
+                        }
+                        else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
+                    }
+
+                },
+                {
+                        throwable -> transactionCallback.onError(transaction, throwable)
+                }
+            )
+    }
+
      @SuppressLint("CheckResult")
      private fun chargeBank(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
             transaction.type = TransactionType.Bank
@@ -388,15 +481,53 @@ object CyberpaySdk {
              ?.observeOn(scheduler.ui())
              ?.subscribe (
                  {t ->
+
                      transaction.message = t.data?.message!!
                      when(t.data?.status){
 
                          "Success", "Successful" -> {
                              transactionCallback.onSuccess(transaction)
                          }
+                         "OtherDetails" -> {
+
+                            when(t.data?.requiredParameters!![0].param){
+                                "dob" -> {
+
+                                    val fragment = DobFragment(t.data?.requiredParameters!![0].message!!, object : com.cyberspace.cyberpaysdk.ui.dob.OnSubmitListener {
+                                        override fun onSubmit(dob: String) {
+                                            transaction.bankAccount?.dateOfBirth = dob
+                                             enrollBank(context,transaction, transactionCallback)
+                                        }
+                                    })
+
+                                    fragment.show(context.supportFragmentManager, fragment.tag)
+                                }
+
+                                "bvn" -> {
+
+                                }
+
+                                else -> {
+
+                                }
+                            }
+                         }
+                         "FinalOtp" -> {
+
+                             val otpFragment = OtpFragment(transaction, object : OtpSubmitted {
+                                 override fun onSubmit(otp: String) {
+                                     // verify otp
+                                     transaction.otp = otp
+                                     processBankFinalOtp(context, transaction, transactionCallback)
+                                 }
+                             })
+
+                             otpFragment.show(context.supportFragmentManager, otpFragment.tag)
+
+                         }
                          "EnrollOtp" ->  {
                              // inflate phone ui
-                             val otpFragment = EnrollOtpBankFragment(object : com.cyberspace.cyberpaysdk.ui.enroll_otp_bank.OnSubmitted {
+                             val otpFragment = EnrollOtpBankFragment(transaction, object : com.cyberspace.cyberpaysdk.ui.enroll_otp_bank.OnSubmitted {
                                  override fun onSubmit(otp: String) {
                                      // verify otp
                                      transaction.otp = otp
@@ -486,7 +617,8 @@ object CyberpaySdk {
 
              }
 
-             override fun onBankSubmit(dialog: Dialog?, bank: BankResponse) {
+             override fun onBankSubmit(dialog: Dialog?, bankAccount: BankAccount) {
+                 transaction.bankAccount = bankAccount
                  progress.show()
                  createTransaction(context, transaction, object : TransactionCallback() {
                      override fun onSuccess(transaction: Transaction) {

@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.cyberspace.cyberpaysdk.R
+import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.ui.widget.PinPad
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-internal  class EnrollOtpBankFragment (var listener: OnSubmitted) : BottomSheetDialogFragment() {
+internal  class EnrollOtpBankFragment (var transaction: Transaction, var listener: OnSubmitted) : BottomSheetDialogFragment() {
 
     private lateinit var pinPad : PinPad
 
@@ -31,6 +32,8 @@ internal  class EnrollOtpBankFragment (var listener: OnSubmitted) : BottomSheetD
         // dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         this.isCancelable = false
         pinPad = view.findViewById(R.id.pad)
+        pinPad.desc = transaction.message
+
         pinPad.onSubmitted = object : PinPad.Submitted {
             override fun onSubmit(pin: String) {
                 listener.onSubmit(pin)

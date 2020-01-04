@@ -45,5 +45,9 @@
     <string name="enrol_text">You have not registered for OTP. Enter your phone number below to register</string>
     <string name="default_bank_otp">You have not registered for OTP. Kindly enter the one time password sent to your phone number or email address to register</string>
     <string name="pay_title">Pay</string>
+    <string name="verify">Verifying...</string>
+    <string name="sample_name">Sunday Okpoluaefe</string>
+    <string name="dob_hint">Date of birth</string>
+    <string name="dob_title">Provide Date of Birth</string>
 
 </resources>

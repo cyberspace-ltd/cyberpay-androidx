@@ -1,8 +1,6 @@
 package com.cyberspace.cyberpaysdk.model
 
 import com.cyberspace.cyberpaysdk.enums.TransactionType
-import com.cyberspace.cyberpaysdk.model.Card
-import com.cyberspace.cyberpaysdk.model.Split
 import java.security.InvalidParameterException
 
 class Transaction {
@@ -28,11 +26,8 @@ class Transaction {
         field = value
     }
 
-    var bankCode: String? = ""
-    var accountNumber : String? = ""
-    var accountName : String? = ""
-    var dateOfBirth : String? = ""
-    var bvn : String? =  ""
+    internal var bankAccount: BankAccount? = null
+
     internal val clientType = "Mobile"
     var message = ""
 
