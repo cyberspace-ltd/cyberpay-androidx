@@ -121,6 +121,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                 super.onPageFinished(view, url)
                 progressDialog.dismiss()
 
+                println(url)
 
                 if (!isError) {
                     webView.visibility = View.VISIBLE
@@ -128,6 +129,13 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                 }
 
                 if (url.startsWith("https://payment.staging.cyberpay.ng/notify?ref=")) {
+                    webView.destroy()
+                    //reference = url.substring(url.lastIndexOf("=") + 1)
+                    listener.onFinish(transaction)
+                    dialog?.dismiss()
+                }
+
+                if (url.startsWith("https://payment.cyberpay.ng/pay?reference=")) {
                     webView.destroy()
                     //reference = url.substring(url.lastIndexOf("=") + 1)
                     listener.onFinish(transaction)
@@ -147,6 +155,8 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
                     listener.onFinish(transaction)
                     dialog?.dismiss()
                 }
+
+                //https://payment.cyberpay.ng/pay?reference=CYB000013060120351450
 
 
                 if (url.startsWith("https://payment.staging.cyberpay.ng/url?ref")) {
