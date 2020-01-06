@@ -114,7 +114,7 @@ class App : Application() {
 ### There are Three (3) Approaches to Integrate Cyberpay SDK
 
 
-**1) Easy Approach: Simple Checkout Page**
+##1) Easy Approach: Simple Checkout Page
 
 This creates a prebuilt checkout page with just a few lines of code
 This allows the user implement payment without having to worry about the boiler plate of implenmentation
