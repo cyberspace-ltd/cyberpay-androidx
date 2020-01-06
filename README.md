@@ -224,31 +224,10 @@ CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
 
 ---
 
-**2) Long Approach: Your Custom implementation**
+## 2) Long Approach: Your Custom implementation
 If you want to have full control of the implementatuin while mentaining the same look and feel across your screens, 
 we got you covered and you can implement the same way with just a few lines of code. 
 However, you will have to implement the progressbar and your textfield to get the card details from your users.
-
-## Inititalize the Variables
-> Java 
-```java
-
-	Transaction trans = new Transaction();
-        trans.setMerchantReference("YOUR REFERENCE"); // optional. auto generated if not provided
-	trans.setCustomerEmail("mycustomer@email.com");
-	trans.setAmout(10000); // amount in kobo
-	
-```
-> Kotlin
-```kotlin
-	var trans = Transaction()
-	trans.merchantReference = "YOUR REFERENCE" // optional. auto generated if not provided
-        trans.customerEmail = "mycustomer@email.com"
-        trans.amout = 10000 // amount in kobo
-
-```
-
----
 
 ## Initialize your Card Object
 > Java
@@ -271,6 +250,32 @@ However, you will have to implement the progressbar and your textfield to get th
     card.expiryYear = 30 
     card.cvv = "000"
 ```
+
+## Initialize your Transaction Object
+
+> Java 
+```java
+
+	Transaction trans = new Transaction();
+        trans.setMerchantReference("YOUR REFERENCE"); // optional. auto generated if not provided
+	trans.setCustomerEmail("mycustomer@email.com");
+	trans.setAmout(10000); // amount in kobo
+	trans.setCard = card
+	
+```
+> Kotlin
+```kotlin
+	var trans = Transaction()
+	trans.merchantReference = "YOUR REFERENCE" // optional. auto generated if not provided
+        trans.customerEmail = "mycustomer@email.com"
+        trans.amout = 10000 // amount in kobo
+	trans.card = card
+
+```
+
+---
+
+
 
 ## Implement your custom payment checkout page
 > Java
