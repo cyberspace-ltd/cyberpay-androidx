@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cyberspace.cyberpaysdk.R
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
 
-internal class BankAdapter(internal var mContext: Context, list: MutableList<BankResponse>) : RecyclerView.Adapter<BankViewHolder>() {
+internal class BankAdapter(list: MutableList<BankResponse>) : RecyclerView.Adapter<BankViewHolder>() {
 
     private var banks: MutableList<BankResponse> = list
 

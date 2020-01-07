@@ -2,12 +2,9 @@ package com.cyberspace.cyberpaysdk
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
-import com.cyberspace.cyberpaysdk.data.transaction.remote.response.ChargeCard
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.data.transaction.repository.TransactionRepository
 import com.cyberspace.cyberpaysdk.data.transaction.repository.TransactionRepositoryImpl
@@ -69,7 +66,7 @@ object CyberpaySdk {
 
 
      @SuppressLint("CheckResult")
-     private fun verifyCardOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+     private fun verifyCardOtp(context: FragmentActivity, transaction: Transaction, transactionCallback: TransactionCallback){
 
          repository.verifyCardOtp(transaction)
              ?.subscribeOn(scheduler.background())
@@ -90,7 +87,7 @@ object CyberpaySdk {
      }
 
      @SuppressLint("CheckResult")
-     private fun verifyBankOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+     private fun verifyBankOtp(context: FragmentActivity, transaction: Transaction, transactionCallback: TransactionCallback){
          repository.verifyBankOtp(transaction)
              ?.subscribeOn(scheduler.background())
              ?.observeOn(scheduler.ui())
@@ -109,7 +106,7 @@ object CyberpaySdk {
      }
 
 
-     private fun processCardOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+     private fun processCardOtp(context: FragmentActivity, transaction: Transaction, transactionCallback: TransactionCallback){
          val otpFragment = OtpFragment(transaction, object : OtpSubmitted {
              override fun onSubmit(otp: String) {
                  // verify otp
@@ -122,7 +119,7 @@ object CyberpaySdk {
          otpFragment.show(context.supportFragmentManager, otpFragment.tag)
      }
 
-     private fun processBankOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+     private fun processBankOtp(context: FragmentActivity, transaction: Transaction, transactionCallback: TransactionCallback){
          val otpFragment = OtpFragment(transaction, object : OtpSubmitted {
              override fun onSubmit(otp: String) {
                  // verify otp
@@ -135,9 +132,9 @@ object CyberpaySdk {
          otpFragment.show(context.supportFragmentManager, otpFragment.tag)
      }
 
-    private fun processEnrollCardOtp(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback) {
+    private fun processEnrollCardOtp(context: FragmentActivity, transaction: Transaction, transactionCallback: TransactionCallback) {
 
-        val enrollFragment = EnrollOtpFragment(context, object : OnSubmitted {
+        val enrollFragment = EnrollOtpFragment( object : OnSubmitted {
             override fun onSubmit(number: String) {
                 // verify otp
                 transaction.card?.phoneNumber = number
@@ -149,8 +146,8 @@ object CyberpaySdk {
     }
 
      @SuppressLint("CheckResult")
-     private fun processSecure3DPayment(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
-         val secure3dFragment = Secure3dFragment(context, transaction ,object : OnFinished {
+     private fun processSecure3DPayment(context: FragmentActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+         val secure3dFragment = Secure3dFragment(transaction ,object : OnFinished {
              override fun onFinish(transaction: Transaction) {
                  // verify transaction status
                  repository.verifyTransactionByReference(transaction.reference)
@@ -180,7 +177,7 @@ object CyberpaySdk {
      }
 
         @SuppressLint("CheckResult")
-        private fun chargeCardWithoutPin(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+        private fun chargeCardWithoutPin(context: FragmentActivity, transaction: Transaction, transactionCallback: TransactionCallback){
             transaction.type = TransactionType.Card
             repository.chargeCard(transaction)
                 ?.subscribeOn(scheduler.background())
@@ -231,7 +228,7 @@ object CyberpaySdk {
         }
 
         @SuppressLint("CheckResult")
-        private fun chargeCardWithPin(context: AppCompatActivity, transaction: Transaction, transactionCallback: TransactionCallback){
+        private fun chargeCardWithPin(context: FragmentActivity, transaction: Transaction, transactionCallback: TransactionCallback){
             repository.chargeCard(transaction)
                 ?.subscribeOn(scheduler.background())
                 ?.observeOn(scheduler.ui())
@@ -260,7 +257,7 @@ object CyberpaySdk {
         }
 
          @SuppressLint("CheckResult")
-         fun createTransaction(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+         fun createTransaction(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
              validateKey()
              //transaction.type = TransactionType.Card
              transaction.key = key
@@ -288,7 +285,7 @@ object CyberpaySdk {
          }
 
         @SuppressLint("CheckResult")
-        fun getPayment(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+        fun getPayment(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
 
             transaction.type = TransactionType.Card
             createTransaction(context, transaction, object : TransactionCallback() {
@@ -306,7 +303,7 @@ object CyberpaySdk {
             })
         }
 
-    private fun processPayment(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+    private fun processPayment(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
         if(transaction.card == null) throw InvalidParameterException("Card Not Found")
         // inflate pin ui
          when(transaction.card?.type?.name) {
@@ -330,7 +327,7 @@ object CyberpaySdk {
      }
 
      @SuppressLint("CheckResult")
-     fun chargeCard(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+     fun chargeCard(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
          validateKey()
          transaction.type = TransactionType.Card
          // set transaction
@@ -339,7 +336,7 @@ object CyberpaySdk {
      }
 
      @SuppressLint("CheckResult")
-     private fun  enrollCardOtp(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+     private fun  enrollCardOtp(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
 
          repository.enrollCardOtp(transaction)
              ?.subscribeOn(scheduler.background())
@@ -361,7 +358,7 @@ object CyberpaySdk {
      }
 
      @SuppressLint("CheckResult")
-     private fun  enrollBankOtp(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+     private fun  enrollBankOtp(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
          repository.enrollBankOtp(transaction)
              ?.subscribeOn(scheduler.background())
              ?.observeOn(scheduler.ui())
@@ -381,7 +378,7 @@ object CyberpaySdk {
      }
 
     @SuppressLint("CheckResult")
-    private fun enrollBank(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+    private fun enrollBank(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
         repository.enrolBank(transaction)
             ?.subscribeOn(scheduler.background())
             ?.observeOn(scheduler.ui())
@@ -418,7 +415,7 @@ object CyberpaySdk {
     }
 
     @SuppressLint("CheckResult")
-    private fun processBankFinalOtp(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+    private fun processBankFinalOtp(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
         repository.finalBankOtp(transaction)
             ?.subscribeOn(scheduler.background())
             ?.observeOn(scheduler.ui())
@@ -439,7 +436,7 @@ object CyberpaySdk {
     }
 
     @SuppressLint("CheckResult")
-    private fun processMandateBankOtp(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+    private fun processMandateBankOtp(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
         repository.mandateBankOtp(transaction)
             ?.subscribeOn(scheduler.background())
             ?.observeOn(scheduler.ui())
@@ -472,7 +469,7 @@ object CyberpaySdk {
     }
 
      @SuppressLint("CheckResult")
-     private fun chargeBank(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+     private fun chargeBank(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
             transaction.type = TransactionType.Bank
             validateKey()
 
@@ -550,10 +547,10 @@ object CyberpaySdk {
             // set transaction
         }
 
-     fun checkoutTransaction(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+     fun checkoutTransaction(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
          validateKey()
          val progress = ProgressDialog(context)
-         val checkoutFragment = CheckoutFragment(context,transaction, object : OnCheckoutSubmitted {
+         val checkoutFragment = CheckoutFragment(transaction, object : OnCheckoutSubmitted {
              override fun onCardSubmit(dialog: Dialog?, card: Card) {
                  // set transaction with card
                  progress.show("Processing Transaction")

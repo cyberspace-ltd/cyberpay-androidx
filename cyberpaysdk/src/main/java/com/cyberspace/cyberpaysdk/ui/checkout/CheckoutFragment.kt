@@ -35,8 +35,7 @@ import java.text.DecimalFormat
 import java.util.*
 
 
-internal class CheckoutFragment constructor(var context: AppCompatActivity,
-                                            var transaction: Transaction,
+internal class CheckoutFragment constructor(var transaction: Transaction,
                                             var listener: OnCheckoutSubmitted) : BottomSheetDialogFragment(), CheckoutContract.View{
 
     lateinit var cardNumber : EditText
@@ -138,10 +137,10 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
             object : DelayedTextWatcher.DelayedTextWatcherListener {
                 override fun onTimeout(text: CharSequence?) {
                     if(text.toString().length == 10){
-                        context.hideKeyboard(view)
+                        requireActivity().hideKeyboard(view)
                         accountNumber.isEnabled = false
                         canContinue = true
-                        accountName.text = context.resources.getString(R.string.verify)
+                        accountName.text = requireActivity().resources.getString(R.string.verify)
                         verified.visibility = View.GONE
                         viewPresenter.getAccountName(bankAccount.bank?.bankCode!!, text.toString())
                     }
@@ -152,7 +151,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
         bankName.setOnClickListener {
             // inflate banks list
            try {
-               val bankFragment = BankFragment(context , bankList, object : OnSelected {
+               val bankFragment = BankFragment(bankList, object : OnSelected {
                    override fun onSelect(bank: BankResponse) {
                        bankAccount.bank = bank
                        bankName.setText(bank.bankName)
@@ -164,7 +163,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
                    }
                })
 
-               bankFragment.show(context.supportFragmentManager, bankFragment.tag)
+               bankFragment.show(requireActivity().supportFragmentManager, bankFragment.tag)
            } catch (error : java.lang.Exception){}
         }
 
@@ -206,7 +205,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
                try {
                    card.cvv = it.toString()
                    isCardCvvError = false
-                   context.hideKeyboard(view)
+                   requireActivity().hideKeyboard(view)
                }catch (error : java.lang.Exception){
                    cvv.error = "Invalid Card CVV"
                    isCardCvvError = true
@@ -300,7 +299,7 @@ internal class CheckoutFragment constructor(var context: AppCompatActivity,
             }
         })
 
-        confirmFragment.show(context.supportFragmentManager, confirmFragment.tag)
+        confirmFragment.show(requireActivity().supportFragmentManager, confirmFragment.tag)
     }
 
     override fun onError(message: String) {

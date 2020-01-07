@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-internal class Secure3dFragment constructor(var context: AppCompatActivity, var transaction: Transaction,  var listener: OnFinished) : BottomSheetDialogFragment(){
+internal class Secure3dFragment constructor(var transaction: Transaction,  var listener: OnFinished) : BottomSheetDialogFragment(){
 
     private lateinit var webView: WebView
     private lateinit var progressDialog: ProgressDialog
@@ -43,7 +43,7 @@ internal class Secure3dFragment constructor(var context: AppCompatActivity, var 
         }
 
         this.isCancelable = false
-        progressDialog = ProgressDialog(context)
+        progressDialog = ProgressDialog(requireActivity())
 
         webView = view.findViewById(R.id.webView)
         errorPage = view.findViewById(R.id.error_page)

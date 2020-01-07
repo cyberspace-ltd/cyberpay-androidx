@@ -3,17 +3,13 @@ package com.cyberspace.cyberpaysdk.ui.enroll_otp
 import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
-import android.widget.EditText
 import android.widget.FrameLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.cyberspace.cyberpaysdk.R
-import com.cyberspace.cyberpaysdk.ui.pin.PinSubmitted
 import com.cyberspace.cyberpaysdk.ui.widget.PinPad
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-internal class EnrollOtpFragment (var context: AppCompatActivity, var listener: OnSubmitted  ) : BottomSheetDialogFragment(){
+internal class EnrollOtpFragment (var listener: OnSubmitted  ) : BottomSheetDialogFragment(){
 
     private lateinit var pinPad : PinPad
 

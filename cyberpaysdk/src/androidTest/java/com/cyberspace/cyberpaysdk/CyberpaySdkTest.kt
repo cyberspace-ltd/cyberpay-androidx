@@ -2,6 +2,7 @@ package com.cyberspace.cyberpaysdk
 
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.test.platform.app.InstrumentationRegistry
 import com.cyberspace.cyberpaysdk.model.Transaction
 import org.junit.Before
@@ -42,7 +43,7 @@ class CyberpaySdkTest {
         val transaction: Transaction = Transaction()
         transaction. amount = 100000.0 // amount in kobo
 
-        CyberpaySdk.checkoutTransaction(appContext as AppCompatActivity, transaction, object : TransactionCallback() {
+        CyberpaySdk.checkoutTransaction(appContext as FragmentActivity, transaction, object : TransactionCallback() {
             override fun onSuccess(transaction: Transaction) {
 
             }

@@ -13,7 +13,7 @@ import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-internal class BankFragment (var context: AppCompatActivity, var banks: MutableList<BankResponse>, var listener  : OnSelected) : BottomSheetDialogFragment(){
+internal class BankFragment (var banks: MutableList<BankResponse>, var listener  : OnSelected) : BottomSheetDialogFragment(){
 
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var close : View
@@ -42,7 +42,7 @@ internal class BankFragment (var context: AppCompatActivity, var banks: MutableL
 
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(activity)
-        val adapter = BankAdapter(context,banks)
+        val adapter = BankAdapter(banks)
 
         adapter.listener = object : BankAdapter.OnClickListener {
             override fun onClick(bank: BankResponse) {
