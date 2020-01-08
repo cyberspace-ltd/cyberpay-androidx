@@ -135,6 +135,13 @@ internal class Secure3dFragment constructor(var transaction: Transaction,  var l
                     dialog?.dismiss()
                 }
 
+                if (url.startsWith("https://payment.cyberpay.ng/url?ref=")) {
+                    webView.destroy()
+                    //reference = url.substring(url.lastIndexOf("=") + 1)
+                    listener.onFinish(transaction)
+                    dialog?.dismiss()
+                }
+
                 if (url.startsWith("https://payment.cyberpay.ng/pay?reference=")) {
                     webView.destroy()
                     //reference = url.substring(url.lastIndexOf("=") + 1)
