@@ -10,6 +10,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         CyberpaySdk.initialiseSdk("Your Integration Key", Mode.Debug)
-        CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
+            .merchantLogo = resources.getDrawable(R.drawable.debit_card)
+       // CyberpaySdk.merchantLogo = resources.getDrawable(R.drawable.debit_card)
     }
 }

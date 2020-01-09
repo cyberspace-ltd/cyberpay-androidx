@@ -7,8 +7,6 @@ class Transaction {
 
     var card : Card? = null
     var reference  = ""
-    internal set
-
     var merchantReference = ""
     var currency = "NGN"
     var returnUrl = "url"

@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         var isCardNumberError : Boolean = true
         var isCardCvvError : Boolean = true
         var isCardExpiryError : Boolean = true
-        var card = Card()
+        val card = Card()
 
         transac.amount = 100000.0
 
@@ -153,14 +153,13 @@ class MainActivity : AppCompatActivity() {
             //
             trans.amount = 1000.0
             trans.customerEmail = "test@test.com"
+            trans.reference = "dkejkejdleee"
 
             //trans.merchantReference = "JJHJRJOI39OHNKDJIUE" // Optional, will be auto generate by SDK if not present
             trans.description = "description"
            // trans.dateOfBirth = "120988"
             trans.card = card
-
-
-            CyberpaySdk.checkoutTransaction(this, trans, object : TransactionCallback() {
+            val callback = object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
                     Log.e("RESPONSE", "SUCCESSFUL")
                 }
@@ -172,7 +171,10 @@ class MainActivity : AppCompatActivity() {
                 override fun onValidate(transaction: Transaction) {
                     //
                 }
-            })
+            }
+
+
+            CyberpaySdk.completeCheckoutTransaction(this, trans, callback )
         }
 
     }

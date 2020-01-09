@@ -1,6 +1,5 @@
 package com.cyberspace.cyberpaysdk.model
 
-import android.util.Log
 import com.cyberspace.cyberpaysdk.enums.CardType
 import com.cyberspace.cyberpaysdk.utils.validator.CardValidator
 import org.json.JSONObject
@@ -9,11 +8,11 @@ import java.security.InvalidParameterException
 class Card {
 
     var number : String? = null
-    set(value) {
+        set(value) {
 
-        if(value.isNullOrEmpty()) throw InvalidParameterException("Invalid Card Number Found")
-        val result = CardValidator.isValid(value)
-        if(!result.isValid) throw InvalidParameterException("Invalid Card Number Found")
+            if(value.isNullOrEmpty()) throw InvalidParameterException("Invalid Card Number Found")
+            val result = CardValidator.isValid(value)
+            if(!result.isValid) throw InvalidParameterException("Invalid Card Number Found")
 
         this.type = result.cardType
         field  = result.cardNo
