@@ -217,6 +217,7 @@ object CyberpaySdk {
                             "Secure3DMpgs" ,
                             "ProcessACS" -> {
                                 transaction.returnUrl = t.data!!.redirectUrl
+                                println(transaction.returnUrl )
                                 processSecure3DPayment(context, transaction, transactionCallback)
                             }
                             else -> transactionCallback.onError(transaction, Throwable(t.data?.message))

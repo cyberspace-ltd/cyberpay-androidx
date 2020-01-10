@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity() {
 
             val trans = Transaction()
             //
-            trans.amount = 1000.0
+            trans.amount = 10000.0
             trans.customerEmail = "test@test.com"
             trans.reference = "dkejkejdleee"
 
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-            CyberpaySdk.completeCheckoutTransaction(this, trans, callback )
+            CyberpaySdk.checkoutTransaction(this, trans, callback )
         }
 
     }
