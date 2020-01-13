@@ -121,6 +121,8 @@ internal class Secure3dFragment constructor(var transaction: Transaction,  var l
                 super.onPageFinished(view, url)
                 progressDialog.dismiss()
 
+                println(url)
+
                 if (!isError) {
                     webView.visibility = View.VISIBLE
                     errorPage.visibility = View.GONE

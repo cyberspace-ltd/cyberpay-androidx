@@ -313,6 +313,7 @@ object CyberpaySdk {
          when(transaction.card?.type?.name) {
 
              "VERVE" -> {
+                 transaction.message = context.getString(R.string.default_pin_message)
                  val pinFragment = PinFragment(transaction, object : PinSubmitted {
                      override fun onSubmit(pin: String) {
                          // verify otp
