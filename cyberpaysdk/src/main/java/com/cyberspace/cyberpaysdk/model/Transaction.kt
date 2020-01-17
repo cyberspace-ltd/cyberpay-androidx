@@ -2,6 +2,7 @@ package com.cyberspace.cyberpaysdk.model
 
 import com.cyberspace.cyberpaysdk.enums.TransactionType
 import java.security.InvalidParameterException
+import java.text.DecimalFormat
 
 class Transaction {
 
@@ -18,6 +19,13 @@ class Transaction {
     var splits : Array<Split>? = null
     internal var key = ""
     var charge : Double? = 0.0
+
+    val amountToPay: String?
+        get() {
+            val df = DecimalFormat("###,###.##")
+            return df.format((amount + charge!!)/100).toString()
+        }
+
     var customerEmail = ""
     set(value) {
         if(!value.contains("@")) throw InvalidParameterException("Invalid Customer Email Found")

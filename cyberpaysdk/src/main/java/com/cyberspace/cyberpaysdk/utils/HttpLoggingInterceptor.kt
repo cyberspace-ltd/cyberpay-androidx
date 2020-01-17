@@ -1,6 +1,8 @@
 package com.cyberspace.cyberpaysdk.utils
 
 
+import com.cyberspace.cyberpaysdk.CyberpaySdk
+import com.cyberspace.cyberpaysdk.enums.Mode
 import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -90,6 +92,7 @@ class HttpLoggingInterceptor @JvmOverloads constructor(private val logger: Logge
             val DEFAULT: Logger = object :
                 Logger {
                 override fun log(message: String) {
+                    if(CyberpaySdk.envMode == Mode.Debug)
                     Platform.get().log(INFO.intValue(), message, null)
                 }
             }

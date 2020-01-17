@@ -3,20 +3,15 @@ package com.cyberspace.cyberpaysdk.ui.checkout
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.R
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.AccountResponse
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
+import com.cyberspace.cyberpaysdk.data.transaction.remote.response.Advice
 import com.cyberspace.cyberpaysdk.enums.Mode
 import com.cyberspace.cyberpaysdk.enums.PaymentOption
 import com.cyberspace.cyberpaysdk.model.BankAccount
@@ -26,17 +21,17 @@ import com.cyberspace.cyberpaysdk.ui.bank.BankFragment
 import com.cyberspace.cyberpaysdk.ui.bank.OnSelected
 import com.cyberspace.cyberpaysdk.ui.confirm_redirect.ConfirmRedirect
 import com.cyberspace.cyberpaysdk.ui.confirm_redirect.OnConfirmed
+import com.cyberspace.cyberpaysdk.ui.widget.ProgressDialog
 import com.cyberspace.cyberpaysdk.utils.DelayedTextWatcher
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jakewharton.rxbinding.widget.RxTextView
 import java.security.InvalidParameterException
 import java.text.DecimalFormat
-import java.util.*
 
 
 internal class CheckoutFragment constructor(var transaction: Transaction,
-                                            var listener: OnCheckoutSubmitted) : BottomSheetDialogFragment(), CheckoutContract.View{
+                                            var listener: CheckoutListener) : BottomSheetDialogFragment(), CheckoutContract.View{
 
     lateinit var cardNumber : EditText
     lateinit var expiry : EditText
@@ -76,9 +71,12 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
 
     private var canContinue = false
 
-    private lateinit var viewPresenter: CheckoutContract.Presenter
+    lateinit var viewPresenter: CheckoutContract.Presenter
 
     private val card = Card()
+
+    private var mAdvice: Advice? = null
+    private lateinit var progress: ProgressDialog
 
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
@@ -93,6 +91,8 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
             val behavior = BottomSheetBehavior.from(bottomSheet)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
+
+        progress = ProgressDialog(requireContext())
 
         verified = view.findViewById(R.id.verified)
         account_loading = view.findViewById(R.id.account_loading)
@@ -119,9 +119,7 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
         pay = view.findViewById(R.id.pay)
         amount = view.findViewById(R.id.amount)
 
-
-        val df = DecimalFormat("###,###.##")
-        pay.text = String.format("%s%s",pay.text, df.format((transaction.amount/100)).toString())
+        pay.text = String.format("%s%s",pay.text, transaction.amountToPay)
 
         testView = view.findViewById(R.id.text_banner)
 
@@ -132,6 +130,8 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
         accountNumber = view.findViewById(R.id.account_number)
         accountName = view.findViewById(R.id.account_name)
         close = view.findViewById(R.id.close)
+
+         viewPresenter = CheckoutPresenter()
 
         accountNumber.addTextChangedListener(DelayedTextWatcher(
             object : DelayedTextWatcher.DelayedTextWatcherListener {
@@ -168,7 +168,8 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
         }
 
         close.setOnClickListener {
-            dialog.dismiss()
+           progress.show("Cancelling Transaction...")
+            viewPresenter.cancelTransaction(transaction)
         }
 
         bankPay.setOnClickListener {
@@ -180,7 +181,7 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
         }
 
         this.isCancelable = false
-        viewPresenter = CheckoutPresenter()
+
         attachPresenter(viewPresenter)
 
         RxTextView.textChanges(cardNumber).subscribe{
@@ -315,6 +316,8 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
         bankLayout.visibility = View.VISIBLE
         cardLayout.visibility = View.GONE
         viewPresenter.loadBanks()
+        viewPresenter.getBankTransactionAdvice(transaction)
+        onDisablePay()
     }
 
     override fun onCardPay() {
@@ -322,10 +325,37 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
         cardIndicator.setBackgroundResource(R.color.primaryColorDark)
         bankLayout.visibility = View.GONE
         cardLayout.visibility = View.VISIBLE
+        viewPresenter.getCardTransactionAdvice(transaction)
+        onDisablePay()
+    }
+
+    override fun onCancelTransaction(transaction: Transaction) {
+       progress.dismiss()
+        dismiss()
+        listener.onCancel(transaction)
+    }
+
+    override fun onCancelTransactionError(transaction: Transaction) {
+        progress.dismiss()
     }
 
     override fun attachPresenter(presenter: Any) {
         viewPresenter  = presenter as CheckoutContract.Presenter
+    }
+
+    override fun onUpdateAdvice(advice: Advice) {
+        pay.text = String.format("Pay ₦%s",advice.amountToPay)
+        onEnablePay()
+    }
+
+    override fun onDisablePay() {
+        pay.isEnabled = false
+        pay.alpha = 0.3f
+    }
+
+    override fun onEnablePay() {
+        pay.isEnabled = true
+        pay.alpha = 1f
     }
 
     override fun close() {

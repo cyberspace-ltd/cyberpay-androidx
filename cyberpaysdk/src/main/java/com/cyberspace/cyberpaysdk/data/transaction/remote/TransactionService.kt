@@ -2,6 +2,7 @@ package com.cyberspace.cyberpaysdk.data.transaction.remote
 
 import com.cyberspace.cyberpaysdk.data.base.remote.ApiResponse
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.*
+import com.google.gson.JsonObject
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -43,5 +44,16 @@ internal interface TransactionService {
 
     @POST("payments/card/enrol")
     fun enrolCardOtp(@Body request: MutableMap<String, Any?>): Observable<ApiResponse<EnrollOtp>>?
+
+    @GET("payments/{reference}/advice")
+    fun getTransactionAdvice(@Path("reference") reference : String,
+                             @Query("channelcode") channel : String) : Observable<ApiResponse<Advice>>
+
+    @POST("payments/clienttype")
+    fun updateTransactionClientType(@Body request: MutableMap<String, Any?>) : Observable<ApiResponse<EnrollOtp>>
+
+    @POST("payments/{reference}/cancel")
+    fun cancelTransaction(@Path("reference") reference : String) : Observable<ApiResponse<Any>>
+
 
 }

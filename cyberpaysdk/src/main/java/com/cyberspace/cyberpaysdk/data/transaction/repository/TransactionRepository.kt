@@ -7,6 +7,7 @@ import com.cyberspace.cyberpaysdk.data.transaction.remote.response.ChargeCard
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.VerifyOtp
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.SetTransaction
 import com.cyberspace.cyberpaysdk.data.transaction.remote.response.VerifyMerchantTransaction
+import com.google.gson.JsonObject
 import io.reactivex.Observable
 
 internal interface TransactionRepository {
@@ -23,5 +24,9 @@ internal interface TransactionRepository {
     fun enrolBank(transaction: Transaction) : Observable<ApiResponse<EnrollBank>>?
     fun finalBankOtp(transaction: Transaction) : Observable<ApiResponse<VerifyOtp>>?
     fun mandateBankOtp(transaction: Transaction) : Observable<ApiResponse<EnrollOtp>>?
+    fun getCardTransactionAdvice(transaction: Transaction) : Observable<Advice>?
+    fun getBankTransactionAdvice(transaction: Transaction) : Observable<Advice>?
+    fun updateTransactionClientType(transaction: Transaction) : Observable<ApiResponse<EnrollOtp>>?
+    fun cancelTransaction(transaction: Transaction) : Observable<ApiResponse<Any>>?
 
 }

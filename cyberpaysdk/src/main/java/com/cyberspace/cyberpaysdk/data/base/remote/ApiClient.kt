@@ -3,12 +3,12 @@ package com.cyberspace.cyberpaysdk.data.base.remote
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.enums.Mode
 import com.cyberspace.cyberpaysdk.utils.HttpLoggingInterceptor
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 internal class ApiClient : Service {
 

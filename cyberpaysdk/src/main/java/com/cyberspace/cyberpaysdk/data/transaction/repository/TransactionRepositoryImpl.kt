@@ -18,6 +18,60 @@ import java.lang.NullPointerException
 internal class TransactionRepositoryImpl : TransactionRepository{
 
     private var service : Service = ApiClient()
+    companion object {
+       var cardAdvice: Advice? = null
+       var bankAdvice: Advice? = null
+    }
+
+    private fun getTransactionAdvice(reference: String, channel: String) : Observable<ApiResponse<Advice>>? {
+        return service.create(TransactionService::class.java)?.getTransactionAdvice(reference, channel)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                Observable.error(ErrorHandler.getError(throwable))
+            }
+    }
+
+    override fun cancelTransaction(transaction: Transaction): Observable<ApiResponse<Any>>? {
+       return service.create(TransactionService::class.java)?.cancelTransaction(transaction.reference)
+           ?.onErrorResumeNext { throwable : Throwable ->
+               Observable.error(ErrorHandler.getError(throwable))
+           }
+    }
+
+    override fun getCardTransactionAdvice(transaction: Transaction): Observable<Advice>? {
+        return when(cardAdvice){
+            null -> {
+                getTransactionAdvice(transaction.reference, "Card")
+                    ?.flatMap {
+                        cardAdvice = it.data!!
+                        Observable.just(it.data)
+                    }
+            }
+            else -> Observable.just(cardAdvice)
+        }
+    }
+
+    override fun updateTransactionClientType(transaction: Transaction): Observable<ApiResponse<EnrollOtp>>? {
+        val param  = mutableMapOf<String, Any?>()
+        param["reference"] = transaction.reference
+
+        return service.create(TransactionService::class.java)?.updateTransactionClientType(param)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                Observable.error(ErrorHandler.getError(throwable))
+            }
+    }
+
+    override fun getBankTransactionAdvice(transaction: Transaction): Observable<Advice>? {
+       return when(bankAdvice){
+            null -> {
+                getTransactionAdvice(transaction.reference, "BankAccount")
+                    ?.flatMap {
+                        bankAdvice = it.data!!
+                        Observable.just(it.data)
+                    }
+            }
+            else -> Observable.just(bankAdvice)
+        }
+    }
 
     override fun beginTransaction(transaction: Transaction): Observable<ApiResponse<SetTransaction>>? {
         if(transaction.customerEmail.isEmpty())throw  NullPointerException("Customer Email Is Required")

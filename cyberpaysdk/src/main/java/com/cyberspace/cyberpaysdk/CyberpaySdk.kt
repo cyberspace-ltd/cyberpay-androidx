@@ -17,8 +17,10 @@ import com.cyberspace.cyberpaysdk.model.BankAccount
 import com.cyberspace.cyberpaysdk.model.Card
 import com.cyberspace.cyberpaysdk.rx.Scheduler
 import com.cyberspace.cyberpaysdk.rx.SchedulerImpl
+import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutContract
 import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutFragment
-import com.cyberspace.cyberpaysdk.ui.checkout.OnCheckoutSubmitted
+import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutListener
+import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutPresenter
 import com.cyberspace.cyberpaysdk.ui.dob.DobFragment
 import com.cyberspace.cyberpaysdk.ui.enroll_otp.EnrollOtpFragment
 import com.cyberspace.cyberpaysdk.ui.enroll_otp.OnSubmitted
@@ -40,14 +42,18 @@ object CyberpaySdk {
     internal var envMode : Mode = Mode.Debug
 
     var merchantLogo : Drawable? = null
+    private var isServerTransaction = false
     private var autoGenerateMerchantReference = false
-
-
    //these dependencies can be injected -> work for another time
    private var repository : TransactionRepository = TransactionRepositoryImpl()
 
     //these dependencies can be injected -> work for another time
     private var scheduler : Scheduler = SchedulerImpl()
+
+    private fun clearTempAdvice(){
+        TransactionRepositoryImpl.bankAdvice = null
+        TransactionRepositoryImpl.cardAdvice = null
+    }
 
     fun initialiseSdk(integrationKey : String) : CyberpaySdk{
         this.key = integrationKey
@@ -307,7 +313,7 @@ object CyberpaySdk {
             })
         }
 
-    private fun processPayment(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+        private fun processPayment(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
         if(transaction.card == null) throw InvalidParameterException("Card Not Found")
         // inflate pin ui
          when(transaction.card?.type?.name) {
@@ -324,6 +330,22 @@ object CyberpaySdk {
 
                  pinFragment.show(context.supportFragmentManager, pinFragment.tag)
              }
+             "VISA" -> {
+                 if(isServerTransaction ) {
+                     repository.updateTransactionClientType(transaction)
+                         ?.subscribeOn(scheduler.background())
+                         ?.observeOn(scheduler.ui())
+                         ?.subscribe(
+                             {
+                                 chargeCardWithoutPin(context, transaction, transactionCallback)
+                             },
+                             { throwable ->
+                                 transactionCallback.onError(transaction, throwable)
+                             }
+                         )
+                 }
+                 else chargeCardWithoutPin(context, transaction, transactionCallback)
+             }
              else -> {
                  chargeCardWithoutPin(context,transaction, transactionCallback)
              }
@@ -334,6 +356,7 @@ object CyberpaySdk {
      @SuppressLint("CheckResult")
      fun chargeCard(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
          validateKey()
+         clearTempAdvice()
          transaction.type = TransactionType.Card
          // set transaction
          processPayment(context, transaction, transactionCallback)
@@ -429,7 +452,6 @@ object CyberpaySdk {
                     when (t.data?.status) {
 
                         "Success", "Successful" -> transactionCallback.onSuccess(transaction)
-
                         else -> transactionCallback.onError(transaction, Throwable(t.data?.message))
                     }
 
@@ -552,10 +574,12 @@ object CyberpaySdk {
             // set transaction
         }
 
-    fun completeCheckoutTransaction(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+    private fun completeTransaction(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
         if(transaction.reference.isEmpty()) {
             throw TransactionNotFoundException("Transaction reference not found. Kindly set transaction before calling this method")
         }
+        isServerTransaction = false
+        clearTempAdvice()
         transaction.key = key
         if(transaction.merchantReference.isEmpty()  && !autoGenerateMerchantReference)
             autoGenerateMerchantReference = true
@@ -563,7 +587,12 @@ object CyberpaySdk {
         if(autoGenerateMerchantReference) transaction.merchantReference = SequenceGenerator.hash()
 
         val progress = ProgressDialog(context)
-        val checkoutFragment = CheckoutFragment(transaction, object : OnCheckoutSubmitted {
+        val checkoutFragment = CheckoutFragment(transaction, object : CheckoutListener {
+
+            override fun onCancel(transaction: Transaction) {
+                transactionCallback.onError(transaction, Throwable(transaction.message))
+            }
+
             override fun onCardSubmit(dialog: Dialog?, card: Card) {
                 // set transaction with card
                 progress.show("Processing Transaction")
@@ -632,115 +661,58 @@ object CyberpaySdk {
                 })
             }
         })
-
         checkoutFragment.show(context.supportFragmentManager, checkoutFragment.tag)
+    }
+
+
+    @SuppressLint("CheckResult")
+    fun completeCheckoutTransaction(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+
+        validateKey()
+        isServerTransaction = true
+        val progress = ProgressDialog(context)
+        progress.show("Processing Transaction")
+        repository.getCardTransactionAdvice(transaction)
+            ?.subscribeOn(scheduler.background())
+            ?.observeOn(scheduler.ui())
+            ?.subscribe(
+                {
+                    progress.dismiss()
+                    transaction.amount = it!!.amount!!
+                    transaction.charge = it.charge!!
+                    completeCheckoutTransaction(context, transaction, transactionCallback)
+                },
+                {
+                    progress.dismiss()
+                    transactionCallback.onError(transaction, it)
+                }
+            )
+
     }
 
      fun checkoutTransaction(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
          validateKey()
          val progress = ProgressDialog(context)
-         val checkoutFragment = CheckoutFragment(transaction, object : OnCheckoutSubmitted {
-             override fun onCardSubmit(dialog: Dialog?, card: Card) {
-                 // set transaction with card
-                 progress.show("Processing Transaction")
-                 transaction.card = card
-                 getPayment(context,transaction, object : TransactionCallback() {
-                     override fun onSuccess(transaction: Transaction) {
-                         progress.dismiss()
-                         dialog?.dismiss()
-                         transactionCallback.onSuccess(transaction)
-                     }
-
-                     override fun onError(transaction: Transaction, throwable: Throwable) {
-                         progress.dismiss()
-                         if(!autoGenerateMerchantReference) dialog?.dismiss()
-                         transactionCallback.onError(transaction,throwable)
-                     }
-
-                     override fun onValidate(transaction: Transaction) {
-                         progress.dismiss()
-                         //dialog?.dismiss()
-                         transactionCallback.onValidate(transaction)
-                     }
-                 })
+         progress.show("Processing Transaction")
+         createTransaction(context, transaction, object : TransactionCallback() {
+             override fun onSuccess(transaction: Transaction) {
+                 progress.dismiss()
+                 completeTransaction(context, transaction, transactionCallback)
              }
 
-             override fun onRedirect(dialog: Dialog?, bank: BankResponse) {
-                // dialog?.dismiss()
-                 progress.show()
-                 createTransaction(context, transaction, object : TransactionCallback() {
-                     override fun onSuccess(transaction: Transaction) {
-                         progress.dismiss()
-                         transaction.returnUrl = String.format("%s?reference=%s", bank.externalRedirectUrl, transaction.reference)
-                         processSecure3DPayment(context, transaction, object : TransactionCallback() {
-                             override fun onSuccess(transaction: Transaction) {
-                                 dialog?.dismiss()
-                                 transactionCallback.onSuccess(transaction)
-                             }
-
-                             override fun onError(transaction: Transaction, throwable: Throwable) {
-                                 progress.dismiss()
-                                 transactionCallback.onError(transaction, throwable)
-                             }
-
-                             override fun onValidate(transaction: Transaction) {
-                                 progress.dismiss()
-                                 transactionCallback.onValidate(transaction)
-                             }
-                         })
-                     }
-
-                     override fun onError(transaction: Transaction, throwable: Throwable) {
-                         progress.dismiss()
-                        transactionCallback.onError(transaction, throwable)
-                     }
-
-                     override fun onValidate(transaction: Transaction) {
-                         progress.dismiss()
-                        transactionCallback.onValidate(transaction)
-                     }
-                 })
-
+             override fun onError(transaction: Transaction, throwable: Throwable) {
+                 progress.dismiss()
+                 transactionCallback.onError(transaction, throwable)
              }
 
-             override fun onBankSubmit(dialog: Dialog?, bankAccount: BankAccount) {
-                 transaction.bankAccount = bankAccount
-                 progress.show()
-                 createTransaction(context, transaction, object : TransactionCallback() {
-                     override fun onSuccess(transaction: Transaction) {
-                         chargeBank(context, transaction, object : TransactionCallback() {
-                             override fun onSuccess(transaction: Transaction) {
-                                 progress.dismiss()
-                                 dialog?.dismiss()
-                                 transactionCallback.onSuccess(transaction)
-                             }
-
-                             override fun onError(transaction: Transaction, throwable: Throwable) {
-                                 progress.dismiss()
-                                 transactionCallback.onError(transaction, throwable)
-                             }
-
-                             override fun onValidate(transaction: Transaction) {
-                                 progress.dismiss()
-                                 transactionCallback.onValidate(transaction)
-                             }
-                         })
-                     }
-
-                     override fun onError(transaction: Transaction, throwable: Throwable) {
-                         progress.dismiss()
-                         transactionCallback.onError(transaction, throwable)
-                     }
-
-                     override fun onValidate(transaction: Transaction) {
-                         progress.dismiss()
-                         transactionCallback.onValidate(transaction)
-                     }
-                 })
+             override fun onValidate(transaction: Transaction) {
+                 progress.dismiss()
+                 transactionCallback.onValidate(transaction)
              }
          })
 
-         checkoutFragment.show(context.supportFragmentManager, checkoutFragment.tag)
+
+
      }
 
 
