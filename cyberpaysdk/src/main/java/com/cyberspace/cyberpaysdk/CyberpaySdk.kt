@@ -680,7 +680,7 @@ object CyberpaySdk {
                     progress.dismiss()
                     transaction.amount = it!!.amount!!
                     transaction.charge = it.charge!!
-                    completeCheckoutTransaction(context, transaction, transactionCallback)
+                    completeTransaction(context, transaction, transactionCallback)
                 },
                 {
                     progress.dismiss()
