@@ -50,6 +50,7 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
     var isCardCvvError : Boolean = true
     var isCardExpiryError : Boolean = true
 
+    private lateinit var verify_layout: View
     private lateinit var cardPay: LinearLayout
     private lateinit var bankPay: LinearLayout
     private lateinit var bankLayout: LinearLayout
@@ -93,6 +94,7 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
         }
 
         progress = ProgressDialog(requireContext())
+        verify_layout = view.findViewById(R.id.verify_layout)
 
         verified = view.findViewById(R.id.verified)
         account_loading = view.findViewById(R.id.account_loading)
@@ -140,7 +142,10 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
                         requireActivity().hideKeyboard(view)
                         accountNumber.isEnabled = false
                         canContinue = true
-                        accountName.text = requireActivity().resources.getString(R.string.verify)
+                        //accountName.text = requireActivity().resources.getString(R.string.verify)
+                        verify_layout.visibility = View.VISIBLE
+                        onDisablePay()
+                        pay.text = getString(R.string.verify)
                         verified.visibility = View.GONE
                         viewPresenter.getAccountName(bankAccount.bank?.bankCode!!, text.toString())
                     }
@@ -272,7 +277,6 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
 
     override fun onAccountName(account: AccountResponse) {
         verified.visibility = View.VISIBLE
-        accountName.text = ""
         accountNumber.isEnabled = true
 
         bankAccount.accountNumber = accountNumber.text.toString()
@@ -281,6 +285,10 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
         account.accountName.split(' ').map {
             accountName.text = "${accountName.text} ${it.toLowerCase().capitalize()}"
         }
+
+        verify_layout.visibility = View.GONE
+        pay.text = String.format("Pay ₦%s",transaction.amountToPay)
+        onEnablePay()
     }
 
     fun Context.hideKeyboard(view: View) {
@@ -305,9 +313,11 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
 
     override fun onError(message: String) {
         accountNumber.isEnabled = true
+        accountNumber.error = "Verify Error"
         verified.visibility = View.GONE
         accountName.text = ""
-        println(message)
+        pay.text = String.format("Pay ₦%s",transaction.amountToPay)
+        verify_layout.visibility = View.GONE
     }
 
     override fun onBankPay() {
@@ -345,6 +355,8 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
 
     override fun onUpdateAdvice(advice: Advice) {
         pay.text = String.format("Pay ₦%s",advice.amountToPay)
+        transaction.amount = advice.amount!!
+        transaction.charge = advice.charge!!
         onEnablePay()
     }
 
