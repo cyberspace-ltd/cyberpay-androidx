@@ -1,4 +1,43 @@
-# cyberpay-androidx
+# Introduction 
+Cyberpay provides you with the most convenient and fastest process of making and collecting payments from your customers all over the world
+
+# About the SDK
+The mobile SDK will serve as an easy to use library to quickly integrate Cyberpay to your mobile application.
+
+The will serve as a wrapper on the existing Cyberpay web services and create a mobile entry point for making both Card and Bank transactions.
+
+The SDK will provide custom views/layouts for checkout, pin, otp, sucured3d as well as handles all business logics taking the bulk of the job and exposing just three call backs representing the status of the transaction.
+
+The SDK introduces a nice error wrapper class on the primary network component, introducing a painless and detailed error messages.
+
+The SDK is designed and written in Kotlin, using the singleton pattern so only one instance is available throughout the life of the application. 
+
+
+# Tools Used
+## IDE 
+Android studio is the official integrated development environment (IDE) for Android development, built on JetBrains IntelliJ IDEA software and designed specifically for android development
+
+## Libraries
+### Network
+Network calls is the heart of most functional mobile applications, this is no different. Here we used Retrofit
+
+Retrofit is a REST client for Java and Android. It makes it easy to send and retrieve JSON or any structured data via a web-based services.
+
+### ReactiveX
+Reactive programming is a software development model structured around asynchronous data streams or sequence. 
+
+ReactiveX (Reactive eXtensions) is a combination of the best ideas from the Observer pattern, the iterator pattern and functional programming.
+
+Here RxJava and RxKotlin are used in combination with Retrofit to make asynchronous network calls
+
+
+### Unit Testing
+Unit testing is the fundamentally carried out to determine the functionality of the smallest possible unit of code
+
+JUnit is the recommended unit testing framework for Java/Android 
+
+
+# Getting Started
 [![](https://jitpack.io/v/cyberspace-ltd/cyberpay-androidx.svg)](https://jitpack.io/#cyberspace-ltd/cyberpay-androidx)
 
 Integrate payment in less than a minute with `ONE` line of code as seen below.
@@ -57,7 +96,7 @@ The Cyberpay Android SDK is compatible with Android Apps supported from Android 
 ```
 
 	dependencies {
-	   implementation 'com.github.cyberspace-ltd:cyberpay-androidx:0.1.6'
+	   implementation 'com.github.cyberspace-ltd:cyberpay-androidx:0.1.7'
 	}
   
 ```
