@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
             //
             trans.amount = 10000.0
             trans.customerEmail = "test@test.com"
-            trans.reference = "JAG000001170120592436"
+            //trans.reference = "JAG000001170120592436"
 
             //trans.merchantReference = "JJHJRJOI39OHNKDJIUE" // Optional, will be auto generate by SDK if not present
             trans.description = "description"

@@ -671,7 +671,8 @@ object CyberpaySdk {
         validateKey()
 
         if(transaction.reference.isEmpty()) {
-            throw TransactionNotFoundException("Transaction reference not found. Kindly set transaction before calling this method")
+            transactionCallback.onError(transaction, Throwable("Transaction reference not found. Kindly set transaction before calling this method"))
+            return
         }
         isServerTransaction = true
         val progress = ProgressDialog(context)
