@@ -92,7 +92,7 @@ class HttpLoggingInterceptor @JvmOverloads constructor(private val logger: Logge
             val DEFAULT: Logger = object :
                 Logger {
                 override fun log(message: String) {
-                    if(CyberpaySdk.envMode == Mode.Debug)
+                   // if(CyberpaySdk.envMode == Mode.Debug)
                     Platform.get().log(INFO.intValue(), message, null)
                 }
             }
