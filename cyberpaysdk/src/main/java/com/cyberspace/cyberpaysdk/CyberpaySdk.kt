@@ -669,6 +669,10 @@ object CyberpaySdk {
     fun completeCheckoutTransaction(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
 
         validateKey()
+
+        if(transaction.reference.isEmpty()) {
+            throw TransactionNotFoundException("Transaction reference not found. Kindly set transaction before calling this method")
+        }
         isServerTransaction = true
         val progress = ProgressDialog(context)
         progress.show("Processing Transaction")
