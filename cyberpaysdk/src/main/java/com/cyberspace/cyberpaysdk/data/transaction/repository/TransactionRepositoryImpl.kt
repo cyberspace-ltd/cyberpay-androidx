@@ -41,9 +41,9 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         return when(cardAdvice){
             null -> {
                 getTransactionAdvice(transaction.reference, "Card")
-                    ?.flatMap {
+                    ?.switchMap {
                         cardAdvice = it.data!!
-                        Observable.just(it.data)
+                        Observable.just(cardAdvice)
                     }
             }
             else -> Observable.just(cardAdvice)
