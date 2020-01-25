@@ -23,6 +23,16 @@ internal class TransactionRepositoryImpl : TransactionRepository{
        var bankAdvice: Advice? = null
     }
 
+    private  fun setCardAdvice(ad: Advice) : Observable<Advice>? {
+        TransactionRepositoryImpl.cardAdvice = ad
+        return Observable.just(ad)
+    }
+
+    private  fun setBankAdvice(ad: Advice) : Observable<Advice>? {
+        TransactionRepositoryImpl.bankAdvice = ad
+        return Observable.just(ad)
+    }
+
     private fun getTransactionAdvice(reference: String, channel: String) : Observable<ApiResponse<Advice>>? {
         return service.create(TransactionService::class.java)?.getTransactionAdvice(reference, channel)
             ?.onErrorResumeNext { throwable : Throwable ->
@@ -41,9 +51,8 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         return when(cardAdvice){
             null -> {
                 getTransactionAdvice(transaction.reference, "Card")
-                    ?.flatMap {
-                        cardAdvice = it.data!!
-                        Observable.just(it.data)
+                    ?.switchMap {
+                        setCardAdvice(it.data!!)
                     }
             }
             else -> Observable.just(cardAdvice)
@@ -64,9 +73,8 @@ internal class TransactionRepositoryImpl : TransactionRepository{
        return when(bankAdvice){
             null -> {
                 getTransactionAdvice(transaction.reference, "BankAccount")
-                    ?.flatMap {
-                        bankAdvice = it.data!!
-                        Observable.just(it.data)
+                    ?.switchMap {
+                        setBankAdvice(it.data!!)
                     }
             }
             else -> Observable.just(bankAdvice)
