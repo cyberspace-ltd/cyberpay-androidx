@@ -683,8 +683,8 @@ object CyberpaySdk {
             ?.subscribe(
                 {
                     progress.dismiss()
-                    transaction.amount = it!!.amount!!
-                    transaction.charge = it.charge!!
+                    transaction.amount = it.data?.amount!!
+                    transaction.charge = it.data?.charge!!
                     completeTransaction(context, transaction, transactionCallback)
                 },
                 {

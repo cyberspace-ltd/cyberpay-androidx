@@ -24,8 +24,8 @@ internal interface TransactionRepository {
     fun enrolBank(transaction: Transaction) : Observable<ApiResponse<EnrollBank>>?
     fun finalBankOtp(transaction: Transaction) : Observable<ApiResponse<VerifyOtp>>?
     fun mandateBankOtp(transaction: Transaction) : Observable<ApiResponse<EnrollOtp>>?
-    fun getCardTransactionAdvice(transaction: Transaction) : Observable<Advice>?
-    fun getBankTransactionAdvice(transaction: Transaction) : Observable<Advice>?
+    fun getCardTransactionAdvice(transaction: Transaction) : Observable<ApiResponse<Advice>>?
+    fun getBankTransactionAdvice(transaction: Transaction) : Observable<ApiResponse<Advice>>?
     fun updateTransactionClientType(transaction: Transaction) : Observable<ApiResponse<EnrollOtp>>?
     fun cancelTransaction(transaction: Transaction) : Observable<ApiResponse<Any>>?
 
