@@ -47,8 +47,8 @@ internal class TransactionRepositoryImpl : TransactionRepository{
            }
     }
 
-    override fun getCardTransactionAdvice(transaction: Transaction): Observable<ApiResponse<Advice>>? {
-        /*
+    override fun getCardTransactionAdvice(transaction: Transaction): Observable<Advice>? {
+
         return when(cardAdvice){
             null -> {
                 getTransactionAdvice(transaction.reference, "Card")
@@ -61,8 +61,8 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         }
 
-         */
-        return getTransactionAdvice(transaction.reference, "Card");
+
+       // return getTransactionAdvice(transaction.reference, "Card");
     }
 
     override fun updateTransactionClientType(transaction: Transaction): Observable<ApiResponse<EnrollOtp>>? {
@@ -75,9 +75,9 @@ internal class TransactionRepositoryImpl : TransactionRepository{
             }
     }
 
-    override fun getBankTransactionAdvice(transaction: Transaction): Observable<ApiResponse<Advice>>? {
+    override fun getBankTransactionAdvice(transaction: Transaction): Observable<Advice>? {
 
-        /*return when(bankAdvice){
+        return when(bankAdvice){
             null -> {
                 getTransactionAdvice(transaction.reference, "BankAccount")
                     ?.switchMap {
@@ -87,9 +87,9 @@ internal class TransactionRepositoryImpl : TransactionRepository{
             else -> Observable.just(bankAdvice)
         }
 
-         */
 
-       return getTransactionAdvice(transaction.reference, "BankAccount")
+
+      // return getTransactionAdvice(transaction.reference, "BankAccount")
     }
 
     override fun beginTransaction(transaction: Transaction): Observable<ApiResponse<SetTransaction>>? {

@@ -28,7 +28,7 @@ internal class CheckoutPresenter : CheckoutContract.Presenter {
             ?.observeOn(scheduler.ui())
             ?.subscribe(
                 {
-                    mView?.onUpdateAdvice(it.data!!)
+                    mView?.onUpdateAdvice(it!!)
                 },
                 {
                     disablePay()
@@ -60,7 +60,7 @@ internal class CheckoutPresenter : CheckoutContract.Presenter {
        ?.observeOn(scheduler.ui())
        ?.subscribe(
            {
-              mView?.onUpdateAdvice(it.data!!)
+              mView?.onUpdateAdvice(it!!)
            },
            {
                disablePay()
