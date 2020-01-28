@@ -23,7 +23,8 @@ internal class ApiClient : Service {
 
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
-                .baseUrl(when(CyberpaySdk.envMode){
+                .baseUrl(
+                    when(CyberpaySdk.envMode){
                     Mode.Debug -> urlDebug
                     Mode.Live -> urlLive
                 })
