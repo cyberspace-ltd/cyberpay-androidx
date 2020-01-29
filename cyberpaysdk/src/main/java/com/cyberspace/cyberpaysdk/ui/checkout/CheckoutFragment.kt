@@ -28,6 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jakewharton.rxbinding.widget.RxTextView
 import java.security.InvalidParameterException
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 
 
 internal class CheckoutFragment constructor(var transaction: Transaction,
@@ -135,23 +136,28 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
 
          viewPresenter = CheckoutPresenter()
 
-        accountNumber.addTextChangedListener(DelayedTextWatcher(
-            object : DelayedTextWatcher.DelayedTextWatcherListener {
-                override fun onTimeout(text: CharSequence?) {
-                    if(text.toString().length == 10){
-                        requireActivity().hideKeyboard(view)
-                        accountNumber.isEnabled = false
-                        canContinue = true
-                        //accountName.text = requireActivity().resources.getString(R.string.verify)
-                        verify_layout.visibility = View.VISIBLE
-                        onDisablePay()
-                        pay.text = getString(R.string.verify)
-                        verified.visibility = View.GONE
-                        viewPresenter.getAccountName(bankAccount.bank?.bankCode!!, text.toString())
-                    }
-                }
-            }
-        ))
+        RxTextView.textChanges(accountNumber)
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .subscribe{ text ->
+
+               requireActivity().runOnUiThread {
+                   if(text.toString().length == 10){
+                       requireActivity().hideKeyboard(view)
+                       accountNumber.isEnabled = false
+                       canContinue = true
+                       //accountName.text = requireActivity().resources.getString(R.string.verify)
+                       verify_layout.visibility = View.VISIBLE
+                       onDisablePay()
+                       pay.text = getString(R.string.verify)
+                       verified.visibility = View.GONE
+                       viewPresenter.getAccountName(bankAccount.bank?.bankCode!!, text.toString())
+                   }
+               }
+
+            };
+
+
+
 
         bankName.setOnClickListener {
             // inflate banks list

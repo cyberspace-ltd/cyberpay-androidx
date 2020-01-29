@@ -96,7 +96,7 @@ The Cyberpay Android SDK is compatible with Android Apps supported from Android 
 ```
 
 	dependencies {
-	   implementation 'com.github.cyberspace-ltd:cyberpay-androidx:0.2.2'
+	   implementation 'com.github.cyberspace-ltd:cyberpay-androidx:0.2.3'
 	}
   
 ```
