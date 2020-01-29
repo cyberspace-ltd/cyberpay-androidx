@@ -19,35 +19,50 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
     private var service : Service = ApiClient()
     companion object {
-       var cardAdvice: Advice? = null
-       var bankAdvice: Advice? = null
+        var cardAdvice: Advice? = null
+        var bankAdvice: Advice? = null
+    }
+
+    private  fun setCardAdvice(ad: Advice) : Observable<Advice>? {
+        TransactionRepositoryImpl.cardAdvice = ad
+        return Observable.just(ad)
+    }
+
+    private  fun setBankAdvice(ad: Advice) : Observable<Advice>? {
+        TransactionRepositoryImpl.bankAdvice = ad
+        return Observable.just(ad)
     }
 
     private fun getTransactionAdvice(reference: String, channel: String) : Observable<ApiResponse<Advice>>? {
         return service.create(TransactionService::class.java)?.getTransactionAdvice(reference, channel)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
     override fun cancelTransaction(transaction: Transaction): Observable<ApiResponse<Any>>? {
-       return service.create(TransactionService::class.java)?.cancelTransaction(transaction.reference)
-           ?.onErrorResumeNext { throwable : Throwable ->
-               Observable.error(ErrorHandler.getError(throwable))
-           }
+        return service.create(TransactionService::class.java)?.cancelTransaction(transaction.reference)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                return@onErrorResumeNext  Observable.error(ErrorHandler.getError(throwable))
+            }
     }
 
     override fun getCardTransactionAdvice(transaction: Transaction): Observable<Advice>? {
+
         return when(cardAdvice){
             null -> {
                 getTransactionAdvice(transaction.reference, "Card")
                     ?.switchMap {
-                        cardAdvice = it.data!!
-                        Observable.just(cardAdvice)
+                        return@switchMap setCardAdvice(it.data!!)
                     }
             }
             else -> Observable.just(cardAdvice)
+
+
         }
+
+
+        // return getTransactionAdvice(transaction.reference, "Card");
     }
 
     override fun updateTransactionClientType(transaction: Transaction): Observable<ApiResponse<EnrollOtp>>? {
@@ -56,21 +71,25 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         return service.create(TransactionService::class.java)?.updateTransactionClientType(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
     override fun getBankTransactionAdvice(transaction: Transaction): Observable<Advice>? {
-       return when(bankAdvice){
+
+        return when(bankAdvice){
             null -> {
                 getTransactionAdvice(transaction.reference, "BankAccount")
-                    ?.flatMap {
-                        bankAdvice = it.data!!
-                        Observable.just(it.data)
+                    ?.switchMap {
+                        return@switchMap  setBankAdvice(it.data!!)
                     }
             }
             else -> Observable.just(bankAdvice)
         }
+
+
+
+        // return getTransactionAdvice(transaction.reference, "BankAccount")
     }
 
     override fun beginTransaction(transaction: Transaction): Observable<ApiResponse<SetTransaction>>? {
@@ -89,7 +108,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         return service.create(TransactionService::class.java)?.beginTransaction(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-               Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
@@ -104,7 +123,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         return service.create(TransactionService::class.java)?.enrolBank(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
@@ -121,16 +140,16 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         return service.create(TransactionService::class.java)?.chargeCard(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext  Observable.error(ErrorHandler.getError(throwable))
             }
 
     }
 
     override fun verifyTransactionByReference(reference: String): Observable<ApiResponse<VerifyTransaction>>? {
-      return service.create(TransactionService::class.java)?.verifyTransactionByReference(reference)
-          ?.onErrorResumeNext { throwable : Throwable ->
-              Observable.error(ErrorHandler.getError(throwable))
-          }
+        return service.create(TransactionService::class.java)?.verifyTransactionByReference(reference)
+            ?.onErrorResumeNext { throwable : Throwable ->
+                return@onErrorResumeNext  Observable.error(ErrorHandler.getError(throwable))
+            }
     }
 
     override fun verifyTransactionByMerchantReference(merchantReference: String): Observable<ApiResponse<VerifyMerchantTransaction>>? {
@@ -146,7 +165,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         return service.create(TransactionService::class.java)?.verifyCardOtp(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext  Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
@@ -157,7 +176,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         return service.create(TransactionService::class.java)?.verifyBankOtp(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext  Observable.error(ErrorHandler.getError(throwable))
             }
 
     }
@@ -173,7 +192,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         return service.create(TransactionService::class.java)?.chargeBank(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
@@ -183,7 +202,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["otp"] = transaction.otp
         return service.create(TransactionService::class.java)?.finalBankOtp(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
@@ -193,7 +212,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["otp"] = transaction.otp
         return service.create(TransactionService::class.java)?.mandateBankOtp(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext  Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
@@ -203,7 +222,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
         param["otp"] = transaction.otp
         return service.create(TransactionService::class.java)?.enrolBankOtp(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext Observable.error(ErrorHandler.getError(throwable))
             }
     }
 
@@ -215,7 +234,7 @@ internal class TransactionRepositoryImpl : TransactionRepository{
 
         return service.create(TransactionService::class.java)?.enrolCardOtp(param)
             ?.onErrorResumeNext { throwable : Throwable ->
-                Observable.error(ErrorHandler.getError(throwable))
+                return@onErrorResumeNext  Observable.error(ErrorHandler.getError(throwable))
             }
 
     }
