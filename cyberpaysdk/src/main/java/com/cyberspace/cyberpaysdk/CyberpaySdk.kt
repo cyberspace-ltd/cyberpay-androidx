@@ -3,6 +3,7 @@ package com.cyberspace.cyberpaysdk
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.drawable.Drawable
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.cyberspace.cyberpaysdk.data.bank.remote.response.BankResponse
 import com.cyberspace.cyberpaysdk.model.Transaction
@@ -695,7 +696,7 @@ object CyberpaySdk {
 
     }
 
-     fun checkoutTransaction(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
+     fun checkoutTransaction(context: AppCompatActivity, transaction : Transaction, transactionCallback: TransactionCallback){
          validateKey()
          val progress = ProgressDialog(context)
          progress.show("Processing Transaction")
