@@ -1,5 +1,6 @@
 package com.cyberspace.cyberpayapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,8 +14,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.TransactionCallback
+import com.cyberspace.cyberpaysdk.model.Booking
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.model.Card
+import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutFlutterActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -138,6 +141,7 @@ class MainActivity : AppCompatActivity() {
 
         pay.setOnClickListener {
 
+
             if(!isCardCvvError && !isCardExpiryError && !isCardNumberError){
 
             }
@@ -149,16 +153,18 @@ class MainActivity : AppCompatActivity() {
 //            card.expiryYear = 30 //20
 //            card.cvv = "000"
 
-            val trans = Transaction()
+            val trans = Booking()
             //
             trans.amount = 10000.0
             trans.customerEmail = "test@test.com"
-            trans.reference = "JAG000001250120707860"
+            trans.customerName = "Shaba Okare"
+            trans.phoneNumber = "0704702347230"
+            //trans.reference = "JAG000001250120707860"
 
             //trans.merchantReference = "JJHJRJOI39OHNKDJIUE" // Optional, will be auto generate by SDK if not present
             trans.description = "description"
            // trans.dateOfBirth = "120988"
-            trans.card = card
+            //trans.card = card
             val callback = object : TransactionCallback() {
                 override fun onSuccess(transaction: Transaction) {
                     Log.e("RESPONSE", "SUCCESSFUL")
@@ -173,8 +179,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-
-            CyberpaySdk.completeCheckoutTransaction(this, trans, callback )
+            val intent = Intent(this, CheckoutFlutterActivity::class.java).apply{
+                putExtra("safejourney", trans)
+            }
+            startActivity(intent)
+            //CyberpaySdk.completeCheckoutTransaction(this, trans, callback )
         }
 
     }
