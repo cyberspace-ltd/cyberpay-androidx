@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.checkout.CheckoutFlutterActivity">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:weightSum="2">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/space_small"
+            android:layout_marginBottom="@dimen/horizontal_margin"
+            android:contentDescription="@string/logo_content_desc"
+            android:foregroundGravity="center"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_cyberpay_logo" />
+
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.ExtraBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="3dp"
+            android:text="@string/passenger_info"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Light
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/default_payment_info_confirm" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/container"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Medium
+            android:layout_marginTop="@dimen/space_small"
+            android:id="@+id/customer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_small"
+            android:text="Name: " />
+        <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+            android:layout_marginTop="@dimen/space_small"
+            android:id="@+id/customer_name_value"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/customer_name"
+            android:layout_toEndOf="@+id/customer_name"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_small"
+            android:text=" " />
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Medium
+            android:layout_marginTop="@dimen/space_small"
+            android:id="@+id/customer_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/customer_name"
+            android:padding="@dimen/space_small"
+            android:text="Email: " />
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+            android:layout_marginTop="@dimen/space_small"
+            android:id="@+id/customer_email_value"
+            android:layout_below="@+id/customer_name"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/customer_email"
+            android:layout_toEndOf="@+id/customer_name"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_small"
+            android:text=" " />
+
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Medium
+            android:layout_marginTop="@dimen/space_small"
+            android:id="@+id/customer_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/customer_email"
+            android:padding="@dimen/space_small"
+            android:text="@string/phone_hint" />
+
+        <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+            android:layout_marginTop="@dimen/space_small"
+            android:id="@+id/customer_phone_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/customer_phone"
+            android:layout_toEndOf="@+id/customer_phone"
+            android:layout_below="@+id/customer_email"
+            android:padding="@dimen/space_small"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/buttonPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:paddingRight="@dimen/space_small"
+            android:paddingLeft="@dimen/space_small">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+
+
+                <com.cyberspace.cyberpaysdk.utils.fonts.Bold
+                    android:id="@+id/make_payment"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    style="@style/button"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:onClick="proceed"
+                    android:text="@string/pay" />
+<!--                <TextView-->
+<!--                    android:id="@+id/total_amount"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_alignParentRight="true"-->
+<!--                    android:text="@string/naira_sign"-->
+<!--                    android:textColor="@android:color/holo_green_dark" />-->
+
+            </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -49,5 +49,10 @@
     <string name="sample_name">Sunday Okpoluaefe</string>
     <string name="dob_hint">Date of birth</string>
     <string name="dob_title">Provide Date of Birth</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="naira_sign">₦</string>
+    <string name="passenger_info">Confirm Passenger Information</string>
+    <string name="default_payment_info_confirm">Kindly confirm your personal information to allow us manage the information with transport provider before you complete your transaction</string>
+
 
 </resources>
