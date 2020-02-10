@@ -9,6 +9,8 @@ class Booking : Serializable {
     var customerEmail = ""
     var customerName = ""
     var phoneNumber = ""
+    var splits : List<Split>? = null
+
 
     val amountToPay : String?
     get(){

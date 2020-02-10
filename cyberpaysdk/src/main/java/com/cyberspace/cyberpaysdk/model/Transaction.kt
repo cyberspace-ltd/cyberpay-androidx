@@ -16,7 +16,7 @@ class Transaction {
     var amount = 0.0
     internal var otp = ""
     var type : TransactionType? = null
-    var splits : Array<Split>? = null
+    var splits : List<Split>? = null
     internal var key = ""
     var charge : Double? = 0.0
 
