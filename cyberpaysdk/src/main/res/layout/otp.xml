@@ -15,6 +15,7 @@
        android:id="@+id/pad"
        android:layout_width="match_parent"
        app:randomiseKeys="false"
+       android:textColor="#555555"
        app:minLength="1"
        app:obscured="true"
        app:desc="@string/default_otp_message"
