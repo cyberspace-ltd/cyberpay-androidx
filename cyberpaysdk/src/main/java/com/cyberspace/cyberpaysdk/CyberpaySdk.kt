@@ -18,10 +18,8 @@ import com.cyberspace.cyberpaysdk.model.BankAccount
 import com.cyberspace.cyberpaysdk.model.Card
 import com.cyberspace.cyberpaysdk.rx.Scheduler
 import com.cyberspace.cyberpaysdk.rx.SchedulerImpl
-import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutContract
 import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutFragment
 import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutListener
-import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutPresenter
 import com.cyberspace.cyberpaysdk.ui.dob.DobFragment
 import com.cyberspace.cyberpaysdk.ui.enroll_otp.EnrollOtpFragment
 import com.cyberspace.cyberpaysdk.ui.enroll_otp.OnSubmitted
@@ -147,7 +145,7 @@ object CyberpaySdk {
         val enrollFragment = EnrollOtpFragment( object : OnSubmitted {
             override fun onSubmit(number: String) {
                 // verify otp
-                transaction.card?.phoneNumber = number
+                transaction.phoneNumber = number
                 enrollCardOtp(context,transaction, transactionCallback)
             }
         })
@@ -209,7 +207,7 @@ object CyberpaySdk {
                                 val pinFragment = PinFragment(transaction, object : PinSubmitted {
                                     override fun onSubmit(pin: String) {
                                         // verify otp
-                                        transaction.card?.pin = pin
+                                        transaction.card?.cardPin = pin
                                         chargeCardWithPin(context,transaction, transactionCallback)
                                     }
                                 })
@@ -317,14 +315,14 @@ object CyberpaySdk {
         private fun processPayment(context: FragmentActivity, transaction : Transaction, transactionCallback: TransactionCallback){
         if(transaction.card == null) throw InvalidParameterException("Card Not Found")
         // inflate pin ui
-         when(transaction.card?.type?.name) {
+         when(transaction.card?.otherInfo?.name) {
 
              "VERVE" -> {
                  transaction.message = context.getString(R.string.default_pin_message)
                  val pinFragment = PinFragment(transaction, object : PinSubmitted {
                      override fun onSubmit(pin: String) {
                          // verify otp
-                         transaction.card?.pin = pin
+                         transaction.card?.cardPin = pin
                          chargeCardWithoutPin(context,transaction, transactionCallback)
                      }
                  })

@@ -20,7 +20,7 @@ class CyberpaySdkJTest {
     fun validateCardNumber(){
         val card = Card()
         // insert an invalid card number
-        card.number = "4000 0000 0000 0622"
+        card.cardNumber = "4000 0000 0000 0622"
     }
 
     /*
@@ -56,9 +56,9 @@ class CyberpaySdkJTest {
     fun isMasterCard(){
         val card = Card()
         // insert an valid master card number
-        card.number = "5453 0100 0006 4261"
-        assertThat(card.type?.name).isEqualTo("MASTERCARD")
-        assertThat(card.type?.issuerName).isEqualTo("MASTER")
+        card.cardNumber = "5453 0100 0006 4261"
+        assertThat(card.otherInfo?.name).isEqualTo("MASTERCARD")
+        assertThat(card.otherInfo?.issuerName).isEqualTo("MASTER")
     }
 
     // tests expected to pass
@@ -67,9 +67,9 @@ class CyberpaySdkJTest {
     fun isVisaCard(){
         val card = Card()
         // insert an valid visa card number
-        card.number = "4000 0000 0000 0622"
-        assertThat(card.type?.name).isEqualTo("VISA")
-        assertThat(card.type?.issuerName).isEqualTo("VISA")
+        card.cardNumber = "4000 0000 0000 0622"
+        assertThat(card.otherInfo?.name).isEqualTo("VISA")
+        assertThat(card.otherInfo?.issuerName).isEqualTo("VISA")
     }
 
 
@@ -81,9 +81,9 @@ class CyberpaySdkJTest {
     fun isVerveCard(){
         val card = Card()
         // insert an valid verve card number
-        card.number = "5061 0300 0000 0000 928"
-        assertThat(card.type?.name).isEqualTo("VERVE")
-        assertThat(card.type?.issuerName).isEqualTo("VERVE")
+        card.cardNumber = "5061 0300 0000 0000 928"
+        assertThat(card.otherInfo?.name).isEqualTo("VERVE")
+        assertThat(card.otherInfo?.issuerName).isEqualTo("VERVE")
     }
 
     // tests expected to pass

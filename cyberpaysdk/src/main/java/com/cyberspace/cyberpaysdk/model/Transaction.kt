@@ -19,6 +19,7 @@ class Transaction {
     var splits : List<Split>? = null
     internal var key = ""
     var charge : Double? = 0.0
+    var phoneNumber = ""
 
     val amountToPay: String?
         get() {
