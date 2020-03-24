@@ -361,10 +361,12 @@ CyberpaySdk.getPayment(this, trans, object : TransactionCallback() {
 
 ---
 
-**Note** : Ensure when going live, you initialize the Live API key `CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Live)` instead of the Test API key `CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Debug)`. 
+**Note** : Ensure when going live, you initialize the Live API key `CyberpaySdk.initialiseSdk("LIVE_INTEGRATION_KEY", Mode.Live)` instead of the Test API key `CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Debug)`. 
 This key can be gotten from the merchant dashboard on the cyberpay merchant portal
 
 **Demo**
+
+Use the `d5355204f9cf495f853c8f8d26ada19b` integration key on `Debug Mode`..
 
 The demo is running in test mode -- use `5399 8300 0000 0008` as a test card number with CVC: 000, future expiration date: 05/30.
 
