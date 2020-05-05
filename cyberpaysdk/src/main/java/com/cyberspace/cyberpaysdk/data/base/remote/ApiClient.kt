@@ -19,7 +19,7 @@ internal class ApiClient : Service {
 
     private fun getRetrofitInstance(): Retrofit? {
 
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+//        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
@@ -32,7 +32,7 @@ internal class ApiClient : Service {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(
                     OkHttpClient.Builder()
-                        .addInterceptor(loggingInterceptor)
+//                        .addInterceptor(loggingInterceptor)
                         .connectTimeout(30, TimeUnit.SECONDS)
                         .readTimeout(60, TimeUnit.SECONDS)
                         .writeTimeout(30, TimeUnit.SECONDS)
