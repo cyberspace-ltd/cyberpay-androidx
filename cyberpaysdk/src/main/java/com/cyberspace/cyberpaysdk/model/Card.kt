@@ -7,29 +7,27 @@ import java.security.InvalidParameterException
 
 class Card {
 
-    var number : String? = null
+    var cardNumber : String? = null
         set(value) {
 
             if(value.isNullOrEmpty()) throw InvalidParameterException("Invalid Card Number Found")
             val result = CardValidator.isValid(value)
             if(!result.isValid) throw InvalidParameterException("Invalid Card Number Found")
 
-        this.type = result.cardType
+//            var last4Digits = ""
+
+            this.otherInfo = result.cardType
         field  = result.cardNo
-        last4Digits = field?.substring(field?.length!! - 4, (field?.length!!))!!
+//        last4Digits = field?.substring(field?.length!! - 4, (field?.length!!))!!
     }
 
-    var expiry = ""
-     get() {
-          return String.format("%02d/%02d",expiryMonth, expiryYear)
-     }
-    private set
+//    var expiry = ""
+//     get() {
+//          return String.format("%02d/%02d",expiryMonth, expiryYear)
+//     }
+//    private set
 
     var name = ""
-    var email = ""
-    var address = ""
-    var last4Digits = ""
-    var phoneNumber = ""
 
     var cvv : String? = null
     set(value) {
@@ -53,9 +51,9 @@ class Card {
             field = value
         }
 
-    var type : CardType? = null
+    var otherInfo : CardType? = null
 
-    internal var pin : String? = null
+    internal var cardPin : String? = null
 
     fun toJson () : JSONObject {
         //val param = mutableMapOf<String, Any?>()
@@ -63,9 +61,9 @@ class Card {
         param["Name"] = ""
         param["ExpiryMonth"] = expiryMonth
         param["ExpiryYear"] = expiryYear
-        param["CardNumber"] = number
+        param["CardNumber"] = cardNumber
         param["CVV"] = cvv
-        param["CardPin"] = pin
+        param["CardPin"] = cardPin
 
         return JSONObject(param)
     }

@@ -14,6 +14,7 @@
     <com.cyberspace.cyberpaysdk.ui.widget.PinPad
         android:id="@+id/pad"
         android:layout_width="match_parent"
+        android:textColor="#555555"
         app:randomiseKeys="false"
         app:obscured="false"
         app:validate="true"

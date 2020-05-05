@@ -21,6 +21,7 @@
             android:textSize="@dimen/medium_font"
             android:layout_weight="1"
             android:gravity="center"
+            android:textColor="@color/primaryColorDark"
             android:layout_width="0dp"
             android:text="@string/select_bank"
             android:layout_height="wrap_content"/>

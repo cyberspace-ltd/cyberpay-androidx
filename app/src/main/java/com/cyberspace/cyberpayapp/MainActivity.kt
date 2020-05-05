@@ -12,16 +12,13 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.cyberspace.cyberpaysdk.CyberpaySdk
 import com.cyberspace.cyberpaysdk.TransactionCallback
 import com.cyberspace.cyberpaysdk.model.Booking
 import com.cyberspace.cyberpaysdk.model.Transaction
 import com.cyberspace.cyberpaysdk.model.Card
 import com.cyberspace.cyberpaysdk.ui.checkout.CheckoutFlutterActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
-import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
 import java.security.InvalidParameterException
 import java.text.DecimalFormat
@@ -61,8 +58,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTextChanged(p: CharSequence?, start: Int, before: Int, count: Int) {
                 try {
-                    card.number = p.toString()
-                    when (card.type?.issuerName){
+                    card.cardNumber = p.toString()
+                    when (card.otherInfo?.issuerName){
                         "MASTER" -> cardType.setImageResource(R.drawable.master_card)
                         "VISA" -> cardType.setImageResource(R.drawable.visa_card)
                         "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
@@ -155,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
             val trans = Booking()
             //
-            trans.amount = 10000.0
+            trans.amount = 1000.0
             trans.customerEmail = "test@test.com"
             trans.customerName = "Shaba Okare"
             trans.phoneNumber = "0704702347230"

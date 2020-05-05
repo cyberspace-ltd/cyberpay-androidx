@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.checkout.CheckoutFlutterActivity">
 
     <LinearLayout
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="3dp"
+            android:textColor="@color/primaryColorDark"
             android:text="@string/passenger_info"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -42,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            android:textColor="@color/primaryColorDark"
             android:text="@string/default_payment_info_confirm" />
 
     </LinearLayout>
@@ -59,12 +62,16 @@
             android:id="@+id/customer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/primaryColorDark"
             android:padding="@dimen/space_small"
             android:text="Name: " />
         <com.cyberspace.cyberpaysdk.utils.fonts.Bold
             android:layout_marginTop="@dimen/space_small"
             android:id="@+id/customer_name_value"
             android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:layout_alignParentRight="true"    android:textColor="@color/primaryColorDark"
             android:layout_toRightOf="@+id/customer_name"
             android:layout_toEndOf="@+id/customer_name"
             android:layout_height="wrap_content"
@@ -74,6 +81,7 @@
         <com.cyberspace.cyberpaysdk.utils.fonts.Medium
             android:layout_marginTop="@dimen/space_small"
             android:id="@+id/customer_email"
+            android:textColor="@color/primaryColorDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/customer_name"
@@ -84,8 +92,11 @@
             android:layout_marginTop="@dimen/space_small"
             android:id="@+id/customer_email_value"
             android:layout_below="@+id/customer_name"
+            android:textColor="@color/primaryColorDark"
             android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/customer_email"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:layout_alignParentRight="true"        android:layout_toRightOf="@+id/customer_email"
             android:layout_toEndOf="@+id/customer_name"
             android:layout_height="wrap_content"
             android:padding="@dimen/space_small"
@@ -95,6 +106,7 @@
         <com.cyberspace.cyberpaysdk.utils.fonts.Medium
             android:layout_marginTop="@dimen/space_small"
             android:id="@+id/customer_phone"
+            android:textColor="@color/primaryColorDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/customer_email"
@@ -106,6 +118,10 @@
             android:id="@+id/customer_phone_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/primaryColorDark"
             android:layout_toRightOf="@+id/customer_phone"
             android:layout_toEndOf="@+id/customer_phone"
             android:layout_below="@+id/customer_email"

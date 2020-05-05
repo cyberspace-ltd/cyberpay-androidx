@@ -22,12 +22,10 @@ import com.cyberspace.cyberpaysdk.ui.bank.OnSelected
 import com.cyberspace.cyberpaysdk.ui.confirm_redirect.ConfirmRedirect
 import com.cyberspace.cyberpaysdk.ui.confirm_redirect.OnConfirmed
 import com.cyberspace.cyberpaysdk.ui.widget.ProgressDialog
-import com.cyberspace.cyberpaysdk.utils.DelayedTextWatcher
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jakewharton.rxbinding.widget.RxTextView
 import java.security.InvalidParameterException
-import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 
 
@@ -197,8 +195,8 @@ internal class CheckoutFragment constructor(var transaction: Transaction,
 
         RxTextView.textChanges(cardNumber).subscribe{
             try{
-                card.number = it.toString()
-                when(card.type?.issuerName){
+                card.cardNumber = it.toString()
+                when(card.otherInfo?.issuerName){
                     "MASTER" -> cardType.setImageResource(R.drawable.master_card)
                     "VISA" -> cardType.setImageResource(R.drawable.visa_card)
                     "VERVE" -> cardType.setImageResource(R.drawable.verve_card)
