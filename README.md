@@ -361,6 +361,16 @@ CyberpaySdk.getPayment(this, trans, object : TransactionCallback() {
 
 ---
 
+Test Card: 5399830000000008,
+expiry date:0530,
+CVV:000,
+OTP:123456
+
+Test Bank Account:
+Bank Account(First Bank): Account No:1234567890,
+OTP: 123456
+
+
 **Note** : Ensure when going live, you initialize the Live API key `CyberpaySdk.initialiseSdk("LIVE_INTEGRATION_KEY", Mode.Live)` instead of the Test API key `CyberpaySdk.initialiseSdk("d5355204f9cf495f853c8f8d26ada19b", Mode.Debug)`. 
 This key can be gotten from the merchant dashboard on the cyberpay merchant portal
 
