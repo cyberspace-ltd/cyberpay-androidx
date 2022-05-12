@@ -151,9 +151,9 @@ class App : Application() {
 ######---------------------------
 
 
-### 
-Test Card : 5399830000000008, expired date:0530, CVV:000, OTP:123456
-#..
+## Test Card : 
+5399830000000008, expiry date:0530, CVV:000, OTP:123456
+
 #...
 ## Test Bank Account
 Bank Account(First Bank): Account No:1234567890, OTP: 123456
