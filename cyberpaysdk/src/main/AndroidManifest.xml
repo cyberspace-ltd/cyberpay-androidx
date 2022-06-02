@@ -10,8 +10,9 @@
         android:theme="@style/Theme.AppCompat"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="n">
-        <activity android:name=".ui.checkout.CheckoutFlutterActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity
+            android:name=".ui.checkout.CheckoutFlutterActivity"
+          />
     </application>
 
 </manifest>
